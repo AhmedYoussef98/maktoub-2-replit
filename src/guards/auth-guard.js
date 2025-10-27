@@ -154,26 +154,9 @@
         });
       }
 
-      // Handle theme toggle
+      // Handle theme toggle - UPDATED
       const themeToggle = document.getElementById('theme-toggle');
-      if (themeToggle) {
-        themeToggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          // Toggle between light and dark mode (placeholder for future implementation)
-          const currentTheme = document.body.getAttribute('data-theme') || 'dark';
-          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-          document.body.setAttribute('data-theme', newTheme);
-
-          // Update button text
-          const themeText = this.querySelector('.profile-dropdown-item-text');
-          if (themeText) {
-            themeText.textContent = newTheme === 'dark' ? 'الوضع الفاتح' : 'الوضع الداكن';
-          }
-
-          console.log('Theme switched to:', newTheme);
-          // TODO: Implement full theme switching with CSS variables
-        });
-      }
+      initializeThemeToggle(themeToggle);
     } else {
       // Old design (for other pages)
       profileContainer.innerHTML = `
@@ -202,6 +185,43 @@
         avatar.innerHTML = '<div class="avatar-circle"></div>';
       }, { once: true });
     }
+  }
+
+  /**
+   * Initialize profile dropdown theme toggle
+   * @param {HTMLElement} themeToggle - Theme toggle button element
+   */
+  function initializeThemeToggle(themeToggle) {
+    if (!themeToggle) return;
+
+    // Update theme toggle text based on current theme
+    function updateThemeToggleText() {
+      const themeText = themeToggle.querySelector('.profile-dropdown-item-text');
+      if (themeText && typeof ThemeService !== 'undefined') {
+        themeText.textContent = ThemeService.getThemeLabel();
+      }
+    }
+
+    // Set initial text
+    updateThemeToggleText();
+
+    // Handle click - use ThemeService
+    themeToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+
+      if (typeof ThemeService !== 'undefined') {
+        ThemeService.toggleTheme();
+        // Text will be updated by theme change listener below
+      } else {
+        console.error('❌ ThemeService not available');
+      }
+    });
+
+    // Listen for theme changes from ANY source (header toggle, dropdown, etc.)
+    document.addEventListener('themechange', function(e) {
+      updateThemeToggleText();
+      console.log('🎨 Dropdown theme text updated:', e.detail.theme);
+    });
   }
 
   /**

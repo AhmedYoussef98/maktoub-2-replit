@@ -197,6 +197,16 @@ const ThemeService = (() => {
     return currentTheme === THEMES.LIGHT;
   }
 
+  /**
+   * Get theme label in Arabic
+   * @param {string} theme - Optional theme, defaults to current
+   * @returns {string} Arabic label
+   */
+  function getThemeLabel(theme) {
+    const t = theme || currentTheme;
+    return t === THEMES.DARK ? 'الوضع الفاتح' : 'الوضع الداكن';
+  }
+
   // ==================== Public API ====================
 
   return {
@@ -207,6 +217,7 @@ const ThemeService = (() => {
     toggleTheme,
     isDark,
     isLight,
+    getThemeLabel,
   };
 })();
 

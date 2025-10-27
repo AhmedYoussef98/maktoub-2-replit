@@ -112,9 +112,17 @@ body {
 .navbar-profile {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
     cursor: pointer;
     position: relative;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.navbar-profile:hover {
+    background-color: rgba(160, 236, 220, 0.05);
 }
 
 .avatar {
@@ -174,27 +182,80 @@ body:not(.dark-mode) .avatar-icon {
     transform: rotate(180deg);
 }
 
-/* Profile Dropdown Menu */
+/* Profile Dropdown Menu - UPDATED */
 .profile-dropdown {
+    /* Positioning - ensure it's below the button and aligned properly */
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 8px);
     right: 0;
+
+    /* Size */
+    min-width: 280px;
+    max-width: 320px;
+
+    /* Appearance */
     background: #0D2823;
     border: 1px solid rgba(160, 236, 220, 0.2);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    min-width: 280px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+
+    /* Visibility */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-    z-index: 50;
+
+    /* Layering - ensure it's above other elements */
+    z-index: 1000;
+
+    /* Prevent overflow */
+    overflow: hidden;
 }
 
 .navbar-profile.active .profile-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+}
+
+/* Responsive: Adjust for small screens */
+@media (max-width: 480px) {
+    .profile-dropdown {
+        /* On mobile, prevent overflow */
+        right: -12px;
+        min-width: 260px;
+        max-width: calc(100vw - 32px);
+    }
+}
+
+/* RTL Support */
+[dir="rtl"] .profile-dropdown {
+    right: 0;
+    left: auto;
+}
+
+/* Optional: Add backdrop for mobile */
+@media (max-width: 768px) {
+    .navbar-profile.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .profile-dropdown {
+        z-index: 1000; /* Above backdrop */
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .profile-dropdown-header {
@@ -226,6 +287,8 @@ body:not(.dark-mode) .avatar-icon {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    flex: 1;
+    min-width: 0; /* Allow text truncation */
 }
 
 .profile-dropdown-name {
@@ -234,6 +297,9 @@ body:not(.dark-mode) .avatar-icon {
     font-size: 16px;
     font-weight: 700;
     line-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-dropdown-email {
@@ -243,6 +309,9 @@ body:not(.dark-mode) .avatar-icon {
     font-weight: 400;
     line-height: 18px;
     opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-dropdown-menu {
