@@ -247,34 +247,34 @@ const ApiClient = (() => {
         recipient: Utils.isEmpty(formData.get('recipient'))
           ? AppConstants.DEFAULTS.RECIPIENT_NAME
           : formData.get('recipient'),
-        isFirst: formData.get('is_first') === 'true',
-        recipientJobTitle: formData.get('recipient_job_title') || getFinalRecipientTitle(formData),
+        is_first: formData.get('is_first') === 'true',
+        recipient_job_title: formData.get('recipient_job_title') || getFinalRecipientTitle(formData),
       };
 
       // Add optional fields
       const organizationName = formData.get('organization_name');
       if (!Utils.isEmpty(organizationName)) {
-        payload.organizationName = organizationName;
+        payload.organization_name = organizationName;
       }
 
       const memberName = formData.get('member_name');
       if (!Utils.isEmpty(memberName)) {
-        payload.memberName = memberName;
+        payload.member_name = memberName;
       }
 
       // Handle previous letter for follow-ups
       const previousLetterId = formData.get('previous_letter_id');
       const previousContent = getLetterDataFromSelect('previousLetter', previousLetterId);
       if (previousContent) {
-        payload.previousLetterContent = previousContent;
-        payload.previousLetterId = previousLetterId;
+        payload.previous_letter_content = previousContent;
+        payload.previous_letter_id = previousLetterId;
       }
 
       // Handle received letter for replies
       const receivedLetterId = formData.get('received_letter_id');
       const receivedContent = getLetterDataFromSelect('receivedLetter', receivedLetterId);
       if (receivedContent) {
-        payload.receivedLetterContent = receivedContent;
+        payload.received_letter_content = receivedContent;
       }
 
       const data = await makeRequest(AppConstants.ENDPOINTS.LETTER_GENERATE, 'POST', payload);
