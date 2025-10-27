@@ -1,0 +1,92 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-light);
+}
+body.dark-mode .auth-container { background-color: var(--background-dark); }
+.auth-box {
+    background-color: var(--card-light);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+body.dark-mode .auth-box { background-color: var(--card-dark); }
+.auth-box .logo { margin-bottom: 1.5rem; text-decoration: none; color: var(--primary-color); }
+.auth-box h2 { margin-bottom: 2rem; }
+.auth-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.auth-button:hover { background-color: #008840; }
+
+/* Google Sign-In Styles */
+.google-signin-container {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.google-signin-container .g_id_signin {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+    /* width: 100% !important; */
+
+/* Divider Styles */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+}
+
+.divider span {
+    padding: 0 15px;
+    background: white;
+    color: #666;
+}
+
+/* Dark mode support for divider */
+body.dark-mode .divider span {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+body.dark-mode .divider::before,
+body.dark-mode .divider::after {
+    background: #444;
+}
+
+/* Responsive adjustments for Google button */
+@media (max-width: 480px) {
+    .google-signin-container {
+        margin-bottom: 15px;
+    }
+    
+    .divider {
+        margin: 15px 0;
+    }
+}

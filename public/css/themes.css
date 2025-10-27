@@ -1,0 +1,235 @@
+/**
+ * Theme Variables
+ * Defines colors and styles for light/dark themes
+ * Uses CSS custom properties that update based on [data-theme] attribute
+ */
+
+/* ==================== Dark Theme (Default) ==================== */
+:root,
+[data-theme="dark"] {
+  /* Background Colors */
+  --bg-primary: #102320;
+  --bg-secondary: #0D1F1C;
+  --bg-tertiary: rgba(13, 31, 28, 0.6);
+  --bg-card: rgba(13, 31, 28, 0.8);
+  --bg-hover: rgba(30, 168, 150, 0.1);
+
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0ECDC;
+  --text-tertiary: rgba(160, 236, 220, 0.7);
+  --text-muted: rgba(160, 236, 220, 0.5);
+
+  /* Accent Colors */
+  --color-primary: #1EA896;
+  --color-primary-hover: #17876F;
+  --color-primary-light: #67E1CB;
+  --color-secondary: #A0ECDC;
+
+  /* Border Colors */
+  --border-primary: rgba(6, 100, 88, 0.5);
+  --border-secondary: rgba(6, 100, 88, 0.3);
+  --border-light: rgba(160, 236, 220, 0.2);
+
+  /* Status Colors */
+  --color-success: #4ADE80;
+  --color-warning: #FDE047;
+  --color-danger: #F87171;
+  --color-info: #60A5FA;
+
+  /* Badge/Tag Colors */
+  --badge-ready: #4ADE80;
+  --badge-pending: #FDE047;
+  --badge-review: #60A5FA;
+  --badge-draft: #A0ECDC;
+  --badge-rejected: #F87171;
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+
+  /* Overlay Colors */
+  --overlay-light: rgba(16, 35, 32, 0.5);
+  --overlay-dark: rgba(16, 35, 32, 0.8);
+
+  /* Input Colors */
+  --input-bg: rgba(13, 31, 28, 0.8);
+  --input-border: rgba(6, 100, 88, 0.5);
+  --input-placeholder: rgba(160, 236, 220, 0.5);
+  --input-focus-border: #1EA896;
+
+  /* Button Colors */
+  --btn-primary-bg: #1EA896;
+  --btn-primary-text: #FFFFFF;
+  --btn-primary-hover: #17876F;
+  --btn-secondary-bg: rgba(13, 31, 28, 0.6);
+  --btn-secondary-text: #FFFFFF;
+  --btn-secondary-border: rgba(160, 236, 220, 0.3);
+
+  /* Table Colors */
+  --table-header-bg: rgba(13, 31, 28, 0.8);
+  --table-row-hover: rgba(30, 168, 150, 0.1);
+  --table-border: rgba(6, 100, 88, 0.3);
+
+  /* Footer Colors */
+  --footer-text: rgba(160, 236, 220, 0.6);
+
+  /* Hero Background */
+  --hero-bg-url: url('/attached_assets/ Images & Graphics/Hero background/Dark Mode/SVG/Hero_Background_1.svg');
+}
+
+/* ==================== Light Theme ==================== */
+[data-theme="light"] {
+  /* Background Colors */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --bg-tertiary: rgba(249, 250, 251, 0.8);
+  --bg-card: #FFFFFF;
+  --bg-hover: rgba(30, 168, 150, 0.05);
+
+  /* Text Colors */
+  --text-primary: #102320;
+  --text-secondary: #066458;
+  --text-tertiary: rgba(6, 100, 88, 0.7);
+  --text-muted: rgba(6, 100, 88, 0.5);
+
+  /* Accent Colors - Keep same primary accent */
+  --color-primary: #1EA896;
+  --color-primary-hover: #17876F;
+  --color-primary-light: #A0ECDC;
+  --color-secondary: #066458;
+
+  /* Border Colors */
+  --border-primary: rgba(6, 100, 88, 0.2);
+  --border-secondary: rgba(6, 100, 88, 0.15);
+  --border-light: rgba(6, 100, 88, 0.1);
+
+  /* Status Colors - Keep same */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #3B82F6;
+
+  /* Badge/Tag Colors */
+  --badge-ready: #10B981;
+  --badge-pending: #F59E0B;
+  --badge-review: #3B82F6;
+  --badge-draft: #6B7280;
+  --badge-rejected: #EF4444;
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Overlay Colors */
+  --overlay-light: rgba(255, 255, 255, 0.5);
+  --overlay-dark: rgba(255, 255, 255, 0.8);
+
+  /* Input Colors */
+  --input-bg: #FFFFFF;
+  --input-border: rgba(6, 100, 88, 0.2);
+  --input-placeholder: rgba(6, 100, 88, 0.4);
+  --input-focus-border: #1EA896;
+
+  /* Button Colors */
+  --btn-primary-bg: #1EA896;
+  --btn-primary-text: #FFFFFF;
+  --btn-primary-hover: #17876F;
+  --btn-secondary-bg: #FFFFFF;
+  --btn-secondary-text: #102320;
+  --btn-secondary-border: rgba(6, 100, 88, 0.2);
+
+  /* Table Colors */
+  --table-header-bg: #F9FAFB;
+  --table-row-hover: rgba(30, 168, 150, 0.05);
+  --table-border: rgba(6, 100, 88, 0.1);
+
+  /* Footer Colors */
+  --footer-text: rgba(6, 100, 88, 0.6);
+
+  /* Hero Background */
+  --hero-bg-url: url('/attached_assets/ Images & Graphics/Hero background/Light Mode/SVG/Hero_Background_L.svg');
+}
+
+/* ==================== Common Transitions ==================== */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Disable transitions during theme initialization to avoid flash */
+.theme-initializing * {
+  transition: none !important;
+}
+
+/* ==================== Theme Toggle Button Styles ==================== */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--text-primary);
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(180deg);
+}
+
+/* Hide/show icons based on theme */
+[data-theme="dark"] .theme-toggle .sun-icon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .moon-icon {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .sun-icon {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .moon-icon {
+  display: block;
+}
+
+/* ==================== Logo Theme Switching ==================== */
+
+/* Dark Mode - Show secondary logo (light colored) */
+[data-theme="dark"] .logo-dark {
+  display: block;
+}
+
+[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+/* Light Mode - Show primary logo (dark colored) */
+[data-theme="light"] .logo-dark {
+  display: none;
+}
+
+[data-theme="light"] .logo-light {
+  display: block;
+}

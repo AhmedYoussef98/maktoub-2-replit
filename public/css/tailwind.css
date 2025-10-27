@@ -1,0 +1,256 @@
+/* Tailwind CSS Entry Point */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Fonts Configuration */
+@import './fonts.css';
+
+/* CSS Variables for Theme System */
+:root {
+  /* Maktoub Brand Colors */
+  --maktoub-dark: #102320;
+  --maktoub-primary: #1EA896;
+  --maktoub-main: #1EA896;
+  --maktoub-light: #A0ECDC;
+  --maktoub-white: #FFFFFF;
+
+  /* Maktoub Teal Palette */
+  --maktoub-teal-50: #F1FCFA;
+  --maktoub-teal-100: #D4F5EF;
+  --maktoub-teal-200: #A9EBE0;
+  --maktoub-teal-300: #67E1CB;
+  --maktoub-teal-400: #3DCBB8;
+  --maktoub-teal-500: #1EA896;
+  --maktoub-teal-600: #178579;
+  --maktoub-teal-700: #136B62;
+  --maktoub-teal-800: #0F544E;
+  --maktoub-teal-900: #0D4541;
+
+  /* Secondary Teal Shades */
+  --teal-dark: #066458;
+
+  /* Gray Scale */
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+
+  /* Theme Variables (Light Mode Default) */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F1FCFA;
+  --bg-tertiary: #F9FAFB;
+  --text-primary: #102320;
+  --text-secondary: #374151;
+  --text-tertiary: #6B7280;
+  --border-color: #D1D5DB;
+  --border-color-hover: #A0ECDC;
+
+  /* Component Specific */
+  --card-bg: #FFFFFF;
+  --input-bg: #FFFFFF;
+  --button-primary-bg: #1EA896;
+  --button-primary-text: #FFFFFF;
+  --hero-bg: url('/attached_assets/ Images & Graphics/Hero background/Light Mode/SVG/Hero_Background_L.svg');
+}
+
+/* Dark Mode Variables */
+.dark {
+  --bg-primary: #102320;
+  --bg-secondary: #0D4541;
+  --bg-tertiary: #0F544E;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0ECDC;
+  --text-tertiary: #67E1CB;
+  --border-color: rgba(6, 100, 88, 0.5);
+  --border-color-hover: #1EA896;
+
+  --card-bg: #0F544E;
+  --input-bg: #136B62;
+  --button-primary-bg: #1EA896;
+  --button-primary-text: #FFFFFF;
+  --hero-bg: url('/attached_assets/ Images & Graphics/Hero background/Dark Mode/SVG/Hero_Background_1.svg');
+}
+
+/* Base Layer Customizations */
+@layer base {
+  html {
+    @apply scroll-smooth;
+    direction: rtl; /* RTL for Arabic */
+  }
+
+  body {
+    @apply font-inter text-base text-gray-900 bg-white antialiased;
+    font-family: 'Inter', 'Janna LT', sans-serif;
+  }
+
+  /* Arabic text should use Janna LT */
+  [lang="ar"], .arabic {
+    @apply font-janna;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-janna font-bold;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  /* Links */
+  a {
+    @apply text-maktoub-primary hover:text-maktoub-teal-600 transition-colors;
+  }
+}
+
+/* Component Layer - Reusable Component Styles */
+@layer components {
+  /* Button Components */
+  .btn-primary {
+    @apply flex items-center justify-center px-[17px] py-[9px] bg-maktoub-primary text-white font-janna font-bold text-sm leading-5 rounded-md shadow-sm hover:bg-maktoub-teal-600 transition-all duration-200;
+  }
+
+  .btn-secondary {
+    @apply flex items-center justify-center px-[17px] py-[9px] bg-maktoub-dark text-maktoub-light font-janna font-bold text-base leading-7 border border-maktoub-light rounded-md shadow-sm hover:bg-maktoub-teal-900 transition-all duration-200;
+  }
+
+  .btn-outlined {
+    @apply flex items-center justify-center px-[17px] py-[9px] bg-white text-gray-700 font-janna text-sm leading-5 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 transition-all duration-200;
+  }
+
+  /* Form Input Components */
+  .input-field {
+    @apply w-full px-[13px] py-[9px] bg-white border border-gray-300 rounded-md shadow-sm text-base leading-6 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-maktoub-primary focus:border-transparent transition-all;
+  }
+
+  .input-label {
+    @apply block w-full text-sm leading-5 text-gray-700 font-janna mb-1 text-right;
+  }
+
+  /* Card Components */
+  .card {
+    @apply bg-white rounded-lg shadow p-8 border border-transparent hover:border-maktoub-light transition-all duration-200;
+  }
+
+  .card-compact {
+    @apply bg-white rounded-lg shadow p-4;
+  }
+
+  /* Status Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-pending {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .badge-info {
+    @apply bg-maktoub-teal-100 text-maktoub-teal-800;
+  }
+
+  /* Navigation Link - Uses theme variables from themes.css */
+  .nav-link {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    font-family: 'Janna LT', Tajawal, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 6px;
+    transition: opacity 0.2s;
+  }
+
+  .nav-link:hover {
+    opacity: 0.8;
+  }
+
+  .nav-link.active {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .nav-button {
+    @apply flex items-center justify-center px-[17px] py-[9px] bg-maktoub-dark text-maktoub-light font-janna font-bold text-base leading-7 border border-maktoub-light rounded-md shadow-sm hover:bg-maktoub-teal-900 transition-all;
+  }
+
+  /* Table Styles */
+  .table {
+    @apply w-full border-collapse;
+  }
+
+  .table-header {
+    @apply bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+  }
+
+  .table-cell {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+  }
+
+  .table-row {
+    @apply border-b border-gray-200 hover:bg-gray-50 transition-colors;
+  }
+}
+
+/* Utility Layer - Custom Utilities */
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-maktoub-primary to-maktoub-teal-300 bg-clip-text text-transparent;
+  }
+
+  .hero-bg-light {
+    background-image: var(--hero-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .rtl {
+    direction: rtl;
+  }
+
+  .ltr {
+    direction: ltr;
+  }
+}
+
+/* Dark Mode Specific Styles */
+.dark body {
+  @apply bg-maktoub-dark text-white;
+}
+
+.dark .card {
+  @apply bg-maktoub-teal-800 border-maktoub-teal-700;
+}
+
+.dark .input-field {
+  @apply bg-maktoub-teal-700 border-maktoub-teal-600 text-white;
+}
+
+.dark .table-row {
+  @apply border-maktoub-teal-700 hover:bg-maktoub-teal-900;
+}

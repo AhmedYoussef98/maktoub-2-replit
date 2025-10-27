@@ -1,0 +1,90 @@
+/*
+ * MAKTOUB FONTS SETUP
+ *
+ * Primary Arabic Font: Janna LT
+ * Fallback Arabic Font: Tajawal (Google Fonts)
+ * Latin Font: Inter (Google Fonts)
+ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+
+/*
+ * JANNA LT FONT SETUP INSTRUCTIONS:
+ *
+ * Janna LT is a premium Arabic font. To use it:
+ *
+ * Option 1: Local Font Files
+ * 1. Obtain Janna LT font files (.woff2, .woff, .ttf)
+ * 2. Place them in /public/fonts/ directory
+ * 3. Uncomment the @font-face declaration below
+ * 4. Update the src paths to match your font file names
+ *
+ * Option 2: Use Fallback (Tajawal)
+ * - Tajawal is already imported above as a fallback
+ * - It provides good Arabic typography similar to Janna LT
+ */
+
+/*
+@font-face {
+  font-family: 'Janna LT';
+  src: url('/public/fonts/JannaLT-Regular.woff2') format('woff2'),
+       url('/public/fonts/JannaLT-Regular.woff') format('woff'),
+       url('/public/fonts/JannaLT-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Janna LT';
+  src: url('/public/fonts/JannaLT-Bold.woff2') format('woff2'),
+       url('/public/fonts/JannaLT-Bold.woff') format('woff'),
+       url('/public/fonts/JannaLT-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* Font Family Variables */
+:root {
+  /* Using Tajawal as fallback for Janna LT */
+  --font-arabic: 'Janna LT', 'Tajawal', 'Arial', sans-serif;
+  --font-latin: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  --font-primary: var(--font-arabic);
+  --font-secondary: var(--font-latin);
+}
+
+/* Global Font Application */
+body {
+  font-family: var(--font-primary);
+}
+
+/* Latin text uses Inter */
+[lang="en"],
+.latin,
+.english {
+  font-family: var(--font-latin);
+}
+
+/* Arabic text uses Janna LT / Tajawal */
+[lang="ar"],
+.arabic,
+.rtl {
+  font-family: var(--font-arabic);
+}
+
+/* Form inputs and placeholders */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-family: var(--font-latin);
+}

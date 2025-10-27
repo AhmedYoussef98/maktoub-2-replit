@@ -1,0 +1,461 @@
+/* ================================
+   Maktoub Theme Override
+   Dark & Light Mode Support
+   ================================ */
+
+/* ================================
+   DARK MODE (Default)
+   ================================ */
+
+/* Body */
+body {
+    background-color: var(--maktoub-dark);
+    color: var(--maktoub-white);
+}
+
+/* Auth Container - Dark Mode */
+.auth-container {
+    background-color: var(--maktoub-dark);
+    background-image: 
+        radial-gradient(at 20% 80%, rgba(var(--maktoub-light-rgb), 0.1) 0px, transparent 50%),
+        radial-gradient(at 80% 20%, rgba(var(--maktoub-primary-rgb), 0.1) 0px, transparent 50%);
+}
+
+.auth-box {
+    background-color: rgba(var(--maktoub-light-rgb), 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--maktoub-border);
+    box-shadow: var(--shadow-xl);
+}
+
+.auth-box h2 {
+    color: var(--maktoub-white);
+}
+
+/* Navbar - Dark Mode */
+.navbar {
+    background-color: var(--maktoub-dark);
+    border-bottom: 1px solid var(--maktoub-border);
+    box-shadow: none;
+}
+
+.nav-link {
+    color: var(--maktoub-white);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--maktoub-light);
+}
+
+/* Logo */
+.logo {
+    color: var(--maktoub-primary);
+}
+
+.logo span {
+    color: var(--maktoub-white);
+}
+
+/* Buttons - Dark Mode */
+.auth-button,
+.cta-button,
+.btn-primary,
+button[type="submit"] {
+    background-color: var(--maktoub-primary);
+    border: 1px solid var(--maktoub-primary);
+    color: var(--maktoub-white);
+}
+
+.auth-button:hover,
+.cta-button:hover,
+.btn-primary:hover,
+button[type="submit"]:hover {
+    background-color: var(--maktoub-light);
+    border-color: var(--maktoub-light);
+    color: var(--maktoub-dark);
+}
+
+/* Form Elements - Dark Mode */
+.form-group label,
+.auth-form label,
+label {
+    color: var(--maktoub-white);
+}
+
+.form-input,
+.form-select,
+.form-textarea,
+.auth-form input,
+.auth-form select,
+.auth-form textarea,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    background-color: rgba(var(--maktoub-light-rgb), 0.05);
+    border: 1px solid var(--maktoub-border);
+    color: var(--maktoub-white);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus,
+.auth-form input:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--maktoub-light);
+    background-color: rgba(var(--maktoub-light-rgb), 0.08);
+    box-shadow: 0 0 0 3px rgba(var(--maktoub-light-rgb), 0.1);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(var(--maktoub-light-rgb), 0.5);
+}
+
+/* Cards - Dark Mode */
+.feature-card,
+.card {
+    background-color: rgba(var(--maktoub-light-rgb), 0.05);
+    border: 1px solid var(--maktoub-border-light);
+}
+
+.feature-card:hover,
+.card:hover {
+    background-color: rgba(var(--maktoub-light-rgb), 0.08);
+    border-color: var(--maktoub-light);
+}
+
+.feature-card h3,
+.card h3,
+h1, h2, h3, h4, h5, h6 {
+    color: var(--maktoub-white);
+}
+
+.feature-card p {
+    color: rgba(var(--maktoub-light-rgb), 0.8);
+}
+
+.feature-card i {
+    color: var(--maktoub-primary);
+}
+
+/* Links - Dark Mode */
+.auth-link,
+.auth-switch a,
+a {
+    color: var(--maktoub-light);
+}
+
+.auth-link:hover,
+.auth-switch a:hover {
+    color: var(--maktoub-primary);
+}
+
+/* Divider */
+.divider {
+    color: rgba(var(--maktoub-light-rgb), 0.6);
+}
+
+.divider::before,
+.divider::after {
+    background: var(--maktoub-border);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--maktoub-border);
+    color: var(--maktoub-light);
+}
+
+.theme-toggle:hover {
+    background-color: rgba(var(--maktoub-light-rgb), 0.1);
+    border-color: var(--maktoub-light);
+}
+
+/* Main Container */
+.main-container {
+    background-color: var(--maktoub-dark);
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: var(--maktoub-dark);
+}
+
+.hero-title {
+    color: var(--maktoub-white);
+}
+
+.hero-subtitle {
+    color: rgba(var(--maktoub-light-rgb), 0.8);
+}
+
+/* Tables - Dark Mode */
+table {
+    background-color: rgba(var(--maktoub-light-rgb), 0.05);
+    border: 1px solid var(--maktoub-border);
+}
+
+thead {
+    background-color: rgba(var(--maktoub-primary-rgb), 0.1);
+}
+
+th, td {
+    border-color: var(--maktoub-border);
+    color: var(--maktoub-white);
+}
+
+tr:hover {
+    background-color: rgba(var(--maktoub-light-rgb), 0.05);
+}
+
+/* Profile */
+.profile-menu,
+.profile-dropdown {
+    background-color: rgba(var(--maktoub-dark-rgb), 0.95);
+    border: 1px solid var(--maktoub-border);
+}
+
+.profile-menu-item {
+    color: var(--maktoub-white);
+}
+
+.profile-menu-item:hover {
+    background-color: rgba(var(--maktoub-light-rgb), 0.1);
+}
+
+/* Modals */
+.modal,
+.modal-content {
+    background-color: var(--maktoub-dark);
+    border: 1px solid var(--maktoub-border);
+}
+
+/* ================================
+   LIGHT MODE
+   ================================ */
+
+body.light-mode {
+    background-color: var(--maktoub-teal-50);
+    color: var(--maktoub-dark);
+}
+
+/* Auth Container - Light Mode */
+body.light-mode .auth-container {
+    background-color: var(--maktoub-teal-50);
+    background-image: 
+        radial-gradient(at 20% 80%, rgba(var(--maktoub-light-rgb), 0.3) 0px, transparent 50%),
+        radial-gradient(at 80% 20%, rgba(var(--maktoub-primary-rgb), 0.2) 0px, transparent 50%);
+}
+
+body.light-mode .auth-box {
+    background-color: var(--maktoub-white);
+    backdrop-filter: none;
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.15);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .auth-box h2 {
+    color: var(--maktoub-dark);
+}
+
+/* Navbar - Light Mode */
+body.light-mode .navbar {
+    background-color: var(--maktoub-white);
+    border-bottom: 1px solid rgba(var(--maktoub-primary-rgb), 0.1);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .nav-link {
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .nav-link:hover,
+body.light-mode .nav-link.active {
+    color: var(--maktoub-primary);
+}
+
+/* Logo - Light Mode */
+body.light-mode .logo span {
+    color: var(--maktoub-dark);
+}
+
+/* Form Elements - Light Mode */
+body.light-mode .form-group label,
+body.light-mode .auth-form label,
+body.light-mode label {
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .form-input,
+body.light-mode .form-select,
+body.light-mode .form-textarea,
+body.light-mode .auth-form input,
+body.light-mode .auth-form select,
+body.light-mode .auth-form textarea,
+body.light-mode input[type="text"],
+body.light-mode input[type="email"],
+body.light-mode input[type="password"],
+body.light-mode input[type="number"],
+body.light-mode select,
+body.light-mode textarea {
+    background-color: var(--maktoub-white);
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.2);
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .form-input:focus,
+body.light-mode .form-select:focus,
+body.light-mode .form-textarea:focus,
+body.light-mode .auth-form input:focus,
+body.light-mode input[type="text"]:focus,
+body.light-mode input[type="email"]:focus,
+body.light-mode input[type="password"]:focus,
+body.light-mode input[type="number"]:focus,
+body.light-mode select:focus,
+body.light-mode textarea:focus {
+    border-color: var(--maktoub-primary);
+    background-color: var(--maktoub-white);
+    box-shadow: 0 0 0 3px rgba(var(--maktoub-primary-rgb), 0.1);
+}
+
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+    color: rgba(var(--maktoub-dark-rgb), 0.4);
+}
+
+/* Cards - Light Mode */
+body.light-mode .feature-card,
+body.light-mode .card {
+    background-color: var(--maktoub-white);
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.15);
+}
+
+body.light-mode .feature-card:hover,
+body.light-mode .card:hover {
+    background-color: var(--maktoub-white);
+    border-color: var(--maktoub-primary);
+    box-shadow: 0px 4px 12px rgba(var(--maktoub-primary-rgb), 0.1);
+}
+
+body.light-mode .feature-card h3,
+body.light-mode .card h3,
+body.light-mode h1, 
+body.light-mode h2, 
+body.light-mode h3, 
+body.light-mode h4, 
+body.light-mode h5, 
+body.light-mode h6 {
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .feature-card p {
+    color: rgba(var(--maktoub-dark-rgb), 0.7);
+}
+
+/* Links - Light Mode */
+body.light-mode .auth-link,
+body.light-mode .auth-switch a,
+body.light-mode a {
+    color: var(--maktoub-primary);
+}
+
+body.light-mode .auth-link:hover,
+body.light-mode .auth-switch a:hover {
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .auth-switch {
+    color: rgba(var(--maktoub-dark-rgb), 0.7);
+}
+
+/* Divider - Light Mode */
+body.light-mode .divider {
+    color: rgba(var(--maktoub-dark-rgb), 0.5);
+}
+
+body.light-mode .divider::before,
+body.light-mode .divider::after {
+    background: rgba(var(--maktoub-primary-rgb), 0.2);
+}
+
+/* Theme Toggle - Light Mode */
+body.light-mode .theme-toggle {
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.2);
+    color: var(--maktoub-primary);
+}
+
+body.light-mode .theme-toggle:hover {
+    background-color: rgba(var(--maktoub-primary-rgb), 0.1);
+    border-color: var(--maktoub-primary);
+}
+
+/* Main Container - Light Mode */
+body.light-mode .main-container {
+    background-color: var(--maktoub-teal-50);
+}
+
+/* Hero Section - Light Mode */
+body.light-mode .hero-section {
+    background-color: transparent;
+}
+
+body.light-mode .hero-title {
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .hero-subtitle {
+    color: rgba(var(--maktoub-dark-rgb), 0.7);
+}
+
+/* Tables - Light Mode */
+body.light-mode table {
+    background-color: var(--maktoub-white);
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.15);
+}
+
+body.light-mode thead {
+    background-color: rgba(var(--maktoub-primary-rgb), 0.05);
+}
+
+body.light-mode th,
+body.light-mode td {
+    border-color: rgba(var(--maktoub-primary-rgb), 0.1);
+    color: var(--maktoub-dark);
+}
+
+body.light-mode tr:hover {
+    background-color: rgba(var(--maktoub-primary-rgb), 0.02);
+}
+
+/* Profile - Light Mode */
+body.light-mode .profile-menu,
+body.light-mode .profile-dropdown {
+    background-color: var(--maktoub-white);
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.15);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .profile-menu-item {
+    color: var(--maktoub-dark);
+}
+
+body.light-mode .profile-menu-item:hover {
+    background-color: rgba(var(--maktoub-primary-rgb), 0.05);
+}
+
+/* Modals - Light Mode */
+body.light-mode .modal,
+body.light-mode .modal-content {
+    background-color: var(--maktoub-white);
+    border: 1px solid rgba(var(--maktoub-primary-rgb), 0.15);
+}

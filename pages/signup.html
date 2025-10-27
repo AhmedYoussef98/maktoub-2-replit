@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد - Maktoub</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/attached_assets/Favicon/SVG/32x32.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/attached_assets/Favicon/PNG/32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/attached_assets/Favicon/PNG/16x16.png">
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/public/css/output.css">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="/public/css/themes.css">
+
+
+    <style>
+        /* Hero Background with Pattern - Theme Aware */
+        .hero-bg {
+            background-image: var(--hero-bg-url);
+            background-size: auto 100%;
+            background-position: left center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            transform: scale(1.2);
+            position: absolute;
+            width: 1893px;
+            height: 1120px;
+            left: 0;
+            top: -33px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-janna" style="background: var(--bg-primary);">
+    <!-- Main Content -->
+    <div class="flex-1 flex items-center justify-center px-4 py-16 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="hero-bg"></div>
+
+        <!-- Content Container -->
+        <div class="w-full max-w-md relative z-10">
+            <!-- Header -->
+            <div class="flex flex-col items-center gap-6 mb-8">
+                <!-- Logo and Theme Toggle -->
+                <div class="w-full flex items-center justify-between">
+                    <button onclick="ThemeService.toggleTheme()" class="theme-toggle" aria-label="Toggle theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z"/>
+                        </svg>
+                    </button>
+                    <a href="/" class="block">
+                        <!-- Dark mode logo (secondary - light colored) -->
+                        <img src="/attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg"
+                             alt="Maktoub Logo"
+                             class="h-[35px] w-[151px] logo-dark">
+                        <!-- Light mode logo (primary - dark colored) -->
+                        <img src="/attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg"
+                             alt="Maktoub Logo"
+                             class="h-[35px] w-[151px] logo-light">
+                    </a>
+                    <div class="w-[40px]"></div> <!-- Spacer for centering -->
+                </div>
+
+                <!-- Headline -->
+                <h1 class="text-3xl font-bold text-center leading-9" style="color: var(--text-primary);">
+                    إنشاء حساب جديد
+                </h1>
+            </div>
+
+            <!-- Card - Dark Teal Background -->
+            <div class="rounded-lg shadow-xl p-10 flex flex-col gap-6" style="background: var(--bg-card);">
+                <!-- Signup Form -->
+                <form id="signupForm" class="flex flex-col gap-6">
+                    <!-- Name Input -->
+                    <div class="flex flex-col items-end gap-2">
+                        <label for="name" class="text-sm font-normal text-right" style="color: var(--text-secondary);">
+                            الاسم الكامل
+                        </label>
+                        <input type="text"
+                               id="name"
+                               class="w-full px-4 py-3 rounded-lg border font-inter text-right"
+                               style="background: var(--input-bg); border-color: var(--input-border); color: var(--text-primary);"
+                               placeholder="أدخل اسمك الكامل"
+                               required>
+                    </div>
+
+                    <!-- Email Input -->
+                    <div class="flex flex-col items-end gap-2">
+                        <label for="email" class="text-sm font-normal text-right" style="color: var(--text-secondary);">
+                            البريد الإلكتروني
+                        </label>
+                        <input type="email"
+                               id="email"
+                               class="w-full px-4 py-3 rounded-lg border font-inter text-right"
+                               style="background: var(--input-bg); border-color: var(--input-border); color: var(--text-primary);"
+                               placeholder="you@example.com"
+                               required>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="flex flex-col items-end gap-2">
+                        <label for="password" class="text-sm font-normal text-right" style="color: var(--text-secondary);">
+                            كلمة المرور
+                        </label>
+                        <input type="password"
+                               id="password"
+                               class="w-full px-4 py-3 rounded-lg border font-inter text-right"
+                               style="background: var(--input-bg); border-color: var(--input-border); color: var(--text-primary);"
+                               placeholder="••••••••"
+                               required>
+                    </div>
+
+                    <!-- Sign Up Button -->
+                    <button type="submit"
+                            id="signupButton"
+                            class="w-full px-6 py-3 rounded-lg font-medium text-base transition-all hover:opacity-90"
+                            style="background: var(--btn-primary-bg); color: var(--btn-primary-text);">
+                        إنشاء حساب
+                    </button>
+                </form>
+
+                <!-- Login Link -->
+                <div class="text-center">
+                    <span class="text-sm" style="color: var(--text-secondary);">لديك حساب بالفعل؟</span>
+                    <a href="/login.html" class="text-sm hover:underline mr-2" style="color: var(--color-primary);">تسجيل الدخول</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-6 bg-transparent">
+        <div class="max-w-6xl mx-auto px-8">
+            <p class="text-sm text-center font-inter" style="color: var(--footer-text);">
+                © 2025 Maktoub. All rights reserved to SQUAD.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts - Load in specific order -->
+    <!-- Core modules first -->
+    <script src="/src/core/config.js" onerror="console.error('❌ Failed to load config.js')"></script>
+    <script src="/src/core/constants.js" onerror="console.error('❌ Failed to load constants.js')"></script>
+    <script src="/src/core/utils.js" onerror="console.error('❌ Failed to load utils.js')"></script>
+
+    <!-- Development mode (REMOVED FOR PRODUCTION) -->
+    <!-- <script src="/src/core/dev-mode.js" onerror="console.error('❌ Failed to load dev-mode.js')"></script> -->
+
+    <!-- Theme Service -->
+    <script src="/src/services/theme.js" onerror="console.error('❌ Failed to load theme.js')"></script>
+
+    <!-- Feature modules -->
+    <script src="/src/modules/notifications.js" onerror="console.error('❌ Failed to load notifications.js')"></script>
+    <script src="/src/services/auth.js" onerror="console.error('❌ Failed to load auth.js')"></script>
+
+    <script>
+        // Trigger Google Sign-Up when custom button is clicked
+        document.addEventListener('DOMContentLoaded', function() {
+            const googleSignUpBtn = document.getElementById('googleSignUpBtn');
+            if (googleSignUpBtn) {
+                googleSignUpBtn.addEventListener('click', function() {
+                    console.log('🔍 Google Sign-Up button clicked');
+                    // Programmatically trigger Google Sign-In
+                    const googleButton = document.querySelector('.g_id_signin');
+                    if (googleButton) {
+                        googleButton.click();
+                    } else {
+                        // Fallback: redirect to Google OAuth
+                        window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=671992619897-iqr0sbkqkchmf40bejbvlj0dr6f717oh.apps.googleusercontent.com';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مراجعة خطاب - Maktoub</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/attached_assets/Favicon/SVG/32x32.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/attached_assets/Favicon/PNG/32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/attached_assets/Favicon/PNG/16x16.png">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="/public/css/themes.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="/public/css/dashboard.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="navbar-logo">
+                    <!-- Dark mode logo (secondary - light colored) -->
+                    <img src="/attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg" alt="Maktoub Logo" class="logo-image logo-dark">
+                    <!-- Light mode logo (primary - dark colored) -->
+                    <img src="/attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg" alt="Maktoub Logo" class="logo-image logo-light">
+                </div>
+
+                <div class="navbar-links">
+                    <a href="/create-letter.html" class="nav-link">إنشاء خطاب جديد</a>
+                    <a href="/letter-history.html" class="nav-link">سجل الخطابات</a>
+                    <a href="/review-letter.html" class="nav-link active">مراجعة خطاب</a>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <!-- Theme Toggle Button -->
+                    <button onclick="ThemeService.toggleTheme()" class="theme-toggle" aria-label="Toggle theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z"/>
+                        </svg>
+                    </button>
+
+                    <!-- Profile Container - Will be populated by auth-guard.js -->
+                    <div id="profile-container" class="navbar-profile" style="direction: ltr;">
+                        <div class="avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="avatar-icon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="12" cy="9" r="3" fill="currentColor"/>
+                                <path d="M6 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="profile-name">جاري التحميل...</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" fill="#A0ECDC"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Background Pattern -->
+            <div class="hero-background"></div>
+
+            <div class="content-wrapper">
+                <!-- Page Title -->
+                <h1 class="page-title">مراجعة خطاب</h1>
+
+                <!-- Letter Selection Section -->
+                <div class="letter-selection-container" id="letterSelection" style="
+                    background: rgba(13, 31, 28, 0.6);
+                    border: 1px solid rgba(6, 100, 88, 0.5);
+                    border-radius: 12px;
+                    padding: 32px;
+                    margin-bottom: 24px;
+                ">
+                    <h2 style="color: #A0ECDC; font-size: 24px; font-weight: 600; margin-bottom: 20px; text-align: right;">
+                        اختر خطاباً للمراجعة
+                    </h2>
+                    <select id="letterSelect" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        background: rgba(13, 31, 28, 0.8);
+                        border: 1px solid rgba(6, 100, 88, 0.5);
+                        border-radius: 8px;
+                        color: #FFF;
+                        font-family: 'Janna LT', sans-serif;
+                        font-size: 16px;
+                        cursor: pointer;
+                        text-align: right;
+                    ">
+                        <option value="">اختر خطاباً</option>
+                    </select>
+                </div>
+
+                <!-- Review Form -->
+                <div class="review-form-container" id="reviewForm" style="display: none;">
+                    <form id="reviewFormElement">
+                        <div style="
+                            background: rgba(13, 31, 28, 0.6);
+                            border: 1px solid rgba(6, 100, 88, 0.5);
+                            border-radius: 12px;
+                            padding: 32px;
+                            margin-bottom: 24px;
+                        ">
+                            <!-- Reviewer Name -->
+                            <div style="margin-bottom: 24px;">
+                                <label for="reviewerName" style="
+                                    display: block;
+                                    color: #A0ECDC;
+                                    font-size: 14px;
+                                    margin-bottom: 8px;
+                                    text-align: right;
+                                ">
+                                    اسم المراجع <span style="color: #F87171;">*</span>
+                                </label>
+                                <input type="text" id="reviewerName" required style="
+                                    width: 100%;
+                                    padding: 12px 16px;
+                                    background: rgba(13, 31, 28, 0.8);
+                                    border: 1px solid rgba(6, 100, 88, 0.5);
+                                    border-radius: 8px;
+                                    color: #FFF;
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    text-align: right;
+                                ">
+                            </div>
+
+                            <!-- Letter Content -->
+                            <div style="margin-bottom: 24px;">
+                                <label for="letterContentReview" style="
+                                    display: block;
+                                    color: #A0ECDC;
+                                    font-size: 14px;
+                                    margin-bottom: 8px;
+                                    text-align: right;
+                                ">محتوى الخطاب</label>
+                                <textarea id="letterContentReview" rows="10" style="
+                                    width: 100%;
+                                    padding: 12px 16px;
+                                    background: rgba(13, 31, 28, 0.8);
+                                    border: 1px solid rgba(6, 100, 88, 0.5);
+                                    border-radius: 8px;
+                                    color: #FFF;
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    text-align: right;
+                                    resize: vertical;
+                                "></textarea>
+                            </div>
+
+                            <!-- Review Notes -->
+                            <div style="margin-bottom: 24px;">
+                                <label for="reviewNotes" style="
+                                    display: block;
+                                    color: #A0ECDC;
+                                    font-size: 14px;
+                                    margin-bottom: 8px;
+                                    text-align: right;
+                                ">الملاحظات</label>
+                                <textarea id="reviewNotes" rows="4" style="
+                                    width: 100%;
+                                    padding: 12px 16px;
+                                    background: rgba(13, 31, 28, 0.8);
+                                    border: 1px solid rgba(6, 100, 88, 0.5);
+                                    border-radius: 8px;
+                                    color: #FFF;
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    text-align: right;
+                                    resize: vertical;
+                                "></textarea>
+                            </div>
+
+                            <!-- Review Complete Checkbox -->
+                            <div style="margin-bottom: 24px;">
+                                <label style="
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    color: #A0ECDC;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    flex-direction: row-reverse;
+                                    justify-content: flex-end;
+                                ">
+                                    <span>تمت المراجعة</span>
+                                    <input type="checkbox" id="reviewComplete" style="
+                                        width: 20px;
+                                        height: 20px;
+                                        cursor: pointer;
+                                    ">
+                                </label>
+                            </div>
+
+                            <!-- Review Action Buttons -->
+                            <div style="
+                                display: flex;
+                                gap: 12px;
+                                justify-content: flex-end;
+                                flex-wrap: wrap;
+                            ">
+                                <button type="button" id="readyButton" disabled style="
+                                    padding: 12px 24px;
+                                    background: rgba(34, 197, 94, 0.2);
+                                    border: 1px solid #4ADE80;
+                                    border-radius: 8px;
+                                    color: #4ADE80;
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                ">
+                                    <i class="fas fa-check"></i>
+                                    <span>جاهز للإرسال</span>
+                                </button>
+                                <button type="button" id="improvementButton" disabled style="
+                                    padding: 12px 24px;
+                                    background: rgba(234, 179, 8, 0.2);
+                                    border: 1px solid #FDE047;
+                                    border-radius: 8px;
+                                    color: #FDE047;
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                ">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>يحتاج إلى تحسينات</span>
+                                </button>
+                                <button type="button" id="rejectedButton" disabled style="
+                                    padding: 12px 24px;
+                                    background: rgba(239, 68, 68, 0.2);
+                                    border: 1px solid #F87171;
+                                    border-radius: 8px;
+                                    color: #F87171;
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                ">
+                                    <i class="fas fa-times"></i>
+                                    <span>مرفوض</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <p class="copyright">© 2025 Maktoub. All rights reserved to SQUAD.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Third-party libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Scripts - Load in specific order -->
+    <!-- Core modules first -->
+    <script src="/src/core/config.js"></script>
+    <script src="/src/core/constants.js"></script>
+    <script src="/src/core/utils.js"></script>
+
+    <!-- Development mode (REMOVED FOR PRODUCTION) -->
+    <!-- <script src="/src/core/dev-mode.js"></script> -->
+
+    <!-- Theme Service -->
+    <script src="/src/services/theme.js"></script>
+
+    <!-- Feature modules -->
+    <script src="/src/modules/notifications.js"></script>
+
+    <!-- Services -->
+    <script src="/src/services/sheets.js"></script>
+    <script src="/src/services/api.js"></script>
+    <script src="/src/services/auth.js"></script>
+
+    <!-- Guards - Authentication guard will populate profile -->
+    <script src="/src/guards/auth-guard.js"></script>
+
+    <!-- Other modules -->
+    <script src="/src/modules/main.js"></script>
+    <script src="/src/modules/mobile.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLettersForReview();
+            setupReviewForm();
+
+            // Enable buttons when review complete checkbox is checked
+            const reviewCompleteCheckbox = document.getElementById('reviewComplete');
+            const readyButton = document.getElementById('readyButton');
+            const improvementButton = document.getElementById('improvementButton');
+            const rejectedButton = document.getElementById('rejectedButton');
+
+            if (reviewCompleteCheckbox) {
+                reviewCompleteCheckbox.addEventListener('change', function() {
+                    const isChecked = this.checked;
+                    readyButton.disabled = !isChecked;
+                    improvementButton.disabled = !isChecked;
+                    rejectedButton.disabled = !isChecked;
+
+                    if (isChecked) {
+                        readyButton.style.opacity = '1';
+                        improvementButton.style.opacity = '1';
+                        rejectedButton.style.opacity = '1';
+                    } else {
+                        readyButton.style.opacity = '0.5';
+                        improvementButton.style.opacity = '0.5';
+                        rejectedButton.style.opacity = '0.5';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

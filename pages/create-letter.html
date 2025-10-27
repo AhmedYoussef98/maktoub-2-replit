@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء خطاب جديد - Maktoub</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="attached_assets/Favicon/SVG/32x32.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="attached_assets/Favicon/PNG/32x32.png">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="public/css/themes.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="public/css/dashboard.css">
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="public/css/output.css">
+
+    <!-- Create Letter Page CSS -->
+    <link rel="stylesheet" href="public/css/create-letter.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="font-janna min-h-screen">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <!-- Dark mode logo (secondary - light colored) -->
+                <img src="attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg" alt="Maktoub Logo" class="logo-image logo-dark">
+                <!-- Light mode logo (primary - dark colored) -->
+                <img src="attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg" alt="Maktoub Logo" class="logo-image logo-light">
+            </div>
+
+            <div class="navbar-links">
+                <a href="/create-letter.html" class="nav-link active">إنشاء خطاب جديد</a>
+                <a href="/letter-history.html" class="nav-link">سجل الخطابات</a>
+                <a href="/review-letter.html" class="nav-link">مراجعة خطاب</a>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Theme Toggle Button -->
+                <button onclick="ThemeService.toggleTheme()" class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z"/>
+                    </svg>
+                </button>
+
+                <!-- Profile Container - Will be populated by auth-guard.js -->
+                <div id="profile-container" class="navbar-profile" style="direction: ltr;">
+                    <div class="avatar">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="avatar-icon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <circle cx="12" cy="9" r="3" fill="currentColor"/>
+                            <path d="M6 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="profile-name">جاري التحميل...</span>
+                    <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" fill="#A0ECDC"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold">إنشاء خطاب جديد</h1>
+        </div>
+
+        <!-- Two Column Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Left Column: Form Section -->
+            <section class="card bg-maktoub-teal-800">
+                <h2 class="text-2xl font-bold mb-6 section-title">بيانات الخطاب</h2>
+
+                <form id="letterForm" class="space-y-6">
+                    <!-- Organization Name -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="organizationName" class="input-label text-right">
+                            اسم الجهة <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text"
+                               id="organizationName"
+                               name="organization_name"
+                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                               required>
+                    </div>
+
+                    <!-- Recipient Job Title -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="recipientJobTitle" class="input-label text-right">
+                            المسمى الوظيفي للمرسل إليه <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text"
+                               id="recipientJobTitle"
+                               name="recipient_job_title"
+                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                               required>
+                    </div>
+
+                    <!-- Recipient Title -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="recipientTitle" class="input-label text-right">
+                            لقب المرسل إليه <span class="text-red-400">*</span>
+                        </label>
+                        <select id="recipientTitle"
+                                name="recipient_title"
+                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                required>
+                            <option value="">اختر اللقب</option>
+                            <option value="صاحب السمو الملكي">صاحب السمو الملكي</option>
+                            <option value="صاحب السمو">صاحب السمو</option>
+                            <option value="صاحب المعالي">صاحب المعالي</option>
+                            <option value="معالي">معالي</option>
+                            <option value="سعادة">سعادة</option>
+                            <option value="السادة">السادة</option>
+                            <option value="أخرى">أخرى</option>
+                        </select>
+                        <input type="text"
+                               id="otherRecipientTitle"
+                               name="other_recipient_title"
+                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600 mt-2"
+                               style="display:none;"
+                               placeholder="أدخل اللقب الآخر">
+                    </div>
+
+                    <!-- Recipient Name -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="recipient" class="input-label text-right">
+                            اسم المرسل إليه
+                        </label>
+                        <input type="text"
+                               id="recipient"
+                               name="recipient"
+                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                               placeholder="الثنائي أو الثلاثي إن وجد">
+                    </div>
+
+                    <!-- Letter Type -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="letterType" class="input-label text-right">
+                            نوع الخطاب <span class="text-red-400">*</span>
+                        </label>
+                        <select id="letterType"
+                                name="category"
+                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                required>
+                            <option value="">اختر نوع الخطاب</option>
+                            <option value="خطاب جديد">خطاب جديد</option>
+                            <option value="خطاب رد على خطاب من الجهة">خطاب رد على خطاب من الجهة</option>
+                            <option value="خطاب إلحاقي">خطاب إلحاقي</option>
+                            <option value="طلب">طلب</option>
+                            <option value="جدولة اجتماع">جدولة اجتماع</option>
+                            <option value="دعوة حضور">دعوة حضور</option>
+                            <option value="تهنئة">تهنئة</option>
+                        </select>
+                    </div>
+
+                    <!-- Previous Letter (conditional) -->
+                    <div id="previousLetterGroup" class="flex flex-col items-end gap-1" style="display: none;">
+                        <label for="previousLetter" class="input-label text-right">
+                            الخطاب السابق <span class="text-red-400">*</span>
+                        </label>
+                        <select id="previousLetter"
+                                name="previous_letter_id"
+                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600">
+                            <option value="">اختر الخطاب السابق</option>
+                        </select>
+                    </div>
+
+                    <!-- Received Letter (conditional) -->
+                    <div id="receivedLetterGroup" class="flex flex-col items-end gap-1" style="display: none;">
+                        <label for="receivedLetter" class="input-label text-right">
+                            الخطاب المستلم <span class="text-red-400">*</span>
+                        </label>
+                        <select id="receivedLetter"
+                                name="received_letter_id"
+                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600">
+                            <option value="">اختر الخطاب المستلم</option>
+                        </select>
+                    </div>
+
+                    <!-- Letter Purpose -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="letterPurpose" class="input-label text-right">
+                            الغرض من الخطاب <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text"
+                               id="letterPurpose"
+                               name="title"
+                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                               required>
+                    </div>
+
+                    <!-- Letter Content -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="letterContent" class="input-label text-right">
+                            محتوى الخطاب <span class="text-red-400">*</span>
+                        </label>
+                        <textarea id="letterContent"
+                                  name="prompt"
+                                  rows="6"
+                                  class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                  required></textarea>
+                    </div>
+
+                    <!-- Is First Communication -->
+                    <div class="flex flex-col items-end gap-2">
+                        <label class="input-label text-right">
+                            هل هذه أول مراسلة؟ <span class="text-red-400">*</span>
+                        </label>
+                        <div class="flex gap-6 flex-row-reverse">
+                            <label class="flex items-center gap-2">
+                                <span>نعم</span>
+                                <input type="radio" name="is_first" value="true" required
+                                       class="w-4 h-4 text-maktoub-primary">
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <span>لا</span>
+                                <input type="radio" name="is_first" value="false" required
+                                       class="w-4 h-4 text-maktoub-primary">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Contact Officer -->
+                    <div class="flex flex-col items-end gap-1">
+                        <label for="letterStyle" class="input-label text-right">
+                            ضابط الاتصال
+                        </label>
+                        <select id="letterStyle"
+                                name="member_name"
+                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600">
+                            <option value="">اختر الاسم (اختياري)</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit"
+                            id="generateButton"
+                            class="btn-primary w-full text-lg gap-2">
+                        <i class="fas fa-magic"></i>
+                        إنشاء الخطاب
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Column: Preview Section -->
+            <section id="previewSection" class="card bg-maktoub-teal-800">
+                <h2 class="text-2xl font-bold mb-6">معاينة الخطاب</h2>
+
+                <div class="space-y-6">
+                    <!-- Placeholder (shown initially) -->
+                    <div id="previewPlaceholder" class="flex flex-col items-center justify-center px-6 bg-maktoub-teal-700 rounded-lg border-2 border-dashed border-maktoub-teal-600" style="min-height: 500px;">
+                        <div class="mb-4 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 80 80" fill="none">
+                                <circle cx="40" cy="40" r="38" stroke="#A0ECDC" stroke-width="3" fill="none"/>
+                                <path d="M10 40C10 40 22 20 40 20C58 20 70 40 70 40C70 40 58 60 40 60C22 60 10 40 10 40Z" stroke="#A0ECDC" stroke-width="3" fill="none"/>
+                                <circle cx="40" cy="40" r="8" fill="#A0ECDC"/>
+                            </svg>
+                        </div>
+                        <p class="text-maktoub-light text-center text-lg">
+                            سنظهر معاينة الرسالة هنا بعد إنشائها
+                        </p>
+                    </div>
+
+                    <!-- Document Template Preview (shown after generation) -->
+                    <div id="documentPreview" style="display: none;">
+                        <div class="bg-white text-maktoub-dark rounded-lg p-6" id="documentTemplate">
+                            <div class="flex justify-between items-start mb-6 pb-4 border-b border-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <!-- Always use primary logo in document (it's always white background) -->
+                                    <img src="attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg"
+                                         alt="Logo"
+                                         class="h-8">
+                                </div>
+                                <div class="text-right text-sm">
+                                    <div class="font-bold mb-1" id="currentDate"></div>
+                                    <div>AL-HAYYAD AL-SAFRI FOR ENVIRONMENTAL SERVICES</div>
+                                    <div>خدمات الحياد الصفري للبيئة</div>
+                                </div>
+                            </div>
+
+                            <div class="prose prose-sm max-w-none" id="mainLetterContent">
+                                <!-- Generated letter content will be inserted here -->
+                            </div>
+
+                            <div class="mt-8 pt-4 border-t border-gray-200">
+                                <p class="text-xs text-gray-500 text-center">
+                                    هذا الخطاب تم إنشاؤه باستخدام منصة الذكاء الاصطناعي لإنشاء الخطابات
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden textarea for backward compatibility -->
+                    <textarea id="letterPreview" class="hidden"></textarea>
+
+                    <!-- Template Selection -->
+                    <div id="templateActionsSection" class="bg-maktoub-teal-700 rounded-lg p-4" style="display: none;">
+                        <h3 class="text-lg font-bold mb-4">الإجراءات</h3>
+
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 p-3 bg-maktoub-teal-800 rounded cursor-pointer hover:bg-maktoub-teal-900 transition-colors">
+                                <input type="radio" name="template" value="template1" checked
+                                       class="w-4 h-4 text-maktoub-primary">
+                                <span>القالب الرسمي</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-maktoub-teal-800 rounded cursor-pointer hover:bg-maktoub-teal-900 transition-colors">
+                                <input type="radio" name="template" value="template2"
+                                       class="w-4 h-4 text-maktoub-primary">
+                                <span>تعديل الخطاب</span>
+                            </label>
+                        </div>
+
+                        <!-- Edit Section -->
+                        <div id="editSection" class="mt-4" style="display: none;">
+                            <div class="flex flex-col items-end gap-1">
+                                <label for="editFeedback" class="input-label text-right">
+                                    التعديلات المطلوبة
+                                </label>
+                                <textarea id="editFeedback"
+                                          rows="4"
+                                          class="input-field bg-maktoub-teal-600 border-maktoub-teal-500"
+                                          placeholder="اكتب التعديلات التي تريد إجراءها على الخطاب هنا..."></textarea>
+                            </div>
+
+                            <button type="button"
+                                    id="editButton"
+                                    class="btn-primary w-full mt-3 gap-2">
+                                <i class="fas fa-edit"></i>
+                                تعديل
+                            </button>
+
+                            <!-- Session Status -->
+                            <div id="sessionStatus" class="mt-3 text-sm text-maktoub-light flex items-center gap-2">
+                                <i class="fas fa-info-circle"></i>
+                                <span id="sessionStatusText">لم يتم إنشاء جلسة تعديل بعد</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button id="saveButton" class="btn-primary w-full gap-2" style="display: none;">
+                        <i class="fas fa-save"></i>
+                        حفظ ومتابعة
+                    </button>
+
+                    <!-- Quality Analysis Section -->
+                    <div id="qualityAnalysisSection" class="bg-maktoub-teal-700 rounded-lg p-4" style="display: none;">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-bold flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-maktoub-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 11l3 3L22 4"></path>
+                                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                                </svg>
+                                تحليل جودة الخطاب
+                            </h4>
+                            <button id="refreshQualityButton"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-maktoub-teal-600 transition-colors"
+                                    title="إعادة التحليل">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-maktoub-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Quality Status Banner -->
+                        <div id="qualityStatus" class="mb-4 p-3 rounded-lg flex items-center gap-2 bg-green-500 bg-opacity-20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                <path d="M22 4L12 14.01l-3-3"></path>
+                            </svg>
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold text-green-400">البنية جيدة</p>
+                                <p class="text-xs text-maktoub-light" id="qualityMessage">الخطاب يحتوي على جودة جيدة</p>
+                            </div>
+                        </div>
+
+                        <!-- Element Checks Section -->
+                        <div class="mb-4">
+                            <h5 class="text-sm font-bold text-maktoub-light mb-3">فحص العناصر</h5>
+                            <div class="grid grid-cols-2 gap-2">
+                                <!-- Basmala Check -->
+                                <div id="checkBasmala" class="check-item flex items-center gap-2 p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                        <path d="M22 4L12 14.01l-3-3"></path>
+                                    </svg>
+                                    <span class="text-sm check-label">البسملة</span>
+                                </div>
+
+                                <!-- Arabic Content Check -->
+                                <div id="checkArabic" class="check-item flex items-center gap-2 p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                        <path d="M22 4L12 14.01l-3-3"></path>
+                                    </svg>
+                                    <span class="text-sm check-label">المحتوى العربي</span>
+                                </div>
+
+                                <!-- Length Check -->
+                                <div id="checkLength" class="check-item flex items-center gap-2 p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                        <path d="M22 4L12 14.01l-3-3"></path>
+                                    </svg>
+                                    <span class="text-sm check-label">الطول المناسب</span>
+                                </div>
+
+                                <!-- Greeting Check -->
+                                <div id="checkGreeting" class="check-item flex items-center gap-2 p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                        <path d="M22 4L12 14.01l-3-3"></path>
+                                    </svg>
+                                    <span class="text-sm check-label">التحية</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics Section -->
+                        <div>
+                            <h5 class="text-sm font-bold text-maktoub-light mb-3">إحصائيات الخطاب</h5>
+                            <div class="grid grid-cols-3 gap-2">
+                                <!-- Character Count -->
+                                <div class="flex flex-col items-center justify-center p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <span id="charCount" class="text-2xl font-bold text-maktoub-primary">0</span>
+                                    <span class="text-xs stat-label-text mt-1">عدد الحروف</span>
+                                </div>
+
+                                <!-- Line Count -->
+                                <div class="flex flex-col items-center justify-center p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <span id="lineCount" class="text-2xl font-bold text-maktoub-primary">0</span>
+                                    <span class="text-xs stat-label-text mt-1">عدد الأسطر</span>
+                                </div>
+
+                                <!-- Word Count -->
+                                <div class="flex flex-col items-center justify-center p-3 bg-maktoub-teal-600 rounded-lg">
+                                    <span id="wordCount" class="text-2xl font-bold text-maktoub-primary">0</span>
+                                    <span class="text-xs stat-label-text mt-1">عدد الكلمات</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loader" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" style="display: none;">
+        <div class="text-center">
+            <i class="fas fa-spinner fa-spin text-5xl text-maktoub-primary mb-4"></i>
+            <p class="text-xl text-white">جاري إنشاء الخطاب...</p>
+        </div>
+    </div>
+
+    <!-- Scripts - Load in specific order -->
+    <!-- Third-party libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Core modules first (dependencies for other modules) -->
+    <script src="../src/core/config.js"></script>
+    <script src="../src/core/constants.js"></script>
+    <script src="../src/core/utils.js"></script>
+
+    <!-- Development mode (REMOVED FOR PRODUCTION) -->
+    <!-- <script src="../src/core/dev-mode.js"></script> -->
+
+    <!-- Theme Service -->
+    <script src="../src/services/theme.js"></script>
+
+    <!-- Feature modules -->
+    <script src="../src/modules/notifications.js"></script>
+    <script src="../src/services/auth.js"></script>
+    <script src="../src/services/api.js"></script>
+    <script src="../src/services/sheets.js"></script>
+
+    <!-- Auth guard (protects page) -->
+    <script src="../src/guards/auth-guard.js"></script>
+
+    <!-- Page-specific modules -->
+    <script src="../src/modules/main.js"></script>
+    <script src="../src/modules/document-template.js"></script>
+    <script src="../src/modules/letter-quality.js"></script>
+    <script src="../src/modules/create-letter.js"></script>
+    <script src="../src/modules/mobile.js"></script>
+</body>
+</html>

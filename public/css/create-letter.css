@@ -1,0 +1,292 @@
+/* Create Letter Page - Theme-aware Styles */
+
+/* ==================== Body & Page Background ==================== */
+
+/* Override Tailwind hard-coded classes with theme variables */
+body {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Navigation */
+nav {
+    background: var(--bg-primary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+/* ==================== Headers & Page Title ==================== */
+
+/* All headings - theme aware */
+h1, h2:not(.section-title), h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+}
+
+/* Paragraph text */
+p {
+    color: var(--text-primary) !important;
+}
+
+/* Span elements (general) */
+span:not(.check-label):not(.stat-label-text) {
+    color: var(--text-primary) !important;
+}
+
+/* ==================== Cards & Sections ==================== */
+
+/* Form cards */
+.card {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-primary);
+}
+
+/* Section backgrounds */
+section {
+    background: var(--bg-card) !important;
+}
+
+/* ==================== Navigation Links ==================== */
+
+/* Navigation links inherit from dashboard.css and tailwind.css - no overrides needed */
+
+/* ==================== Labels & Text Colors ==================== */
+
+/* Dark Mode - White labels */
+[data-theme="dark"] .input-label,
+[data-theme="dark"] label:not(.flex) {
+    color: #FFFFFF !important;
+}
+
+/* Light Mode - Black labels */
+[data-theme="light"] .input-label,
+[data-theme="light"] label:not(.flex) {
+    color: #102320 !important;
+}
+
+/* Keep "بيانات الخطاب" green in both modes */
+[data-theme="dark"] .section-title,
+[data-theme="dark"] h2 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .section-title,
+[data-theme="light"] h2 {
+    color: var(--text-secondary) !important;
+}
+
+/* ==================== Preview Section ==================== */
+
+/* Ensure preview has consistent size */
+#documentTemplate {
+    min-height: 600px;
+    max-height: 800px;
+    overflow-y: auto;
+}
+
+/* Fix preview size when editing */
+#documentPreview {
+    width: 100%;
+}
+
+#documentPreview #documentTemplate {
+    width: 100%;
+    min-height: 600px;
+}
+
+/* ==================== Quality Analysis Colors ==================== */
+
+/* Element Check - Success (Green) */
+.check-success .check-icon {
+    color: #4ADE80 !important;
+}
+
+.check-success {
+    background: rgba(34, 197, 94, 0.15) !important;
+}
+
+/* Element Check - Failure (Red) */
+.check-failure .check-icon {
+    color: #F87171 !important;
+}
+
+.check-failure {
+    background: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] .check-success {
+    background: rgba(34, 197, 94, 0.2) !important;
+}
+
+[data-theme="dark"] .check-failure {
+    background: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Light mode specific adjustments */
+[data-theme="light"] .check-success {
+    background: rgba(34, 197, 94, 0.15) !important;
+}
+
+[data-theme="light"] .check-failure {
+    background: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Element check label colors */
+[data-theme="dark"] .check-label {
+    color: #FFFFFF !important;
+}
+
+[data-theme="light"] .check-label {
+    color: #102320 !important;
+}
+
+/* ==================== Statistics Cards ==================== */
+
+/* Statistics labels */
+[data-theme="dark"] .stat-label-text {
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .stat-label-text {
+    color: var(--text-secondary);
+}
+
+/* ==================== Quality Status Banner Colors ==================== */
+
+/* Excellent quality - Green */
+.quality-excellent {
+    background: rgba(34, 197, 94, 0.2) !important;
+}
+
+.quality-excellent .status-icon,
+.quality-excellent .status-title {
+    color: #4ADE80 !important;
+}
+
+/* Good quality - Yellow */
+.quality-good {
+    background: rgba(234, 179, 8, 0.2) !important;
+}
+
+.quality-good .status-icon,
+.quality-good .status-title {
+    color: #FDE047 !important;
+}
+
+/* Poor quality - Red */
+.quality-poor {
+    background: rgba(239, 68, 68, 0.2) !important;
+}
+
+.quality-poor .status-icon,
+.quality-poor .status-title {
+    color: #F87171 !important;
+}
+
+/* ==================== Form Input Backgrounds ==================== */
+
+/* Override hard-coded input backgrounds */
+.border-maktoub-teal-600 {
+    border-color: var(--border-primary) !important;
+}
+
+.border-maktoub-teal-500 {
+    border-color: var(--border-primary) !important;
+}
+
+/* Dark mode inputs */
+[data-theme="dark"] .input-field {
+    background: var(--input-bg) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Light mode inputs */
+[data-theme="light"] .input-field {
+    background: #FFFFFF !important;
+    border-color: rgba(6, 100, 88, 0.2) !important;
+    color: #102320 !important;
+}
+
+/* Select elements */
+select.input-field {
+    background: var(--input-bg) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Textarea elements */
+textarea.input-field {
+    background: var(--input-bg) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ==================== Placeholder Styling ==================== */
+
+#previewPlaceholder {
+    transition: opacity 0.3s ease;
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+#previewPlaceholder p {
+    color: var(--text-secondary) !important;
+}
+
+#documentPreview {
+    transition: opacity 0.3s ease;
+}
+
+/* ==================== Actions Section ==================== */
+
+/* Actions card background */
+.bg-maktoub-teal-700 {
+    background: var(--bg-secondary) !important;
+}
+
+/* Check items background */
+.bg-maktoub-teal-600 {
+    background: var(--input-bg) !important;
+}
+
+/* Template options background */
+.bg-maktoub-teal-800 {
+    background: var(--bg-card) !important;
+}
+
+.bg-maktoub-teal-900 {
+    background: var(--bg-hover) !important;
+}
+
+/* ==================== Text Color Overrides for Hard-coded Classes ==================== */
+
+/* Override text-maktoub-light */
+.text-maktoub-light {
+    color: var(--text-secondary) !important;
+}
+
+/* Override text-white */
+.text-white {
+    color: var(--text-primary) !important;
+}
+
+/* Session status text */
+#sessionStatus {
+    color: var(--text-secondary) !important;
+}
+
+/* ==================== Responsive Adjustments ==================== */
+
+@media (max-width: 1024px) {
+    #documentTemplate {
+        min-height: 400px;
+        max-height: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    #documentTemplate {
+        min-height: 300px;
+        max-height: 500px;
+    }
+}
