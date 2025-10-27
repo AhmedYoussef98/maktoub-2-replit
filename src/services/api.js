@@ -242,7 +242,7 @@ const ApiClient = (() => {
     try {
       // Build payload according to new API spec
       const payload = {
-        letterType: formData.get('category') || formData.get('type'),
+        category: formData.get('category') || formData.get('type'),
         prompt: formData.get('prompt'),
         recipient: Utils.isEmpty(formData.get('recipient'))
           ? AppConstants.DEFAULTS.RECIPIENT_NAME
