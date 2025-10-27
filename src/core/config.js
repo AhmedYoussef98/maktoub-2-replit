@@ -6,7 +6,9 @@
 const AppConfig = (() => {
   // API Configuration
   const API = {
-    BASE_URL: 'https://128.140.37.194:5018',
+    // Use proxy route for production (Replit/deployed environments)
+    // This avoids CORS issues by routing through the Express proxy
+    BASE_URL: '/api/proxy',
     TIMEOUT: 30000, // 30 seconds
     VERSION: 'v1',
   };
@@ -74,7 +76,8 @@ const AppConfig = (() => {
     ROUTES,
 
     // Helper methods
-    getApiUrl: (endpoint) => `${API.BASE_URL}/api/${API.VERSION}/${endpoint}`,
+    // Returns the proxy URL - the proxy handles routing to backend endpoints
+    getApiUrl: (endpoint) => API.BASE_URL,
   };
 })();
 

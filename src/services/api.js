@@ -44,21 +44,77 @@ const ApiClient = (() => {
   }
 
   /**
+   * Map frontend endpoints to proxy endpoint names
+   * @private
+   * @param {string} endpoint - Frontend endpoint (e.g., 'letter/generate')
+   * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
+   * @returns {string} Proxy endpoint name (e.g., 'generate-letter')
+   */
+  function mapEndpointToProxy(endpoint, method = 'GET') {
+    const endpointMap = {
+      'letter/generate': 'generate-letter',
+      'letter/validate': 'validate-letter',
+      'letter/categories': 'letter-categories',
+      'letter/templates': 'letter-template',
+      'chat/sessions': method === 'GET' ? 'chat-sessions' : 'create-chat-session',
+      'chat/edit': 'edit-letter',
+      'chat/history': 'chat-history',
+      'chat/status': 'chat-status',
+      'chat/extend': 'extend-chat-session',
+      'chat/cleanup': 'cleanup-chat',
+      'chat/sessions/delete': 'delete-chat-session',
+      'archive/letter': 'archive-letter',
+      'archive/status': 'archive-status',
+      'archive/update': 'update-archive',
+      'submissions': 'submissions',
+      'submissions/stats': 'submissions-stats',
+      'submissions/single': 'submissions-single',
+    };
+
+    return endpointMap[endpoint] || endpoint;
+  }
+
+  /**
    * Generic HTTP request handler with error handling
    * @private
    */
   async function makeRequest(endpoint, method = 'GET', data = null, options = {}) {
-    const url = AppConfig.getApiUrl(endpoint);
-    const config = {
-      method,
-      headers: {
-        ...getAuthHeaders(),
-        ...options.headers,
-      },
-    };
+    const proxyUrl = AppConfig.getApiUrl(endpoint);
+    const proxyEndpoint = mapEndpointToProxy(endpoint, method);
 
-    if (data && (method === 'POST' || method === 'PUT')) {
-      config.body = JSON.stringify(data);
+    let config;
+    let url = proxyUrl;
+
+    if (method === 'GET' || method === 'DELETE') {
+      // For GET/DELETE requests, use query parameters
+      const params = new URLSearchParams({
+        endpoint: proxyEndpoint,
+        ...options.queryParams,
+        ...(data || {}) // Include any additional params from data
+      });
+      url = `${proxyUrl}?${params.toString()}`;
+
+      config = {
+        method: method,
+        headers: {
+          ...getAuthHeaders(),
+          ...options.headers,
+        },
+      };
+    } else {
+      // For POST/PUT, wrap data in proxy format
+      config = {
+        method: method,
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+        body: JSON.stringify({
+          endpoint: proxyEndpoint,
+          data: data || {}
+        })
+      };
     }
 
     try {
@@ -274,7 +330,7 @@ const ApiClient = (() => {
    */
   async function getLetterTemplates(category) {
     try {
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.LETTER_TEMPLATES}/${category}`, 'GET');
+      const data = await makeRequest('letter/templates', 'GET', { category });
       return data;
     } catch (error) {
       console.error('Failed to get letter templates:', error);
@@ -321,6 +377,7 @@ const ApiClient = (() => {
       }
 
       const payload = {
+        session_id: sessionId,
         user_message: userMessage,
       };
 
@@ -328,7 +385,7 @@ const ApiClient = (() => {
         payload.context = context;
       }
 
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.CHAT_EDIT}/${sessionId}/edit`, 'POST', payload);
+      const data = await makeRequest('chat/edit', 'POST', payload);
       // API returns: { edited_letter, session_id }
       return data;
     } catch (error) {
@@ -350,8 +407,7 @@ const ApiClient = (() => {
    */
   async function getChatHistory(sessionId, limit = 10, offset = 0) {
     try {
-      const params = { limit, offset };
-      const data = await makeGetRequest(`${AppConstants.ENDPOINTS.CHAT_HISTORY}/${sessionId}/history`, params);
+      const data = await makeRequest('chat/history', 'GET', { session_id: sessionId, limit, offset });
       return data;
     } catch (error) {
       console.error('Failed to get chat history:', error);
@@ -366,7 +422,7 @@ const ApiClient = (() => {
    */
   async function getChatStatus(sessionId) {
     try {
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.CHAT_STATUS}/${sessionId}/status`, 'GET');
+      const data = await makeRequest('chat/status', 'GET', { session_id: sessionId });
       return data;
     } catch (error) {
       console.error('Failed to get chat status:', error);
@@ -382,8 +438,11 @@ const ApiClient = (() => {
    */
   async function extendChatSession(sessionId, extendMinutes = 30) {
     try {
-      const payload = { extend_minutes: extendMinutes };
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.CHAT_EXTEND}/${sessionId}/extend`, 'POST', payload);
+      const payload = {
+        session_id: sessionId,
+        extend_minutes: extendMinutes
+      };
+      const data = await makeRequest('chat/extend', 'POST', payload);
       return data;
     } catch (error) {
       console.error('Failed to extend chat session:', error);
@@ -403,7 +462,7 @@ const ApiClient = (() => {
         return true;
       }
 
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.CHAT_DELETE}/${sessionId}`, 'DELETE');
+      const data = await makeRequest('chat/sessions/delete', 'DELETE', { session_id: sessionId });
       console.log('Session deleted successfully:', data);
       return data;
     } catch (error) {
@@ -419,8 +478,7 @@ const ApiClient = (() => {
    */
   async function listChatSessions(includeExpired = false) {
     try {
-      const params = { include_expired: includeExpired };
-      const data = await makeGetRequest(AppConstants.ENDPOINTS.CHAT_SESSIONS, params);
+      const data = await makeRequest('chat/sessions', 'GET', { include_expired: includeExpired });
       return data;
     } catch (error) {
       console.error('Failed to list chat sessions:', error);
@@ -463,7 +521,7 @@ const ApiClient = (() => {
    */
   async function getArchiveStatus(letterId) {
     try {
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.ARCHIVE_STATUS}/${letterId}`, 'GET');
+      const data = await makeRequest('archive/status', 'GET', { letter_id: letterId });
       return data;
     } catch (error) {
       console.error('Failed to get archive status:', error);
@@ -514,7 +572,7 @@ const ApiClient = (() => {
         sort_by: sortBy,
         sort_order: sortOrder,
       };
-      const data = await makeGetRequest(AppConstants.ENDPOINTS.SUBMISSIONS, params);
+      const data = await makeRequest('submissions', 'GET', params);
       // API returns: { status, data: [...], pagination: {...} }
       return data;
     } catch (error) {
@@ -530,7 +588,7 @@ const ApiClient = (() => {
    */
   async function getSubmission(submissionId) {
     try {
-      const data = await makeRequest(`${AppConstants.ENDPOINTS.SUBMISSIONS_SINGLE}/${submissionId}`, 'GET');
+      const data = await makeRequest('submissions/single', 'GET', { submission_id: submissionId });
       return data;
     } catch (error) {
       console.error('Failed to get submission:', error);
