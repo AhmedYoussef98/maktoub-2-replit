@@ -323,3 +323,12 @@ body.dark-mode .document-preview-bg {
 .document-preview-bg .prose h6 {
     color: #0D2823 !important;
 }
+
+/* ==================== Required Field Asterisks ==================== */
+
+/* Override text-red-400 with brand color for required field indicators */
+.text-red-400,
+label .text-red-400,
+label span.text-red-400 {
+    color: var(--color-danger) !important;
+}

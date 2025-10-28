@@ -9,9 +9,9 @@
 [data-theme="dark"] {
   /* Background Colors */
   --bg-primary: #102320;
-  --bg-secondary: #0D1F1C;
-  --bg-tertiary: rgba(13, 31, 28, 0.6);
-  --bg-card: rgba(13, 31, 28, 0.8);
+  --bg-secondary: #174A46;
+  --bg-tertiary: rgba(23, 74, 70, 0.6);
+  --bg-card: #174A46;
   --bg-hover: rgba(30, 168, 150, 0.1);
 
   /* Text Colors */
@@ -34,7 +34,7 @@
   /* Status Colors */
   --color-success: #4ADE80;
   --color-warning: #FDE047;
-  --color-danger: #F87171;
+  --color-danger: #F33043;
   --color-info: #60A5FA;
 
   /* Badge/Tag Colors */
@@ -55,7 +55,7 @@
   --overlay-dark: rgba(16, 35, 32, 0.8);
 
   /* Input Colors */
-  --input-bg: rgba(13, 31, 28, 0.8);
+  --input-bg: #168B7F;
   --input-border: rgba(6, 100, 88, 0.5);
   --input-placeholder: rgba(160, 236, 220, 0.5);
   --input-focus-border: #1EA896;
