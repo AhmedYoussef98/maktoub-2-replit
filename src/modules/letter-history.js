@@ -58,10 +58,27 @@ const LetterHistory = (() => {
   function init() {
     console.log('📄 Letter History module initialized');
 
-    loadStats();
-    setupDropdowns();
-    loadLetters();
-    setupEventListeners();
+    try {
+      // Check if ApiClient is available
+      if (typeof ApiClient === 'undefined') {
+        console.error('❌ ApiClient is not defined! Make sure api.js is loaded before letter-history.js');
+        alert('خطأ: لم يتم تحميل خدمة API بشكل صحيح. الرجاء تحديث الصفحة.');
+        return;
+      }
+
+      console.log('✅ ApiClient is available');
+      console.log('🔄 Loading statistics and letters...');
+
+      loadStats();
+      setupDropdowns();
+      loadLetters();
+      setupEventListeners();
+
+      console.log('✅ Letter History initialization complete');
+    } catch (error) {
+      console.error('❌ Fatal error in Letter History init:', error);
+      alert('حدث خطأ في تحميل صفحة سجل الخطابات: ' + error.message);
+    }
   }
 
   /**

@@ -365,10 +365,11 @@ const ApiClient = (() => {
    * Edit letter via chat session
    * @param {string} sessionId - Chat session ID
    * @param {string} userMessage - User editing instructions
+   * @param {string} currentLetter - Current letter content
    * @param {string|null} context - Additional context
    * @returns {Promise<Object|null>} Edited letter data or null on error
    */
-  async function editLetter(sessionId, userMessage, context = null) {
+  async function editLetter(sessionId, userMessage, currentLetter, context = null) {
     toggleLoader(true);
 
     try {
@@ -376,9 +377,16 @@ const ApiClient = (() => {
         throw new Error('Session ID is required for editing');
       }
 
+      if (!currentLetter) {
+        throw new Error('Current letter content is required for editing');
+      }
+
+      // Backend expects: message, current_letter, and optional context
+      // session_id goes in URL path (handled by server.js)
       const payload = {
         session_id: sessionId,
-        user_message: userMessage,
+        message: userMessage,
+        current_letter: currentLetter,
       };
 
       if (context) {
@@ -389,6 +397,7 @@ const ApiClient = (() => {
       // API returns: { edited_letter, session_id }
       return data;
     } catch (error) {
+      console.error('Edit letter error:', error);
       if (typeof notify !== 'undefined') {
         notify.error('حدث خطأ أثناء تعديل الخطاب. الرجاء المحاولة مرة أخرى.');
       }
