@@ -12,6 +12,20 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ==================== CORS MIDDLEWARE ====================
+// CRITICAL: Must come BEFORE route handlers to set headers
+// =======================================================
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
+
 // ==================== API PROXY ROUTE ====================
 // CRITICAL: This MUST come BEFORE static file middleware!
 // If static middleware comes first, it will serve /api/proxy.js as a file
@@ -451,6 +465,7 @@ app.use(express.static('.', {
     extensions: ['css', 'js', 'png', 'jpg', 'svg', 'ico']
 }));
 
+// ==================== HTML PAGE ROUTES ====================
 // HTML page routes - serve from pages/ directory
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'index.html'));
@@ -488,18 +503,7 @@ app.get('/admin-panel.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'admin-panel.html'));
 });
 
-// CORS middleware
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-    next();
-});
-
+// ==================== AUTHENTICATION ENDPOINTS ====================
 // User authentication proxy endpoints
 app.post('/api/auth/login', async (req, res) => {
     try {
