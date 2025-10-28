@@ -12,67 +12,11 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from multiple directories
-app.use('/src', express.static('src'));
-app.use('/public', express.static('public'));
-app.use('/attached_assets', express.static('attached_assets'));
-app.use('/css', express.static('css'));
-// NOTE: /api directory is NOT served as static - /api/proxy is a route handler, not a static file
-
-// Serve remaining static files from root (logo.svg, styles.css, etc.)
-app.use(express.static('.', {
-    index: false,  // Don't auto-serve index.html from root
-    extensions: ['css', 'js', 'png', 'jpg', 'svg', 'ico']
-}));
-
-// HTML page routes - serve from pages/ directory
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
-});
-
-app.get('/index.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
-});
-
-app.get('/login.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'login.html'));
-});
-
-app.get('/signup.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'signup.html'));
-});
-
-app.get('/forgot-password.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'forgot-password.html'));
-});
-
-app.get('/create-letter.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'create-letter.html'));
-});
-
-app.get('/letter-history.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'letter-history.html'));
-});
-
-app.get('/review-letter.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'review-letter.html'));
-});
-
-app.get('/admin-panel.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'admin-panel.html'));
-});
-
-// CORS middleware
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-    next();
-});
+// ==================== API PROXY ROUTE ====================
+// CRITICAL: This MUST come BEFORE static file middleware!
+// If static middleware comes first, it will serve /api/proxy.js as a file
+// instead of executing this route handler.
+// =========================================================
 
 app.all('/api/proxy', async (req, res) => {
     // Prevent caching of API responses
@@ -163,7 +107,7 @@ app.all('/api/proxy', async (req, res) => {
                     httpsAgent: agent,
                     timeout: 30000
                 });
-                
+
                 console.log('GET API success:', response.status);
                 return res.status(200).json(response.data);
             } catch (axiosError) {
@@ -209,7 +153,7 @@ app.all('/api/proxy', async (req, res) => {
                     httpsAgent: agent,
                     timeout: 30000
                 });
-                
+
                 console.log('DELETE API success:', response.status);
                 return res.status(200).json(response.data);
             } catch (axiosError) {
@@ -230,7 +174,7 @@ app.all('/api/proxy', async (req, res) => {
 
         if (req.method === 'PUT') {
             console.log('Processing PUT request');
-            
+
             let requestData;
             try {
                 requestData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -238,9 +182,9 @@ app.all('/api/proxy', async (req, res) => {
                 console.error('JSON parse error:', parseError);
                 return res.status(400).json({ error: 'Invalid JSON in request body' });
             }
-            
+
             const { endpoint, data } = requestData;
-            
+
             let targetUrl;
             switch (endpoint) {
                 case 'update-archive':
@@ -250,7 +194,7 @@ app.all('/api/proxy', async (req, res) => {
                     console.log('Invalid PUT endpoint:', endpoint);
                     return res.status(400).json({ error: 'Invalid endpoint' });
             }
-            
+
             try {
                 console.log(`Attempting ${endpoint} PUT call to:`, targetUrl);
                 console.log('Payload:', data);
@@ -269,10 +213,10 @@ app.all('/api/proxy', async (req, res) => {
                     httpsAgent: agent,
                     timeout: 30000,
                 });
-                
+
                 console.log(`${endpoint} PUT success:`, response.status);
                 return res.status(200).json(response.data);
-                
+
             } catch (axiosError) {
                 console.error(`${endpoint} PUT error:`, axiosError.message);
                 if (axiosError.response) {
@@ -292,10 +236,10 @@ app.all('/api/proxy', async (req, res) => {
         }
 
         const contentType = req.headers['content-type'] || '';
-        
+
         if (contentType.includes('multipart/form-data')) {
             console.log('Processing FormData request for archive-letter');
-            
+
             const form = new formidable.IncomingForm({
                 multiples: true,
                 keepExtensions: true,
@@ -320,7 +264,7 @@ app.all('/api/proxy', async (req, res) => {
                 for (const key in fields) {
                     if (key !== 'endpoint') {
                         const value = fields[key];
-                        
+
                         if (Array.isArray(value)) {
                             if (value.length > 0) {
                                 formData.append(key, value[0]);
@@ -335,7 +279,7 @@ app.all('/api/proxy', async (req, res) => {
 
                 for (const key in files) {
                     const file = files[key];
-                    
+
                     if (Array.isArray(file)) {
                         file.forEach((f, index) => {
                             if (f && f.filepath) {
@@ -375,10 +319,10 @@ app.all('/api/proxy', async (req, res) => {
                         httpsAgent: agent,
                         timeout: 30000,
                     });
-                    
+
                     console.log('Archive API success:', response.status);
                     return res.status(200).json(response.data);
-                    
+
                 } catch (axiosError) {
                     console.error('Archive API error:', axiosError.message);
                     if (axiosError.response) {
@@ -396,10 +340,10 @@ app.all('/api/proxy', async (req, res) => {
                     }
                 }
             });
-            
+
         } else {
             console.log('Processing JSON request');
-            
+
             let requestData;
             try {
                 requestData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -407,9 +351,9 @@ app.all('/api/proxy', async (req, res) => {
                 console.error('JSON parse error:', parseError);
                 return res.status(400).json({ error: 'Invalid JSON in request body' });
             }
-            
+
             const { endpoint, data } = requestData;
-            
+
             let targetUrl;
             switch (endpoint) {
                 case 'generate-letter':
@@ -440,7 +384,7 @@ app.all('/api/proxy', async (req, res) => {
                     console.log('Invalid endpoint:', endpoint);
                     return res.status(400).json({ error: 'Invalid endpoint' });
             }
-            
+
             try {
                 console.log(`Attempting ${endpoint} API call to:`, targetUrl);
                 console.log('Payload:', data);
@@ -459,10 +403,10 @@ app.all('/api/proxy', async (req, res) => {
                     httpsAgent: agent,
                     timeout: 30000,
                 });
-                
+
                 console.log(`${endpoint} API success:`, response.status);
                 return res.status(200).json(response.data);
-                
+
             } catch (axiosError) {
                 console.error(`${endpoint} API error:`, axiosError.message);
                 if (axiosError.response) {
@@ -480,14 +424,80 @@ app.all('/api/proxy', async (req, res) => {
                 }
             }
         }
-        
+
     } catch (error) {
         console.error('Proxy error:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             error: 'Internal server error',
-            message: error.message 
+            message: error.message
         });
     }
+});
+
+// ==================== STATIC FILE SERVING ====================
+// IMPORTANT: Static middleware must come AFTER API routes!
+// ===========================================================
+
+// Serve static files from multiple directories
+app.use('/src', express.static('src'));
+app.use('/public', express.static('public'));
+app.use('/attached_assets', express.static('attached_assets'));
+app.use('/css', express.static('css'));
+// NOTE: /api directory is NOT served as static - /api/proxy is a route handler, not a static file
+
+// Serve remaining static files from root (logo.svg, styles.css, etc.)
+app.use(express.static('.', {
+    index: false,  // Don't auto-serve index.html from root
+    extensions: ['css', 'js', 'png', 'jpg', 'svg', 'ico']
+}));
+
+// HTML page routes - serve from pages/ directory
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
+});
+
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
+});
+
+app.get('/login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'login.html'));
+});
+
+app.get('/signup.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'signup.html'));
+});
+
+app.get('/forgot-password.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'forgot-password.html'));
+});
+
+app.get('/create-letter.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'create-letter.html'));
+});
+
+app.get('/letter-history.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'letter-history.html'));
+});
+
+app.get('/review-letter.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'review-letter.html'));
+});
+
+app.get('/admin-panel.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'admin-panel.html'));
+});
+
+// CORS middleware
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
 });
 
 // User authentication proxy endpoints
