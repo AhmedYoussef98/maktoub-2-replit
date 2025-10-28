@@ -2,11 +2,10 @@
  * Letter History Module
  * Manages the letter history page functionality
  *
- * ⚠️ TODO: Integrate with real API endpoints
+ * Integrated with real API endpoints:
  * - GET /api/v1/submissions (paginated letter list)
  * - GET /api/v1/submissions/stats (statistics)
  * - GET /api/v1/submissions/<id> (single letter details)
- * See API_ENDPOINTS.md for full API documentation
  */
 
 const LetterHistory = (() => {
@@ -59,10 +58,6 @@ const LetterHistory = (() => {
   function init() {
     console.log('📄 Letter History module initialized');
 
-    // TODO: Replace with real API integration
-    // This page currently needs API integration to function properly
-    console.warn('⚠️ Letter History: API integration required');
-
     loadStats();
     setupDropdowns();
     loadLetters();
@@ -72,13 +67,38 @@ const LetterHistory = (() => {
   /**
    * Load and display statistics
    */
-  function loadStats() {
-    const stats = FakeLetters.getStats();
+  async function loadStats() {
+    try {
+      const response = await ApiClient.getSubmissionsStats();
 
-    document.getElementById('total-letters').textContent = stats.total;
-    document.getElementById('pending-review').textContent = stats.pendingReview;
-    document.getElementById('ready-to-send').textContent = stats.readyToSend;
-    document.getElementById('this-month').textContent = stats.thisMonth;
+      if (response && response.status === 'success' && response.data) {
+        const stats = response.data;
+
+        // Update stats cards
+        document.getElementById('total-letters').textContent = stats.total_submissions || 0;
+        document.getElementById('pending-review').textContent =
+          (stats.by_review_status && stats.by_review_status['في الانتظار']) || 0;
+        document.getElementById('ready-to-send').textContent =
+          (stats.by_review_status && stats.by_review_status['جاهز للإرسال']) || 0;
+        document.getElementById('this-month').textContent = stats.this_month_count || 0;
+      } else {
+        console.warn('⚠️ No stats data available');
+        setDefaultStats();
+      }
+    } catch (error) {
+      console.error('❌ Failed to load stats:', error);
+      setDefaultStats();
+    }
+  }
+
+  /**
+   * Set default stats when API fails
+   */
+  function setDefaultStats() {
+    document.getElementById('total-letters').textContent = '0';
+    document.getElementById('pending-review').textContent = '0';
+    document.getElementById('ready-to-send').textContent = '0';
+    document.getElementById('this-month').textContent = '0';
   }
 
   /**
@@ -168,57 +188,82 @@ const LetterHistory = (() => {
   /**
    * Load and display letters
    */
-  function loadLetters() {
-    const allFilters = { ...filters };
-    const result = FakeLetters.getPaginatedLetters(currentPage, itemsPerPage, allFilters);
+  async function loadLetters() {
+    try {
+      // Convert frontend sort values to backend format
+      const sortMapping = {
+        'newest': { field: 'created_at', order: 'desc' },
+        'oldest': { field: 'created_at', order: 'asc' },
+        'recipient-asc': { field: 'recipient', order: 'asc' },
+        'recipient-desc': { field: 'recipient', order: 'desc' },
+        'subject-asc': { field: 'subject', order: 'asc' },
+        'subject-desc': { field: 'subject', order: 'desc' },
+        'type-asc': { field: 'letter_type', order: 'asc' },
+        'review-status': { field: 'review_status', order: 'asc' },
+        'writer-asc': { field: 'writer', order: 'asc' }
+      };
 
-    // Apply sorting
-    result.data = sortLetters(result.data, filters.sortBy);
+      const sortConfig = sortMapping[filters.sortBy] || { field: 'created_at', order: 'desc' };
 
-    renderTable(result.data);
-    renderPagination(result);
+      const response = await ApiClient.getSubmissions(
+        currentPage,
+        itemsPerPage,
+        sortConfig.field,
+        sortConfig.order
+      );
 
-    // Update stats after filtering
-    loadStats();
+      if (response && response.status === 'success') {
+        // Filter data on client side (until backend supports filtering)
+        let filteredData = response.data || [];
+
+        // Apply letter type filter
+        if (filters.letterType && filters.letterType !== 'all') {
+          filteredData = filteredData.filter(l => l.letter_type === filters.letterType);
+        }
+
+        // Apply review status filter
+        if (filters.reviewStatus && filters.reviewStatus !== 'all') {
+          filteredData = filteredData.filter(l => l.review_status === filters.reviewStatus);
+        }
+
+        // Apply search filter
+        if (filters.search && filters.search.trim()) {
+          const searchTerm = filters.search.trim().toLowerCase();
+          filteredData = filteredData.filter(l =>
+            (l.recipient && l.recipient.toLowerCase().includes(searchTerm)) ||
+            (l.reference_number && l.reference_number.toLowerCase().includes(searchTerm)) ||
+            (l.writer && l.writer.toLowerCase().includes(searchTerm)) ||
+            (l.subject && l.subject.toLowerCase().includes(searchTerm))
+          );
+        }
+
+        renderTable(filteredData);
+        renderPagination(response.pagination || {
+          page: currentPage,
+          page_size: itemsPerPage,
+          total_items: filteredData.length,
+          total_pages: Math.ceil(filteredData.length / itemsPerPage)
+        });
+      } else {
+        console.warn('⚠️ No submissions data available');
+        renderTable([]);
+        renderPagination({ page: 1, page_size: itemsPerPage, total_items: 0, total_pages: 0 });
+      }
+    } catch (error) {
+      console.error('❌ Failed to load letters:', error);
+      renderTable([]);
+      renderPagination({ page: 1, page_size: itemsPerPage, total_items: 0, total_pages: 0 });
+    }
   }
 
   /**
    * Sort letters based on selected option
+   * NOTE: Sorting is now handled by the API in loadLetters()
+   * This function is kept for backward compatibility but is no longer used
    */
   function sortLetters(letters, sortBy) {
-    const sorted = [...letters];
-
-    switch (sortBy) {
-      case 'newest':
-        sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
-        break;
-      case 'oldest':
-        sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
-        break;
-      case 'recipient-asc':
-        sorted.sort((a, b) => a.recipient.localeCompare(b.recipient, 'ar'));
-        break;
-      case 'recipient-desc':
-        sorted.sort((a, b) => b.recipient.localeCompare(a.recipient, 'ar'));
-        break;
-      case 'subject-asc':
-        sorted.sort((a, b) => a.subject.localeCompare(b.subject, 'ar'));
-        break;
-      case 'subject-desc':
-        sorted.sort((a, b) => b.subject.localeCompare(a.subject, 'ar'));
-        break;
-      case 'type-asc':
-        sorted.sort((a, b) => a.letterType.localeCompare(b.letterType, 'ar'));
-        break;
-      case 'review-status':
-        sorted.sort((a, b) => a.reviewStatus.localeCompare(b.reviewStatus, 'ar'));
-        break;
-      case 'writer-asc':
-        sorted.sort((a, b) => a.writer.localeCompare(b.writer, 'ar'));
-        break;
-    }
-
-    return sorted;
+    // Sorting is now handled by the API
+    return letters;
   }
 
   /**
@@ -244,44 +289,61 @@ const LetterHistory = (() => {
       <tr data-letter-id="${letter.id}">
         <td>
           <div class="action-buttons">
-            <button class="action-btn view" onclick="LetterHistory.viewLetter(${letter.id})" title="عرض">
+            <button class="action-btn view" onclick="LetterHistory.viewLetter('${letter.id}')" title="عرض">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1.66669 10C1.66669 10 4.16669 4.16667 10 4.16667C15.8334 4.16667 18.3334 10 18.3334 10C18.3334 10 15.8334 15.8333 10 15.8333C4.16669 15.8333 1.66669 10 1.66669 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <button class="action-btn download" onclick="LetterHistory.downloadLetter(${letter.id})" title="تحميل">
+            <button class="action-btn download" onclick="LetterHistory.downloadLetter('${letter.id}')" title="تحميل">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10M17.5 13.9524C18.4583 13.2953 19.1667 12.2142 19.1667 11C19.1667 9.15906 17.6743 7.66668 15.8334 7.66668C15.6061 7.66668 15.3834 7.68759 15.1676 7.72754C14.5867 5.39198 12.5469 3.66668 10.0834 3.66668C7.13781 3.66668 4.75002 6.05447 4.75002 9.00001C4.75002 9.60569 4.84314 10.1896 5.01592 10.738C3.36225 11.2208 2.16669 12.7391 2.16669 14.5C2.16669 16.6591 3.92395 18.4167 6.08335 18.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <button class="action-btn delete" onclick="LetterHistory.deleteLetter(${letter.id})" title="حذف">
+            <button class="action-btn delete" onclick="LetterHistory.deleteLetter('${letter.id}')" title="حذف">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.5 5H4.16667M4.16667 5H17.5M4.16667 5V16.6667C4.16667 17.1087 4.34226 17.5326 4.65482 17.8452C4.96738 18.1577 5.39131 18.3333 5.83333 18.3333H14.1667C14.6087 18.3333 15.0326 18.1577 15.3452 17.8452C15.6577 17.5326 15.8333 17.1087 15.8333 16.6667V5H4.16667ZM6.66667 5V3.33333C6.66667 2.89131 6.84226 2.46738 7.15482 2.15482C7.46738 1.84226 7.89131 1.66667 8.33333 1.66667H11.6667C12.1087 1.66667 12.5326 1.84226 12.8452 2.15482C13.1577 2.46738 13.3333 2.89131 13.3333 3.33333V5M8.33333 9.16667V14.1667M11.6667 9.16667V14.1667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
           </div>
         </td>
-        <td>${Utils.escapeHtml(letter.writer)}</td>
-        <td>${Utils.escapeHtml(letter.notes)}</td>
-        <td>${Utils.escapeHtml(letter.reviewerName)}</td>
-        <td>${Utils.escapeHtml(letter.subject)}</td>
-        <td>${Utils.escapeHtml(letter.recipient)}</td>
+        <td>${Utils.escapeHtml(letter.writer || '-')}</td>
+        <td>${Utils.escapeHtml(letter.notes || '-')}</td>
+        <td>${Utils.escapeHtml(letter.reviewer_name || '-')}</td>
+        <td>${Utils.escapeHtml(letter.subject || '-')}</td>
+        <td>${Utils.escapeHtml(letter.recipient || '-')}</td>
         <td>
-          <span class="status-badge ${getStatusClass(letter.sender)}">
-            ${Utils.escapeHtml(letter.sender)}
+          <span class="status-badge ${getStatusClass(letter.sender || 'مرسل')}">
+            ${Utils.escapeHtml(letter.sender || 'مرسل')}
           </span>
         </td>
         <td>
-          <span class="status-badge ${getStatusClass(letter.reviewStatus)}">
-            ${Utils.escapeHtml(letter.reviewStatus)}
+          <span class="status-badge ${getStatusClass(letter.review_status)}">
+            ${Utils.escapeHtml(letter.review_status || '-')}
           </span>
         </td>
-        <td>${Utils.escapeHtml(letter.letterType)}</td>
-        <td>${Utils.escapeHtml(letter.date)}</td>
-        <td>${Utils.escapeHtml(letter.referenceNumber)}</td>
+        <td>${Utils.escapeHtml(letter.letter_type || '-')}</td>
+        <td>${formatDate(letter.created_at)}</td>
+        <td>${Utils.escapeHtml(letter.reference_number || '-')}</td>
       </tr>
     `).join('');
+  }
+
+  /**
+   * Format date for display
+   */
+  function formatDate(dateString) {
+    if (!dateString) return '-';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    } catch (error) {
+      return dateString;
+    }
   }
 
   /**
@@ -299,25 +361,29 @@ const LetterHistory = (() => {
   /**
    * Render pagination controls
    */
-  function renderPagination(result) {
+  function renderPagination(pagination) {
     const paginationInfo = document.getElementById('pagination-info');
     const paginationControls = document.getElementById('pagination-controls');
 
+    const page = pagination.page || 1;
+    const totalPages = pagination.total_pages || 1;
+    const totalItems = pagination.total_items || 0;
+
     // Update info
-    paginationInfo.textContent = `صفحة ${result.page} من ${result.totalPages} (${result.total} خطاب)`;
+    paginationInfo.textContent = `صفحة ${page} من ${totalPages} (${totalItems} خطاب)`;
 
     // Update controls
     paginationControls.innerHTML = `
-      <button class="page-btn" onclick="LetterHistory.goToPage('first')" ${result.page === 1 ? 'disabled' : ''}>
+      <button class="page-btn" onclick="LetterHistory.goToPage('first')" ${page === 1 ? 'disabled' : ''}>
         الأولى
       </button>
-      <button class="page-btn" onclick="LetterHistory.goToPage('prev')" ${result.page === 1 ? 'disabled' : ''}>
+      <button class="page-btn" onclick="LetterHistory.goToPage('prev')" ${page === 1 ? 'disabled' : ''}>
         السابق
       </button>
-      <button class="page-btn" onclick="LetterHistory.goToPage('next')" ${result.page === result.totalPages ? 'disabled' : ''}>
+      <button class="page-btn" onclick="LetterHistory.goToPage('next')" ${page === totalPages ? 'disabled' : ''}>
         التالي
       </button>
-      <button class="page-btn" onclick="LetterHistory.goToPage('last')" ${result.page === result.totalPages ? 'disabled' : ''}>
+      <button class="page-btn" onclick="LetterHistory.goToPage('last')" ${page === totalPages ? 'disabled' : ''}>
         الأخيرة
       </button>
     `;
@@ -327,8 +393,6 @@ const LetterHistory = (() => {
    * Navigate to a specific page
    */
   function goToPage(direction) {
-    const result = FakeLetters.getPaginatedLetters(currentPage, itemsPerPage, filters);
-
     switch (direction) {
       case 'first':
         currentPage = 1;
@@ -337,10 +401,11 @@ const LetterHistory = (() => {
         currentPage = Math.max(1, currentPage - 1);
         break;
       case 'next':
-        currentPage = Math.min(result.totalPages, currentPage + 1);
+        currentPage = currentPage + 1; // Will be capped by backend
         break;
       case 'last':
-        currentPage = result.totalPages;
+        // Get from pagination info or use a large number
+        currentPage = 9999; // Backend will cap to actual last page
         break;
       default:
         if (typeof direction === 'number') {
@@ -354,29 +419,77 @@ const LetterHistory = (() => {
   /**
    * View letter details
    */
-  function viewLetter(id) {
-    const letter = FakeLetters.viewLetter(id);
-    if (letter) {
-      alert(`عرض تفاصيل الخطاب:\n\nالرقم المرجعي: ${letter.referenceNumber}\nالموضوع: ${letter.subject}\n\n(هذا مجرد إجراء وهمي للاختبار)`);
+  async function viewLetter(id) {
+    try {
+      const response = await ApiClient.getSubmission(id);
+      if (response && response.status === 'success' && response.data) {
+        const letter = response.data;
+        // TODO: Navigate to review-letter.html with the letter ID
+        window.location.href = `review-letter.html?id=${id}`;
+      } else {
+        alert('حدث خطأ في تحميل تفاصيل الخطاب');
+      }
+    } catch (error) {
+      console.error('Failed to view letter:', error);
+      alert('حدث خطأ في تحميل تفاصيل الخطاب');
     }
   }
 
   /**
    * Download letter
    */
-  function downloadLetter(id) {
-    FakeLetters.downloadLetter(id);
+  async function downloadLetter(id) {
+    try {
+      const response = await ApiClient.getSubmission(id);
+      if (response && response.status === 'success' && response.data) {
+        const letter = response.data;
+        // Create a downloadable file
+        const content = `
+الرقم المرجعي: ${letter.reference_number || '-'}
+التاريخ: ${formatDate(letter.created_at)}
+نوع الخطاب: ${letter.letter_type || '-'}
+المستلم: ${letter.recipient || '-'}
+الموضوع: ${letter.subject || '-'}
+
+${letter.content || ''}
+        `.trim();
+
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `letter-${letter.reference_number || id}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } else {
+        alert('حدث خطأ في تحميل الخطاب');
+      }
+    } catch (error) {
+      console.error('Failed to download letter:', error);
+      alert('حدث خطأ في تحميل الخطاب');
+    }
   }
 
   /**
    * Delete letter
    */
-  function deleteLetter(id) {
+  async function deleteLetter(id) {
     if (confirm('هل أنت متأكد من حذف هذا الخطاب؟')) {
-      const success = FakeLetters.deleteLetter(id);
-      if (success) {
-        loadStats();
-        loadLetters();
+      try {
+        // TODO: Add delete endpoint to API when backend supports it
+        console.log('Delete letter:', id);
+        alert('عذراً، وظيفة الحذف غير متاحة حالياً');
+        // When backend adds delete endpoint:
+        // const response = await ApiClient.deleteSubmission(id);
+        // if (response && response.status === 'success') {
+        //   await loadStats();
+        //   await loadLetters();
+        // }
+      } catch (error) {
+        console.error('Failed to delete letter:', error);
+        alert('حدث خطأ في حذف الخطاب');
       }
     }
   }
@@ -392,11 +505,47 @@ const LetterHistory = (() => {
   /**
    * Export all letters
    */
-  function exportAll() {
-    const letters = FakeLetters.getAllLetters();
-    console.log('📤 Exporting letters:', letters);
-    alert(`تصدير ${letters.length} خطاب\n\n(هذا مجرد إجراء وهمي للاختبار)`);
-    // In production, this would generate CSV/Excel file
+  async function exportAll() {
+    try {
+      // Get all letters (max pages)
+      const response = await ApiClient.getSubmissions(1, 1000, 'created_at', 'desc');
+      if (response && response.status === 'success' && response.data) {
+        const letters = response.data;
+        console.log('📤 Exporting letters:', letters);
+
+        // Create CSV content
+        const headers = ['الرقم المرجعي', 'التاريخ', 'نوع الخطاب', 'حالة المراجعة', 'المستلم', 'الموضوع', 'الكاتب'];
+        const rows = letters.map(letter => [
+          letter.reference_number || '-',
+          formatDate(letter.created_at),
+          letter.letter_type || '-',
+          letter.review_status || '-',
+          letter.recipient || '-',
+          letter.subject || '-',
+          letter.writer || '-'
+        ]);
+
+        const csvContent = [headers, ...rows]
+          .map(row => row.map(cell => `"${cell}"`).join(','))
+          .join('\n');
+
+        // Add BOM for Excel compatibility with Arabic
+        const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `letters-export-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } else {
+        alert('لا توجد خطابات للتصدير');
+      }
+    } catch (error) {
+      console.error('Failed to export letters:', error);
+      alert('حدث خطأ في تصدير الخطابات');
+    }
   }
 
   /**
