@@ -29,27 +29,28 @@ const LetterHistory = (() => {
     { value: 'recipient-asc', label: 'المستلم: أ - ي' },
     { value: 'recipient-desc', label: 'المستلم: ي - أ' },
     { value: 'subject-asc', label: 'الموضوع: أ - ي' },
-    { value: 'subject-desc', label: 'الموضوع: ي - أ' }
+    { value: 'subject-desc', label: 'الموضوع: ي - أ' },
+    { value: 'type-asc', label: 'النوع: أ - ي' },
+    { value: 'review-status', label: 'حالة المراجعة' },
+    { value: 'writer-asc', label: 'الكاتب: أ - ي' }
   ];
 
   const letterTypeOptions = [
     { value: 'all', label: 'جميع أنواع الخطابات' },
     { value: 'خطاب جديد', label: 'خطاب جديد' },
     { value: 'رد على خطاب من الجهة', label: 'رد على خطاب من الجهة' },
+    { value: 'خطاب إلحاقي', label: 'خطاب إلحاقي' },
     { value: 'طلب', label: 'طلب' },
-    { value: 'توصية', label: 'توصية' },
-    { value: 'دعوة اجتماع', label: 'دعوة اجتماع' },
+    { value: 'جدولة اجتماع', label: 'جدولة اجتماع' },
     { value: 'دعوة حضور', label: 'دعوة حضور' },
-    { value: 'توهبة', label: 'توهبة' }
+    { value: 'تهنئة', label: 'تهنئة' }
   ];
 
   const reviewStatusOptions = [
     { value: 'all', label: 'جميع حالات المراجعة' },
     { value: 'جاهز للإرسال', label: 'جاهز للإرسال' },
     { value: 'في الانتظار', label: 'في الانتظار' },
-    { value: 'تحسينات', label: 'يحتاج إلى تحسين' },
-    { value: 'تمت الموافقة', label: 'تمت الموافقة' },
-    { value: 'مرفوض', label: 'مرفوض' }
+    { value: 'يحتاج إلى تحسين', label: 'يحتاج إلى تحسين' }
   ];
 
   /**
@@ -206,6 +207,15 @@ const LetterHistory = (() => {
       case 'subject-desc':
         sorted.sort((a, b) => b.subject.localeCompare(a.subject, 'ar'));
         break;
+      case 'type-asc':
+        sorted.sort((a, b) => a.letterType.localeCompare(b.letterType, 'ar'));
+        break;
+      case 'review-status':
+        sorted.sort((a, b) => a.reviewStatus.localeCompare(b.reviewStatus, 'ar'));
+        break;
+      case 'writer-asc':
+        sorted.sort((a, b) => a.writer.localeCompare(b.writer, 'ar'));
+        break;
     }
 
     return sorted;
@@ -281,8 +291,7 @@ const LetterHistory = (() => {
     const statusMap = {
       'جاهز للإرسال': 'ready',
       'في الانتظار': 'pending',
-      'تمت الموافقة': 'approved',
-      'تحسينات': 'improvements'
+      'يحتاج إلى تحسين': 'improvements'
     };
     return statusMap[status] || 'pending';
   }
