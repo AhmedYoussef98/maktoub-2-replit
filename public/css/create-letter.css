@@ -277,16 +277,49 @@ textarea.input-field {
 
 /* ==================== Responsive Adjustments ==================== */
 
+/* Removed fixed height constraints to prevent canvas corruption on edit */
+/* Document template now flows naturally with content */
+
+#documentTemplate {
+    min-height: 400px; /* Minimum height to prevent collapse */
+    height: auto; /* Allow natural height based on content */
+}
+
 @media (max-width: 1024px) {
     #documentTemplate {
-        min-height: 400px;
-        max-height: 600px;
+        min-height: 300px;
     }
 }
 
 @media (max-width: 768px) {
     #documentTemplate {
-        min-height: 300px;
-        max-height: 500px;
+        min-height: 250px;
     }
+}
+
+/* ==================== Document Preview Background ==================== */
+
+/* Document preview - always readable in both modes */
+.document-preview-bg {
+    /* Light mode: white background with dark text */
+    background-color: #FFFFFF;
+    color: #0D2823;
+}
+
+/* Dark mode: light green shade background with dark text */
+body.dark-mode .document-preview-bg {
+    background-color: #C8E6C9; /* Light green shade */
+    color: #0D2823; /* Keep text dark for readability */
+}
+
+/* Ensure prose content inside preview is always dark */
+.document-preview-bg .prose,
+.document-preview-bg .prose p,
+.document-preview-bg .prose h1,
+.document-preview-bg .prose h2,
+.document-preview-bg .prose h3,
+.document-preview-bg .prose h4,
+.document-preview-bg .prose h5,
+.document-preview-bg .prose h6 {
+    color: #0D2823 !important;
 }
