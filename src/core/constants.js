@@ -120,6 +120,12 @@ const AppConstants = (() => {
     SUBMISSIONS_SINGLE: 'submissions',  // + /:submission_id
     SUBMISSIONS_STATS: 'submissions/stats',
 
+    // Admin user management endpoints
+    ADMIN_USERS: 'user/admin/users',
+    ADMIN_CREATE_USER: 'user/admin/users/create',
+    ADMIN_UPDATE_USER: 'user/admin/users/update',
+    ADMIN_DELETE_USER: 'user/admin/users/delete',
+
     // Health checks
     USER_HEALTH: 'user/health',
   };

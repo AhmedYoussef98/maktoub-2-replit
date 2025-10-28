@@ -69,6 +69,10 @@ const ApiClient = (() => {
       'submissions': 'submissions',
       'submissions/stats': 'submissions-stats',
       'submissions/single': 'submissions-single',
+      'user/admin/users': 'admin-users',
+      'user/admin/users/create': 'admin-create-user',
+      'user/admin/users/update': 'admin-update-user',
+      'user/admin/users/delete': 'admin-delete-user',
     };
 
     return endpointMap[endpoint] || endpoint;
@@ -620,6 +624,119 @@ const ApiClient = (() => {
     }
   }
 
+  // ==================== Admin User Management ====================
+
+  /**
+   * Get all users (admin only)
+   * @returns {Promise<Object|null>} Users list with count or null on error
+   */
+  async function getAdminUsers() {
+    try {
+      const data = await makeRequest(AppConstants.ENDPOINTS.ADMIN_USERS, 'GET');
+      // API returns: { status, count, client_id, users: [...] }
+      return data;
+    } catch (error) {
+      console.error('Failed to get admin users:', error);
+      if (typeof notify !== 'undefined') {
+        notify.error('فشل في تحميل المستخدمين');
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Create a new user (admin only)
+   * @param {Object} userData - User data
+   * @param {string} userData.email - User email (required)
+   * @param {string} userData.username - User full name (required)
+   * @param {string} userData.password - User password (required)
+   * @param {string} [userData.phone_number] - User phone number (optional)
+   * @param {string} [userData.role='user'] - User role (optional, defaults to 'user')
+   * @param {string} [userData.status='inactive'] - User status (optional, defaults to 'inactive')
+   * @returns {Promise<Object|null>} Created user data or null on error
+   */
+  async function createAdminUser(userData) {
+    try {
+      const data = await makeRequest(AppConstants.ENDPOINTS.ADMIN_CREATE_USER, 'POST', userData);
+      // API returns 201: { status, message, email, username, phone_number, role, status, admin }
+      if (typeof notify !== 'undefined') {
+        notify.success('تم إنشاء المستخدم بنجاح');
+      }
+      return data;
+    } catch (error) {
+      console.error('Failed to create admin user:', error);
+      if (typeof notify !== 'undefined') {
+        notify.error('فشل في إنشاء المستخدم');
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Update a user (admin only)
+   * @param {string} email - User email to update
+   * @param {Object} updates - Fields to update
+   * @param {string} [updates.username] - New username
+   * @param {string} [updates.phone_number] - New phone number
+   * @param {string} [updates.password] - New password
+   * @param {string} [updates.role] - New role
+   * @param {string} [updates.status] - New status
+   * @returns {Promise<Object|null>} Updated user data or null on error
+   */
+  async function updateAdminUser(email, updates) {
+    try {
+      const data = await makeRequest(
+        AppConstants.ENDPOINTS.ADMIN_UPDATE_USER,
+        'POST',
+        updates,
+        {
+          headers: { 'X-User-Email': email }
+        }
+      );
+      // API returns: { status, message, email, updates, admin }
+      if (typeof notify !== 'undefined') {
+        notify.success('تم تحديث المستخدم بنجاح');
+      }
+      return data;
+    } catch (error) {
+      console.error('Failed to update admin user:', error);
+      if (typeof notify !== 'undefined') {
+        notify.error('فشل في تحديث المستخدم');
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Delete a user (admin only)
+   * @param {string} email - User email to delete
+   * @returns {Promise<Object|null>} Deletion confirmation or null on error
+   */
+  async function deleteAdminUser(email) {
+    try {
+      // For DELETE requests, we need to pass the email in the headers
+      const data = await makeRequest(
+        AppConstants.ENDPOINTS.ADMIN_DELETE_USER,
+        'DELETE',
+        null,
+        {
+          headers: { 'X-User-Email': email }
+        }
+      );
+      // API returns: { status, message, email, admin }
+      if (typeof notify !== 'undefined') {
+        notify.success('تم حذف المستخدم بنجاح');
+      }
+      return data;
+    } catch (error) {
+      console.error('Failed to delete admin user:', error);
+      if (typeof notify !== 'undefined') {
+        notify.error('فشل في حذف المستخدم');
+      }
+      return null;
+    }
+  }
+
   /**
    * Generate unique ID for letters
    * @returns {string} Unique letter ID
@@ -730,6 +847,10 @@ const ApiClient = (() => {
     getSubmissions,
     getSubmission,
     getSubmissionsStats,
+    getAdminUsers,
+    createAdminUser,
+    updateAdminUser,
+    deleteAdminUser,
     generateUniqueId,
   };
 })();

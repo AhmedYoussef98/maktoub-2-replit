@@ -102,6 +102,9 @@ app.all('/api/proxy', async (req, res) => {
                 case 'submissions-single':
                     targetUrl = `${API_BASE_URL}/api/v1/submissions/${submission_id}`;
                     break;
+                case 'admin-users':
+                    targetUrl = `${API_BASE_URL}/api/v1/user/admin/users`;
+                    break;
                 default:
                     return res.status(400).json({ error: 'Invalid GET endpoint' });
             }
@@ -148,6 +151,9 @@ app.all('/api/proxy', async (req, res) => {
                 case 'delete-chat-session':
                     targetUrl = `${API_BASE_URL}/api/v1/chat/sessions/${session_id}`;
                     break;
+                case 'admin-delete-user':
+                    targetUrl = `${API_BASE_URL}/api/v1/user/admin/users/delete`;
+                    break;
                 default:
                     return res.status(400).json({ error: 'Invalid DELETE endpoint' });
             }
@@ -160,6 +166,11 @@ app.all('/api/proxy', async (req, res) => {
                 if (req.headers.authorization) {
                     headers['Authorization'] = req.headers.authorization;
                     console.log('Forwarding Authorization header');
+                }
+                // Forward X-User-Email header for admin delete operations
+                if (req.headers['x-user-email']) {
+                    headers['X-User-Email'] = req.headers['x-user-email'];
+                    console.log('Forwarding X-User-Email header');
                 }
 
                 const response = await axios.delete(targetUrl, {
@@ -394,6 +405,12 @@ app.all('/api/proxy', async (req, res) => {
                 case 'update-archive':
                     targetUrl = `${API_BASE_URL}/api/v1/archive/update`;
                     break;
+                case 'admin-create-user':
+                    targetUrl = `${API_BASE_URL}/api/v1/user/admin/users/create`;
+                    break;
+                case 'admin-update-user':
+                    targetUrl = `${API_BASE_URL}/api/v1/user/admin/users/update`;
+                    break;
                 default:
                     console.log('Invalid endpoint:', endpoint);
                     return res.status(400).json({ error: 'Invalid endpoint' });
@@ -410,6 +427,11 @@ app.all('/api/proxy', async (req, res) => {
                 if (req.headers.authorization) {
                     headers['Authorization'] = req.headers.authorization;
                     console.log('Forwarding Authorization header');
+                }
+                // Forward X-User-Email header for admin update operations
+                if (req.headers['x-user-email']) {
+                    headers['X-User-Email'] = req.headers['x-user-email'];
+                    console.log('Forwarding X-User-Email header');
                 }
 
                 const response = await axios.post(targetUrl, data, {
