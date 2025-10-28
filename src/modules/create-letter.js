@@ -197,8 +197,8 @@ const CreateLetterPage = (() => {
         console.log('✅ Chat session created:', currentEditSession);
       }
 
-      // Call edit API
-      const result = await ApiClient.editLetter(letterPreview, editFeedback, currentEditSession);
+      // Call edit API with correct parameter order: (sessionId, userMessage, currentLetter, context)
+      const result = await ApiClient.editLetter(currentEditSession, editFeedback, letterPreview);
 
       if (!result || !result.Letter) {
         console.error('❌ Letter editing failed');
