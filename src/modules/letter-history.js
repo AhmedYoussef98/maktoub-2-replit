@@ -208,19 +208,20 @@ const LetterHistory = (() => {
   async function loadLetters() {
     try {
       // Convert frontend sort values to backend format
+      // Backend uses capital case field names (ID, Timestamp, Letter_type, etc.)
       const sortMapping = {
-        'newest': { field: 'created_at', order: 'desc' },
-        'oldest': { field: 'created_at', order: 'asc' },
-        'recipient-asc': { field: 'recipient', order: 'asc' },
-        'recipient-desc': { field: 'recipient', order: 'desc' },
-        'subject-asc': { field: 'subject', order: 'asc' },
-        'subject-desc': { field: 'subject', order: 'desc' },
-        'type-asc': { field: 'letter_type', order: 'asc' },
-        'review-status': { field: 'review_status', order: 'asc' },
-        'writer-asc': { field: 'writer', order: 'asc' }
+        'newest': { field: 'Timestamp', order: 'desc' },
+        'oldest': { field: 'Timestamp', order: 'asc' },
+        'recipient-asc': { field: 'Recipient_name', order: 'asc' },
+        'recipient-desc': { field: 'Recipient_name', order: 'desc' },
+        'subject-asc': { field: 'Subject', order: 'asc' },
+        'subject-desc': { field: 'Subject', order: 'desc' },
+        'type-asc': { field: 'Letter_type', order: 'asc' },
+        'review-status': { field: 'Review_status', order: 'asc' },
+        'writer-asc': { field: 'Created_by', order: 'asc' }
       };
 
-      const sortConfig = sortMapping[filters.sortBy] || { field: 'created_at', order: 'desc' };
+      const sortConfig = sortMapping[filters.sortBy] || { field: 'ID', order: 'desc' };
 
       const response = await ApiClient.getSubmissions(
         currentPage,
@@ -231,26 +232,27 @@ const LetterHistory = (() => {
 
       if (response && response.status === 'success') {
         // Filter data on client side (until backend supports filtering)
+        // Backend returns capital case field names (Letter_type, Review_status, etc.)
         let filteredData = response.data || [];
 
         // Apply letter type filter
         if (filters.letterType && filters.letterType !== 'all') {
-          filteredData = filteredData.filter(l => l.letter_type === filters.letterType);
+          filteredData = filteredData.filter(l => l.Letter_type === filters.letterType);
         }
 
         // Apply review status filter
         if (filters.reviewStatus && filters.reviewStatus !== 'all') {
-          filteredData = filteredData.filter(l => l.review_status === filters.reviewStatus);
+          filteredData = filteredData.filter(l => l.Review_status === filters.reviewStatus);
         }
 
         // Apply search filter
         if (filters.search && filters.search.trim()) {
           const searchTerm = filters.search.trim().toLowerCase();
           filteredData = filteredData.filter(l =>
-            (l.recipient && l.recipient.toLowerCase().includes(searchTerm)) ||
-            (l.reference_number && l.reference_number.toLowerCase().includes(searchTerm)) ||
-            (l.writer && l.writer.toLowerCase().includes(searchTerm)) ||
-            (l.subject && l.subject.toLowerCase().includes(searchTerm))
+            (l.Recipient_name && l.Recipient_name.toLowerCase().includes(searchTerm)) ||
+            (l.ID && l.ID.toLowerCase().includes(searchTerm)) ||
+            (l.Created_by && l.Created_by.toLowerCase().includes(searchTerm)) ||
+            (l.Subject && l.Subject.toLowerCase().includes(searchTerm))
           );
         }
 
@@ -302,46 +304,47 @@ const LetterHistory = (() => {
       return;
     }
 
+    // Backend returns capital case field names (ID, Timestamp, Created_by, etc.)
     tbody.innerHTML = letters.map(letter => `
-      <tr data-letter-id="${letter.id}">
+      <tr data-letter-id="${letter.ID}">
         <td>
           <div class="action-buttons">
-            <button class="action-btn view" onclick="LetterHistory.viewLetter('${letter.id}')" title="عرض">
+            <button class="action-btn view" onclick="LetterHistory.viewLetter('${letter.ID}')" title="عرض">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1.66669 10C1.66669 10 4.16669 4.16667 10 4.16667C15.8334 4.16667 18.3334 10 18.3334 10C18.3334 10 15.8334 15.8333 10 15.8333C4.16669 15.8333 1.66669 10 1.66669 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <button class="action-btn download" onclick="LetterHistory.downloadLetter('${letter.id}')" title="تحميل">
+            <button class="action-btn download" onclick="LetterHistory.downloadLetter('${letter.ID}')" title="تحميل">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10M17.5 13.9524C18.4583 13.2953 19.1667 12.2142 19.1667 11C19.1667 9.15906 17.6743 7.66668 15.8334 7.66668C15.6061 7.66668 15.3834 7.68759 15.1676 7.72754C14.5867 5.39198 12.5469 3.66668 10.0834 3.66668C7.13781 3.66668 4.75002 6.05447 4.75002 9.00001C4.75002 9.60569 4.84314 10.1896 5.01592 10.738C3.36225 11.2208 2.16669 12.7391 2.16669 14.5C2.16669 16.6591 3.92395 18.4167 6.08335 18.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <button class="action-btn delete" onclick="LetterHistory.deleteLetter('${letter.id}')" title="حذف">
+            <button class="action-btn delete" onclick="LetterHistory.deleteLetter('${letter.ID}')" title="حذف">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.5 5H4.16667M4.16667 5H17.5M4.16667 5V16.6667C4.16667 17.1087 4.34226 17.5326 4.65482 17.8452C4.96738 18.1577 5.39131 18.3333 5.83333 18.3333H14.1667C14.6087 18.3333 15.0326 18.1577 15.3452 17.8452C15.6577 17.5326 15.8333 17.1087 15.8333 16.6667V5H4.16667ZM6.66667 5V3.33333C6.66667 2.89131 6.84226 2.46738 7.15482 2.15482C7.46738 1.84226 7.89131 1.66667 8.33333 1.66667H11.6667C12.1087 1.66667 12.5326 1.84226 12.8452 2.15482C13.1577 2.46738 13.3333 2.89131 13.3333 3.33333V5M8.33333 9.16667V14.1667M11.6667 9.16667V14.1667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
           </div>
         </td>
-        <td>${Utils.escapeHtml(letter.writer || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Created_by || '-')}</td>
         <td>${Utils.escapeHtml(letter.notes || '-')}</td>
         <td>${Utils.escapeHtml(letter.reviewer_name || '-')}</td>
-        <td>${Utils.escapeHtml(letter.subject || '-')}</td>
-        <td>${Utils.escapeHtml(letter.recipient || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Subject || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
         <td>
           <span class="status-badge ${getStatusClass(letter.sender || 'مرسل')}">
             ${Utils.escapeHtml(letter.sender || 'مرسل')}
           </span>
         </td>
         <td>
-          <span class="status-badge ${getStatusClass(letter.review_status)}">
-            ${Utils.escapeHtml(letter.review_status || '-')}
+          <span class="status-badge ${getStatusClass(letter.Review_status)}">
+            ${Utils.escapeHtml(letter.Review_status || '-')}
           </span>
         </td>
-        <td>${Utils.escapeHtml(letter.letter_type || '-')}</td>
-        <td>${formatDate(letter.created_at)}</td>
-        <td>${Utils.escapeHtml(letter.reference_number || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
+        <td>${formatDate(letter.Timestamp)}</td>
+        <td>${Utils.escapeHtml(letter.ID || '-')}</td>
       </tr>
     `).join('');
   }
