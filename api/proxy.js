@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     // Enable CORS - Updated to support new methods
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     
     if (req.method === "OPTIONS") {
         res.status(200).end();
@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
 
         // Handle GET requests for new endpoints
         if (req.method === "GET") {
-            const { endpoint, session_id, category, letter_id, limit, offset, include_expired } = req.query;
+            const { endpoint, session_id, category, letter_id, limit, offset, include_expired, page, page_size, sort_by, sort_order, submission_id } = req.query;
             
             let targetUrl;
             switch (endpoint) {
@@ -67,13 +67,40 @@ module.exports = async (req, res) => {
                 case "archive-status":
                     targetUrl = `${API_BASE_URL}/api/v1/archive/status/${letter_id}`;
                     break;
+                case "submissions":
+                    targetUrl = `${API_BASE_URL}/api/v1/submissions`;
+                    const submissionsParams = new URLSearchParams();
+                    if (page) submissionsParams.append('page', page);
+                    if (page_size) submissionsParams.append('page_size', page_size);
+                    if (sort_by) submissionsParams.append('sort_by', sort_by);
+                    if (sort_order) submissionsParams.append('sort_order', sort_order);
+                    if (submissionsParams.toString()) targetUrl += `?${submissionsParams.toString()}`;
+                    break;
+                case "submissions-stats":
+                    targetUrl = `${API_BASE_URL}/api/v1/submissions/stats`;
+                    break;
+                case "submissions-single":
+                    if (!submission_id) {
+                        return res.status(400).json({ error: "submission_id is required for submissions-single endpoint" });
+                    }
+                    targetUrl = `${API_BASE_URL}/api/v1/submissions/${submission_id}`;
+                    break;
                 default:
                     return res.status(400).json({ error: "Invalid GET endpoint" });
             }
             
             try {
                 console.log("GET request to:", targetUrl);
+
+                // Forward Authorization header if present
+                const headers = {};
+                if (req.headers.authorization) {
+                    headers['Authorization'] = req.headers.authorization;
+                    console.log("Forwarding Authorization header");
+                }
+
                 const response = await axios.get(targetUrl, {
+                    headers: headers,
                     httpsAgent: agent,
                     timeout: 30000
                 });
