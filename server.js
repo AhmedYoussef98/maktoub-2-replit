@@ -17,7 +17,7 @@ app.use('/src', express.static('src'));
 app.use('/public', express.static('public'));
 app.use('/attached_assets', express.static('attached_assets'));
 app.use('/css', express.static('css'));
-app.use('/api', express.static('api'));
+// NOTE: /api directory is NOT served as static - /api/proxy is a route handler, not a static file
 
 // Serve remaining static files from root (logo.svg, styles.css, etc.)
 app.use(express.static('.', {
