@@ -75,13 +75,18 @@ app.use((req, res, next) => {
 });
 
 app.all('/api/proxy', async (req, res) => {
+    // Prevent caching of API responses
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     if (!['GET', 'PUT', 'POST', 'DELETE'].includes(req.method)) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
-    
+
     try {
         const API_BASE_URL = 'https://128.140.37.194:5018';
-        
+
         const agent = new https.Agent({
             rejectUnauthorized: false
         });
