@@ -87,7 +87,7 @@ app.all('/api/proxy', async (req, res) => {
         });
 
         if (req.method === 'GET') {
-            const { endpoint, session_id, category, letter_id, limit, offset, include_expired } = req.query;
+            const { endpoint, session_id, category, letter_id, limit, offset, include_expired, page, page_size, sort_by, sort_order, submission_id } = req.query;
 
             let targetUrl;
             switch (endpoint) {
@@ -123,6 +123,21 @@ app.all('/api/proxy', async (req, res) => {
                     break;
                 case 'archive-status':
                     targetUrl = `${API_BASE_URL}/api/v1/archive/status/${letter_id}`;
+                    break;
+                case 'submissions':
+                    targetUrl = `${API_BASE_URL}/api/v1/submissions`;
+                    const submissionsParams = new URLSearchParams();
+                    if (page) submissionsParams.append('page', page);
+                    if (page_size) submissionsParams.append('page_size', page_size);
+                    if (sort_by) submissionsParams.append('sort_by', sort_by);
+                    if (sort_order) submissionsParams.append('sort_order', sort_order);
+                    if (submissionsParams.toString()) targetUrl += `?${submissionsParams.toString()}`;
+                    break;
+                case 'submissions-stats':
+                    targetUrl = `${API_BASE_URL}/api/v1/submissions/stats`;
+                    break;
+                case 'submissions-single':
+                    targetUrl = `${API_BASE_URL}/api/v1/submissions/${submission_id}`;
                     break;
                 default:
                     return res.status(400).json({ error: 'Invalid GET endpoint' });
