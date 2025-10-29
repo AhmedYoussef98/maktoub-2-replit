@@ -100,7 +100,13 @@ app.all('/api/proxy', async (req, res) => {
                     targetUrl = `${API_BASE_URL}/api/v1/submissions/stats`;
                     break;
                 case 'submissions-single':
+                    if (!submission_id) {
+                        console.error('❌ Missing submission_id parameter');
+                        return res.status(400).json({ error: 'submission_id parameter is required' });
+                    }
+                    console.log('📄 Fetching single submission:', submission_id);
                     targetUrl = `${API_BASE_URL}/api/v1/submissions/${submission_id}`;
+                    console.log('🔗 Target URL:', targetUrl);
                     break;
                 case 'admin-users':
                     targetUrl = `${API_BASE_URL}/api/v1/user/admin/users`;

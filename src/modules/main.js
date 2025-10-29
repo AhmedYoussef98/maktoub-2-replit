@@ -709,10 +709,13 @@ async function clearAppCache() {
 // LOAD LETTERS FOR REVIEW
 function loadLettersForReview() {
     console.log('🔍 Loading letters for review...');
+    console.log('🔍 Current URL:', window.location.href);
 
     // Check if we have a letter ID in the URL
     const urlParams = new URLSearchParams(window.location.search);
     const letterId = urlParams.get('id');
+
+    console.log('🔍 URL parameter "id":', letterId);
 
     if (!letterId) {
         // No ID provided, redirect to review letters list
@@ -720,6 +723,8 @@ function loadLettersForReview() {
         window.location.href = '/review-letters.html';
         return;
     }
+
+    console.log('✅ Letter ID found, proceeding to load:', letterId);
 
     // Show the review form immediately
     const reviewForm = document.getElementById('reviewForm');
@@ -787,28 +792,33 @@ function setupReviewForm() {
 }
 
 async function loadLetterForReview(id) {
-    console.log('📄 Loading letter for review:', id);
+    console.log('📄 [loadLetterForReview] Loading letter for review:', id);
+    console.log('📄 [loadLetterForReview] Submission ID type:', typeof id);
 
     try {
         // Use the API client to fetch the specific submission
         if (typeof ApiClient === 'undefined' || !ApiClient.getSubmission) {
-            console.error('❌ ApiClient.getSubmission not available');
+            console.error('❌ [loadLetterForReview] ApiClient.getSubmission not available');
+            console.error('❌ [loadLetterForReview] ApiClient exists?', typeof ApiClient !== 'undefined');
             displayLetterError();
             return;
         }
 
+        console.log('🔄 [loadLetterForReview] Calling ApiClient.getSubmission...');
         const response = await ApiClient.getSubmission(id);
+        console.log('📥 [loadLetterForReview] API response received:', response);
 
         if (response && response.status === 'success' && response.data) {
             const letter = response.data;
-            console.log('✅ Letter loaded successfully:', letter);
+            console.log('✅ [loadLetterForReview] Letter loaded successfully:', letter);
             displayLetterForReview(letter);
         } else {
-            console.error('❌ Failed to load letter:', response);
+            console.error('❌ [loadLetterForReview] Failed to load letter:', response);
             displayLetterError();
         }
     } catch (error) {
-        console.error('❌ Error loading letter:', error);
+        console.error('❌ [loadLetterForReview] Error loading letter:', error);
+        console.error('❌ [loadLetterForReview] Error stack:', error.stack);
         displayLetterError();
     }
 }
