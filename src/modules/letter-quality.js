@@ -243,10 +243,15 @@ const LetterQuality = (() => {
     if (wordCountEl) wordCountEl.textContent = statistics.wordCount;
     if (lineCountEl) lineCountEl.textContent = statistics.lineCount;
 
-    // Show quality analysis section
+    // Show quality analysis section (make sure it's visible)
     const qualitySection = document.getElementById('qualityAnalysisSection');
     if (qualitySection) {
       qualitySection.style.display = 'block';
+      qualitySection.style.opacity = '1';
+      qualitySection.style.visibility = 'visible';
+      console.log('✅ Quality analysis section shown');
+    } else {
+      console.warn('⚠️ qualityAnalysisSection element not found');
     }
 
     console.log('✅ Letter analysis complete:', { checks, statistics });
@@ -295,8 +300,14 @@ const LetterQuality = (() => {
 
     // Analyze the letter content
     const letterContent = letterData.Letter || letterData.content || '';
-    if (letterContent) {
+
+    console.log('📄 Letter content found:', letterContent ? `${letterContent.length} chars` : 'NO CONTENT');
+
+    if (letterContent && letterContent.trim().length > 0) {
+      console.log('🔍 Running quality analysis...');
       analyzeLetter(letterContent);
+    } else {
+      console.warn('⚠️ No letter content to analyze in showPreview');
     }
 
     console.log('✅ Letter preview displayed');
@@ -343,17 +354,38 @@ const LetterQuality = (() => {
    * Refresh quality analysis for current letter
    */
   function refreshQualityAnalysis() {
-    const letterContent = document.getElementById('mainLetterContent')?.textContent || '';
+    console.log('🔄 Refreshing quality analysis...');
+
+    const mainLetterContentEl = document.getElementById('mainLetterContent');
+
+    if (!mainLetterContentEl) {
+      console.error('❌ mainLetterContent element not found');
+      if (typeof notify !== 'undefined') {
+        notify.error('خطأ: عنصر المحتوى غير موجود');
+      }
+      return;
+    }
+
+    // Get text content (strips HTML tags)
+    const letterContent = mainLetterContentEl.textContent || mainLetterContentEl.innerText || '';
+
+    console.log('📄 Letter content length:', letterContent.length);
+    console.log('📄 Letter content preview:', letterContent.substring(0, 100) + '...');
 
     if (letterContent.trim().length > 0) {
-      analyzeLetter(letterContent);
+      console.log('✅ Analyzing letter...');
+      const result = analyzeLetter(letterContent);
+
+      console.log('📊 Analysis result:', result);
 
       if (typeof notify !== 'undefined') {
-        notify.success('تم تحديث تحليل الجودة');
+        notify.success('تم تحديث تحليل الجودة بنجاح');
       }
     } else {
+      console.warn('⚠️ No letter content to analyze');
+
       if (typeof notify !== 'undefined') {
-        notify.warning('لا يوجد محتوى للتحليل');
+        notify.warning('لا يوجد محتوى للتحليل. الرجاء إنشاء خطاب أولاً');
       }
     }
   }
@@ -362,11 +394,26 @@ const LetterQuality = (() => {
    * Initialize event listeners
    */
   function init() {
+    console.log('🚀 Initializing Letter Quality module...');
+
     // Refresh quality button
     const refreshButton = document.getElementById('refreshQualityButton');
     if (refreshButton) {
       refreshButton.addEventListener('click', refreshQualityAnalysis);
+      console.log('✅ Refresh quality button found and connected');
+    } else {
+      console.warn('⚠️ refreshQualityButton not found - button may not exist yet');
     }
+
+    // Check if main elements exist
+    const mainLetterContent = document.getElementById('mainLetterContent');
+    const qualitySection = document.getElementById('qualityAnalysisSection');
+
+    console.log('📋 Element check:', {
+      mainLetterContent: mainLetterContent ? '✓' : '✗',
+      qualitySection: qualitySection ? '✓' : '✗',
+      refreshButton: refreshButton ? '✓' : '✗'
+    });
 
     console.log('✅ Letter Quality module initialized');
   }
