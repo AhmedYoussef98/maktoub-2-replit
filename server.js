@@ -527,6 +527,10 @@ app.get('/review-letter.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'review-letter.html'));
 });
 
+app.get('/review-letters.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pages', 'review-letters.html'));
+});
+
 app.get('/admin-panel.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'admin-panel.html'));
 });
