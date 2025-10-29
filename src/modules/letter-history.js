@@ -495,23 +495,61 @@ ${letter.content || ''}
   /**
    * Delete letter
    */
-  async function deleteLetter(id) {
-    if (confirm('هل أنت متأكد من حذف هذا الخطاب؟')) {
-      try {
-        console.log('Deleting letter:', id);
-        const response = await ApiClient.deleteLetter(id);
+  let letterToDelete = null;
 
-        if (response && response.status === 'success') {
-          NotificationsModule.show(response.message || 'تم حذف الخطاب بنجاح', 'success');
-          await loadStats();
-          await loadLetters();
-        } else {
-          throw new Error(response?.message || 'فشل حذف الخطاب');
-        }
-      } catch (error) {
-        console.error('Failed to delete letter:', error);
-        NotificationsModule.show(error.message || 'حدث خطأ في حذف الخطاب', 'error');
+  function deleteLetter(id) {
+    // Store the letter ID and show the custom modal
+    letterToDelete = id;
+    showDeleteModal();
+  }
+
+  /**
+   * Show delete confirmation modal
+   */
+  function showDeleteModal() {
+    const modal = document.getElementById('deleteModalOverlay');
+    if (modal) {
+      modal.style.display = 'flex';
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  /**
+   * Hide delete confirmation modal
+   */
+  function hideDeleteModal() {
+    const modal = document.getElementById('deleteModalOverlay');
+    if (modal) {
+      modal.style.display = 'none';
+      // Restore body scroll
+      document.body.style.overflow = '';
+    }
+    letterToDelete = null;
+  }
+
+  /**
+   * Confirm delete and execute
+   */
+  async function confirmDelete() {
+    if (!letterToDelete) return;
+
+    try {
+      console.log('Deleting letter:', letterToDelete);
+      const response = await ApiClient.deleteLetter(letterToDelete);
+
+      if (response && response.status === 'success') {
+        hideDeleteModal();
+        NotificationsModule.show(response.message || 'تم حذف الخطاب بنجاح', 'success');
+        await loadStats();
+        await loadLetters();
+      } else {
+        throw new Error(response?.message || 'فشل حذف الخطاب');
       }
+    } catch (error) {
+      console.error('Failed to delete letter:', error);
+      hideDeleteModal();
+      NotificationsModule.show(error.message || 'حدث خطأ في حذف الخطاب', 'error');
     }
   }
 
@@ -596,6 +634,27 @@ ${letter.content || ''}
     const exportBtn = document.getElementById('export-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', exportAll);
+    }
+
+    // Delete modal event listeners
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+      confirmDeleteBtn.addEventListener('click', confirmDelete);
+    }
+
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    if (cancelDeleteBtn) {
+      cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+    }
+
+    // Close modal when clicking overlay
+    const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+    if (deleteModalOverlay) {
+      deleteModalOverlay.addEventListener('click', (e) => {
+        if (e.target === deleteModalOverlay) {
+          hideDeleteModal();
+        }
+      });
     }
 
     // Close dropdowns when clicking outside

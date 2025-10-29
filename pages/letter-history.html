@@ -224,6 +224,32 @@
         </footer>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="delete-modal-overlay" id="deleteModalOverlay">
+        <div class="delete-modal">
+            <!-- Icon -->
+            <div class="delete-modal-icon">
+                <img src="/attached_assets/Exclamation.svg" alt="تحذير">
+            </div>
+
+            <!-- Content -->
+            <div class="delete-modal-content">
+                <h2 class="delete-modal-title">حذف الخطاب</h2>
+                <p class="delete-modal-message">هل أنت متأكد أنك تريد حذف الخطاب؟ سيتم حذف جميع البيانات نهائياً</p>
+            </div>
+
+            <!-- Actions -->
+            <div class="delete-modal-actions">
+                <button class="delete-modal-btn delete-modal-btn-confirm" id="confirmDeleteBtn">
+                    حذف
+                </button>
+                <button class="delete-modal-btn delete-modal-btn-cancel" id="cancelDeleteBtn">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts - Load in specific order -->
     <!-- Core modules first -->
     <script src="/src/core/config.js"></script>
