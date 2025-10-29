@@ -25,8 +25,9 @@ min-width: 300px;
 max-width: 400px;
 position: relative;
 }
+[data-theme="dark"] .notification,
 body.dark-mode .notification {
-background-color: var(--card-dark, #2a2a2a);
+background-color: var(--bg-card, #2a2a2a);
 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 .notification-show {
@@ -55,8 +56,9 @@ font-size: 15px;
 line-height: 1.5;
 color: var(--text-light, #333);
 }
+[data-theme="dark"] .notification-message,
 body.dark-mode .notification-message {
-color: var(--text-dark, #ffffff);
+color: var(--text-primary, #ffffff);
 }
 .notification-close {
 background: none;
@@ -73,12 +75,14 @@ width: 24px;
 height: 24px;
 flex-shrink: 0;
 }
+[data-theme="dark"] .notification-close,
 body.dark-mode .notification-close {
-color: var(--text-dark, #aaa);
+color: var(--text-secondary, #aaa);
 }
 .notification-close:hover {
 background-color: rgba(0, 0, 0, 0.1);
 }
+[data-theme="dark"] .notification-close:hover,
 body.dark-mode .notification-close:hover {
 background-color: rgba(255, 255, 255, 0.1);
 }
@@ -89,6 +93,7 @@ background-color: rgba(0, 0, 0, 0.1);
 position: relative;
 overflow: hidden;
 }
+[data-theme="dark"] .notification-progress,
 body.dark-mode .notification-progress {
 background-color: rgba(255, 255, 255, 0.1);
 }
@@ -195,8 +200,9 @@ transform: scale(0.9);
 opacity: 0;
 transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+[data-theme="dark"] .notification-modal,
 body.dark-mode .notification-modal {
-background-color: var(--card-dark, #2a2a2a);
+background-color: var(--bg-card, #2a2a2a);
 }
 .notification-modal-show {
 transform: scale(1);
@@ -216,20 +222,22 @@ gap: 12px;
 padding: 24px 24px 16px 24px;
 border-bottom: 1px solid var(--border-light, #e0e0e0);
 }
+[data-theme="dark"] .notification-modal-header,
 body.dark-mode .notification-modal-header {
-border-bottom-color: var(--border-dark, #444);
+border-bottom-color: var(--border-primary, #444);
 }
 .notification-modal-header i {
 font-size: 28px;
-color: var(--primary-color, #00a651);
+color: var(--color-primary, #00a651);
 }
 .notification-modal-header h3 {
 margin: 0;
 font-size: 20px;
-color: var(--text-light, #333);
+color: var(--text-primary, #333);
 }
+[data-theme="dark"] .notification-modal-header h3,
 body.dark-mode .notification-modal-header h3 {
-color: var(--text-dark, #ffffff);
+color: var(--text-primary, #ffffff);
 }
 .notification-modal-body {
 padding: 24px;
@@ -238,10 +246,11 @@ padding: 24px;
 margin: 0;
 font-size: 16px;
 line-height: 1.6;
-color: var(--text-light, #555);
+color: var(--text-secondary, #555);
 }
+[data-theme="dark"] .notification-modal-body p,
 body.dark-mode .notification-modal-body p {
-color: var(--text-dark, #ccc);
+color: var(--text-secondary, #ccc);
 }
 .notification-modal-footer {
 display: flex;
@@ -271,13 +280,15 @@ background-color: transparent;
 color: var(--text-light, #666);
 border: 1px solid var(--border-light, #ddd);
 }
+[data-theme="dark"] .notification-modal-btn-cancel,
 body.dark-mode .notification-modal-btn-cancel {
-color: var(--text-dark, #aaa);
-border-color: var(--border-dark, #555);
+color: var(--text-secondary, #aaa);
+border-color: var(--border-primary, #555);
 }
 .notification-modal-btn-cancel:hover {
 background-color: rgba(0, 0, 0, 0.05);
 }
+[data-theme="dark"] .notification-modal-btn-cancel:hover,
 body.dark-mode .notification-modal-btn-cancel:hover {
 background-color: rgba(255, 255, 255, 0.05);
 }

@@ -985,18 +985,36 @@ async function updateReviewStatus(status) {
 
         console.log('✅ Review status updated successfully:', result);
 
-        // Show success message
-        if (typeof notify !== 'undefined') {
-            notify.success(`تم تحديث حالة المراجعة إلى: ${status}`);
-        } else {
-            showSuccessMessage(`تم تحديث حالة المراجعة إلى: ${status}`);
+        // Show action-specific success message
+        let successMessage = '';
+        switch (status) {
+            case 'جاهز للإرسال':
+                successMessage = '✅ تم اعتماد الخطاب بنجاح! الخطاب جاهز للإرسال.';
+                break;
+            case 'مرفوض':
+                successMessage = '❌ تم رفض الخطاب. تم حفظ ملاحظات المراجعة.';
+                break;
+            case 'يحتاج إلى تحسينات':
+                successMessage = '⚠️ تم تحديد أن الخطاب يحتاج إلى تحسينات. تم إرسال الملاحظات للكاتب.';
+                break;
+            default:
+                successMessage = `تم تحديث حالة المراجعة إلى: ${status}`;
         }
 
-        // Redirect to letter history with highlight
-        setTimeout(() => {
-            window.location.href = `letter-history.html?highlight=${letterId}`;
-        }, 1500);
-        
+        if (typeof notify !== 'undefined') {
+            notify.success(successMessage, 5000);  // Show for 5 seconds
+        } else {
+            alert(successMessage);
+        }
+
+        // Reset button state after successful submission
+        if (activeButton) {
+            activeButton.innerHTML = originalText;
+            activeButton.disabled = false;
+        }
+
+        console.log('✅ Review submission completed successfully');
+
     } catch (error) {
         console.error('Error updating review status:', error);
         
