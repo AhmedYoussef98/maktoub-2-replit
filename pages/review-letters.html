@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختر خطاباً للمراجعة - Maktoub</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/attached_assets/Favicon/SVG/32x32.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/attached_assets/Favicon/PNG/32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/attached_assets/Favicon/PNG/16x16.png">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="/public/css/themes.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="/public/css/dashboard.css">
+    <!-- Review Letters CSS -->
+    <link rel="stylesheet" href="/public/css/review-letters.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <div class="review-letters-page">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="navbar-logo">
+                    <!-- Dark mode logo (secondary - light colored) -->
+                    <img src="/attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg" alt="Maktoub Logo" class="logo-image logo-dark">
+                    <!-- Light mode logo (primary - dark colored) -->
+                    <img src="/attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg" alt="Maktoub Logo" class="logo-image logo-light">
+                </div>
+
+                <div class="navbar-links">
+                    <a href="/create-letter.html" class="nav-link">إنشاء خطاب جديد</a>
+                    <a href="/letter-history.html" class="nav-link">سجل الخطابات</a>
+                    <a href="/review-letters.html" class="nav-link active">مراجعة خطاب</a>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <!-- Theme Toggle Button -->
+                    <button onclick="ThemeService.toggleTheme()" class="theme-toggle" aria-label="Toggle theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"/>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z"/>
+                        </svg>
+                    </button>
+
+                    <!-- Profile Container - Will be populated by auth-guard.js -->
+                    <div id="profile-container" class="navbar-profile" style="direction: ltr;">
+                        <div class="avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="avatar-icon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="12" cy="9" r="3" fill="currentColor"/>
+                                <path d="M6 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="profile-name">جاري التحميل...</span>
+                        <svg class="chevron-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" fill="#A0ECDC"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Title -->
+            <h1 class="page-title">اختر خطاباً للمراجعة</h1>
+
+            <!-- Filters and Actions -->
+            <div class="filters-section">
+                <div class="filter-left">
+                    <button class="export-btn" id="export-btn">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.3334 6.66666L10 3.33333M10 3.33333L6.66669 6.66666M10 3.33333V12.5M17.5 12.5V16.6667C17.5 17.1087 17.3244 17.5326 17.0119 17.8452C16.6993 18.1577 16.2754 18.3333 15.8334 18.3333H4.16669C3.72466 18.3333 3.30074 18.1577 2.98818 17.8452C2.67562 17.5326 2.50002 17.1087 2.50002 16.6667V12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>تصدير الكل</span>
+                    </button>
+
+                    <div class="filter-dropdown" id="sort-dropdown">
+                        <button class="dropdown-btn">
+                            <span>التاريخ الأحدث أولاً</span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" fill="#A0ECDC"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="filter-dropdown" id="type-dropdown">
+                        <button class="dropdown-btn">
+                            <span>جميع أنواع الخطابات</span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" fill="#A0ECDC"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="filter-dropdown" id="status-dropdown">
+                        <button class="dropdown-btn">
+                            <span>جميع حالات المراجعة</span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" fill="#A0ECDC"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-right">
+                    <div class="search-box">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17.5 17.5L13.875 13.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input type="text" id="search-input" placeholder="ابحث عن المستلم أو الرقم المرجعي أو الكاتب...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table class="letters-table">
+                    <thead>
+                        <tr>
+                            <th>الرقم المرجعي</th>
+                            <th>التاريخ</th>
+                            <th>نوع الخطاب</th>
+                            <th>المراجعة</th>
+                            <th>الرقم الرسمي</th>
+                            <th>المستلم</th>
+                            <th>الموضوع</th>
+                            <th>اسم المراجع</th>
+                            <th>الملاحظات</th>
+                            <th>الكاتب</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="letters-tbody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="items-per-page">
+                    <select id="items-per-page">
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <label>عدد العناصر في الصفحة</label>
+                </div>
+
+                <div class="pagination-info" id="pagination-info">
+                    صفحة 1 من 1 (0 خطاب)
+                </div>
+
+                <div class="pagination-controls" id="pagination-controls">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <p class="copyright">© 2025 Maktoub. All rights reserved to SQUAD.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts - Load in specific order -->
+    <!-- Core modules first -->
+    <script src="/src/core/config.js"></script>
+    <script src="/src/core/constants.js"></script>
+    <script src="/src/core/utils.js"></script>
+
+    <!-- Development mode (REMOVED FOR PRODUCTION) -->
+    <!-- <script src="/src/core/dev-mode.js"></script> -->
+
+    <!-- Theme Service -->
+    <script src="/src/services/theme.js"></script>
+
+    <!-- API Service -->
+    <script src="/src/services/api.js"></script>
+
+    <!-- Feature modules -->
+    <script src="/src/modules/notifications.js"></script>
+
+    <!-- Guards - Authentication guard will populate profile -->
+    <script src="/src/guards/auth-guard.js"></script>
+
+    <!-- Page-specific module -->
+    <script src="/src/modules/review-letters.js"></script>
+</body>
+</html>

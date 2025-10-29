@@ -709,28 +709,26 @@ async function clearAppCache() {
 // LOAD LETTERS FOR REVIEW
 function loadLettersForReview() {
     console.log('🔍 Loading letters for review...');
-    
-    const letterSelect = document.getElementById('letterSelect');
-    
+
     // Check if we have a letter ID in the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const preselectedId = urlParams.get('id');
-    
-    // Load from cache first for faster response
-    const cachedLetters = letterCache ? letterCache.get('submissions_data') : null;
-    
-    if (cachedLetters && cachedLetters.length > 0) {
-        populateLetterSelect(cachedLetters, preselectedId);
+    const letterId = urlParams.get('id');
+
+    if (!letterId) {
+        // No ID provided, redirect to review letters list
+        console.warn('⚠️ No letter ID provided, redirecting to review letters page');
+        window.location.href = '/review-letters.html';
+        return;
     }
-    
-    // Load fresh data in background
-    loadSubmissionsDataOptimized().then(letters => {
-        if (letters.length > 0) {
-            populateLetterSelect(letters, preselectedId);
-        }
-    }).catch(error => {
-        console.error('Error loading letters for review:', error);
-    });
+
+    // Show the review form immediately
+    const reviewForm = document.getElementById('reviewForm');
+    if (reviewForm) {
+        reviewForm.style.display = 'block';
+    }
+
+    // Load the specific letter
+    loadLetterForReview(letterId);
 }
 
 function populateLetterSelect(letters, preselectedId) {
@@ -760,23 +758,10 @@ function populateLetterSelect(letters, preselectedId) {
 
 function setupReviewForm() {
     console.log('⚙️ Setting up review form...');
-    
-    const letterSelect = document.getElementById('letterSelect');
-    const reviewForm = document.getElementById('reviewForm');
+
     const reviewCheckbox = document.getElementById('reviewComplete');
     const actionButtons = document.querySelectorAll('.action-button');
-    
-    if (letterSelect) {
-        letterSelect.addEventListener('change', (e) => {
-            if (e.target.value) {
-                if (reviewForm) reviewForm.style.display = 'block';
-                loadLetterForReview(e.target.value);
-            } else {
-                if (reviewForm) reviewForm.style.display = 'none';
-            }
-        });
-    }
-    
+
     if (reviewCheckbox) {
         reviewCheckbox.addEventListener('change', (e) => {
             actionButtons.forEach(button => {
@@ -784,12 +769,12 @@ function setupReviewForm() {
             });
         });
     }
-    
+
     // Setup action buttons
     const readyButton = document.getElementById('readyButton');
     const improvementButton = document.getElementById('improvementButton');
     const rejectedButton = document.getElementById('rejectedButton');
-    
+
     if (readyButton) {
         readyButton.addEventListener('click', () => updateReviewStatus('جاهز للإرسال'));
     }
