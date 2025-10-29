@@ -210,21 +210,15 @@ const CreateLetterPage = (() => {
       // Update current letter data
       currentLetterData = result;
 
-      // Update preview
-      const mainLetterContent = document.getElementById('mainLetterContent');
-      if (mainLetterContent && typeof formatLetterContent === 'function') {
-        mainLetterContent.innerHTML = formatLetterContent(result.Letter);
-      }
-
-      // Update hidden textarea
-      const letterPreviewEl = document.getElementById('letterPreview');
-      if (letterPreviewEl) {
-        letterPreviewEl.value = result.Letter;
-      }
-
-      // Re-analyze letter quality
+      // Refresh preview with updated content
+      // This will update both the display and quality analysis
       if (typeof LetterQuality !== 'undefined') {
-        LetterQuality.analyzeLetter(result.Letter);
+        // Get form data for preview
+        const letterForm = document.getElementById('letterForm');
+        const formData = letterForm ? new FormData(letterForm) : null;
+
+        // Show preview (updates content, shows UI elements, and analyzes quality)
+        LetterQuality.showPreview(result, formData);
       }
 
       // Clear edit feedback
