@@ -105,6 +105,9 @@ app.all('/api/proxy', async (req, res) => {
                 case 'admin-users':
                     targetUrl = `${API_BASE_URL}/api/v1/user/admin/users`;
                     break;
+                case 'letter-by-id':
+                    targetUrl = `${API_BASE_URL}/api/v1/letter/${letter_id}`;
+                    break;
                 default:
                     return res.status(400).json({ error: 'Invalid GET endpoint' });
             }
@@ -144,7 +147,7 @@ app.all('/api/proxy', async (req, res) => {
         }
 
         if (req.method === 'DELETE') {
-            const { endpoint, session_id } = req.query;
+            const { endpoint, session_id, letter_id } = req.query;
 
             let targetUrl;
             switch (endpoint) {
@@ -153,6 +156,9 @@ app.all('/api/proxy', async (req, res) => {
                     break;
                 case 'admin-delete-user':
                     targetUrl = `${API_BASE_URL}/api/v1/user/admin/users/delete`;
+                    break;
+                case 'delete-letter':
+                    targetUrl = `${API_BASE_URL}/api/v1/letter/${letter_id}`;
                     break;
                 default:
                     return res.status(400).json({ error: 'Invalid DELETE endpoint' });
