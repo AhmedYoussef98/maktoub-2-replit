@@ -11,7 +11,7 @@
   --bg-primary: #102320;
   --bg-secondary: #174A46;
   --bg-tertiary: rgba(23, 74, 70, 0.6);
-  --bg-card: #174A46;
+  --bg-card: #072C2A;
   --bg-hover: rgba(30, 168, 150, 0.1);
 
   /* Text Colors */
@@ -55,8 +55,8 @@
   --overlay-dark: rgba(16, 35, 32, 0.8);
 
   /* Input Colors */
-  --input-bg: #168B7F;
-  --input-border: rgba(6, 100, 88, 0.5);
+  --input-bg: #072C2A;
+  --input-border: #165954;
   --input-placeholder: rgba(160, 236, 220, 0.5);
   --input-focus-border: #1EA896;
 

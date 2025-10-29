@@ -196,7 +196,7 @@ section {
 /* Dark mode inputs */
 [data-theme="dark"] .input-field {
     background: var(--input-bg) !important;
-    border-color: var(--border-primary) !important;
+    border-color: var(--input-border) !important;
     color: var(--text-primary) !important;
 }
 
@@ -210,14 +210,14 @@ section {
 /* Select elements */
 select.input-field {
     background: var(--input-bg) !important;
-    border-color: var(--border-primary) !important;
+    border-color: var(--input-border) !important;
     color: var(--text-primary) !important;
 }
 
 /* Textarea elements */
 textarea.input-field {
     background: var(--input-bg) !important;
-    border-color: var(--border-primary) !important;
+    border-color: var(--input-border) !important;
     color: var(--text-primary) !important;
 }
 
