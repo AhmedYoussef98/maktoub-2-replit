@@ -540,7 +540,7 @@ ${letter.content || ''}
 
       if (response && response.status === 'success') {
         hideDeleteModal();
-        NotificationsModule.show(response.message || 'تم حذف الخطاب بنجاح', 'success');
+        notify.show(response.message || 'تم حذف الخطاب بنجاح', 'success');
         await loadStats();
         await loadLetters();
       } else {
@@ -549,7 +549,7 @@ ${letter.content || ''}
     } catch (error) {
       console.error('Failed to delete letter:', error);
       hideDeleteModal();
-      NotificationsModule.show(error.message || 'حدث خطأ في حذف الخطاب', 'error');
+      notify.show(error.message || 'حدث خطأ في حذف الخطاب', 'error');
     }
   }
 
