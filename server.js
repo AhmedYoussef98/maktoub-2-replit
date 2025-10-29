@@ -223,6 +223,8 @@ app.all('/api/proxy', async (req, res) => {
             const { endpoint, data } = requestData;
 
             let targetUrl;
+            let payloadToSend = data;  // Default: send data as-is
+
             switch (endpoint) {
                 case 'update-archive':
                     targetUrl = `${API_BASE_URL}/api/v1/archive/update`;
@@ -237,10 +239,10 @@ app.all('/api/proxy', async (req, res) => {
                     targetUrl = `${API_BASE_URL}/api/v1/submissions/review/${submissionId}`;
                     console.log('Updating submission review for ID:', submissionId);
 
-                    // Remove submission_id from data before forwarding (ID is in URL path per REST spec)
+                    // Remove submission_id from payload before forwarding (ID is in URL path per REST spec)
                     const { submission_id, ...cleanData } = data;
-                    data = cleanData;
-                    console.log('Cleaned payload (submission_id removed from body):', data);
+                    payloadToSend = cleanData;  // Use cleaned data for this endpoint
+                    console.log('Cleaned payload (submission_id removed from body):', payloadToSend);
                     break;
                 default:
                     console.log('Invalid PUT endpoint:', endpoint);
@@ -249,7 +251,7 @@ app.all('/api/proxy', async (req, res) => {
 
             try {
                 console.log(`Attempting ${endpoint} PUT call to:`, targetUrl);
-                console.log('Payload:', data);
+                console.log('Payload:', payloadToSend);
 
                 // Prepare headers with Authorization if present
                 const headers = {
@@ -260,7 +262,7 @@ app.all('/api/proxy', async (req, res) => {
                     console.log('Forwarding Authorization header');
                 }
 
-                const response = await axios.put(targetUrl, data, {
+                const response = await axios.put(targetUrl, payloadToSend, {
                     headers,
                     httpsAgent: agent,
                     timeout: 30000,
