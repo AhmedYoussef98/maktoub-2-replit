@@ -91,21 +91,27 @@ const CreateLetterPage = (() => {
 
   /**
    * Set button loading state
+   * @param {HTMLElement} button - The button element
+   * @param {boolean} isLoading - Whether the button should be in loading state
+   * @param {string} loadingText - Text to show during loading
+   * @param {string} defaultText - Default button text
    */
-  function setButtonLoading(button, isLoading) {
-    const buttonText = button.querySelector('#generateButtonText') || button.querySelector('span');
+  function setButtonLoading(button, isLoading, loadingText = 'جاري المعالجة...', defaultText = '') {
+    if (!button) return;
+
+    const buttonText = button.querySelector('span');
 
     if (isLoading) {
       button.disabled = true;
       button.classList.add('loading');
       if (buttonText) {
-        buttonText.textContent = 'جاري الإنشاء...';
+        buttonText.textContent = loadingText;
       }
     } else {
       button.disabled = false;
       button.classList.remove('loading');
-      if (buttonText) {
-        buttonText.textContent = 'إنشاء الخطاب';
+      if (buttonText && defaultText) {
+        buttonText.textContent = defaultText;
       }
     }
   }
@@ -120,7 +126,7 @@ const CreateLetterPage = (() => {
 
     try {
       // Set button to loading state
-      setButtonLoading(generateButton, true);
+      setButtonLoading(generateButton, true, 'جاري الإنشاء...', 'إنشاء الخطاب');
 
       const formData = new FormData(event.target);
 
@@ -132,7 +138,7 @@ const CreateLetterPage = (() => {
         if (typeof notify !== 'undefined') {
           notify.error('خطأ في النظام. الرجاء إعادة تحميل الصفحة.');
         }
-        setButtonLoading(generateButton, false);
+        setButtonLoading(generateButton, false, '', 'إنشاء الخطاب');
         return;
       }
 
@@ -140,7 +146,7 @@ const CreateLetterPage = (() => {
 
       if (!result) {
         console.error('❌ Letter generation failed');
-        setButtonLoading(generateButton, false);
+        setButtonLoading(generateButton, false, '', 'إنشاء الخطاب');
         return;
       }
 
@@ -162,7 +168,7 @@ const CreateLetterPage = (() => {
       }
 
       // Reset button state
-      setButtonLoading(generateButton, false);
+      setButtonLoading(generateButton, false, '', 'إنشاء الخطاب');
 
     } catch (error) {
       console.error('❌ Error in letter generation:', error);
@@ -172,7 +178,7 @@ const CreateLetterPage = (() => {
       }
 
       // Reset button state on error
-      setButtonLoading(generateButton, false);
+      setButtonLoading(generateButton, false, '', 'إنشاء الخطاب');
     }
   }
 
@@ -184,6 +190,7 @@ const CreateLetterPage = (() => {
   async function handleLetterEdit() {
     const editFeedback = document.getElementById('editFeedback')?.value;
     const letterPreview = document.getElementById('mainLetterContent')?.textContent || '';
+    const editButton = document.getElementById('editButton');
 
     if (!editFeedback || editFeedback.trim() === '') {
       if (typeof notify !== 'undefined') {
@@ -200,12 +207,16 @@ const CreateLetterPage = (() => {
     }
 
     try {
+      // Set button to loading state
+      setButtonLoading(editButton, true, 'جاري التعديل...', 'تعديل');
+
       console.log('✏️ Editing letter...');
 
       // Create chat session if not exists
       if (!currentEditSession) {
         if (typeof ApiClient === 'undefined' || !ApiClient.createChatSession) {
           console.error('❌ ApiClient not available');
+          setButtonLoading(editButton, false, '', 'تعديل');
           return;
         }
 
@@ -216,6 +227,7 @@ const CreateLetterPage = (() => {
           if (typeof notify !== 'undefined') {
             notify.error('فشل في إنشاء جلسة التعديل');
           }
+          setButtonLoading(editButton, false, '', 'تعديل');
           return;
         }
 
@@ -235,6 +247,7 @@ const CreateLetterPage = (() => {
 
       if (!result || !result.Letter) {
         console.error('❌ Letter editing failed');
+        setButtonLoading(editButton, false, '', 'تعديل');
         return;
       }
 
@@ -265,12 +278,18 @@ const CreateLetterPage = (() => {
         notify.success('تم تعديل الخطاب بنجاح');
       }
 
+      // Reset button state
+      setButtonLoading(editButton, false, '', 'تعديل');
+
     } catch (error) {
       console.error('❌ Error in letter editing:', error);
 
       if (typeof notify !== 'undefined') {
         notify.error('حدث خطأ أثناء تعديل الخطاب');
       }
+
+      // Reset button state on error
+      setButtonLoading(editButton, false, '', 'تعديل');
     }
   }
 
@@ -281,6 +300,7 @@ const CreateLetterPage = (() => {
    */
   async function handleLetterSave() {
     const letterContent = document.getElementById('mainLetterContent')?.textContent || '';
+    const saveButton = document.getElementById('saveButton');
 
     if (!letterContent || letterContent.trim() === '') {
       if (typeof notify !== 'undefined') {
@@ -290,12 +310,16 @@ const CreateLetterPage = (() => {
     }
 
     try {
+      // Set button to loading state
+      setButtonLoading(saveButton, true, 'جاري الحفظ...', 'حفظ ومتابعة');
+
       console.log('💾 Saving letter...');
 
       // Get form data
       const letterForm = document.getElementById('letterForm');
       if (!letterForm) {
         console.error('❌ Letter form not found');
+        setButtonLoading(saveButton, false, '', 'حفظ ومتابعة');
         return;
       }
 
@@ -312,6 +336,7 @@ const CreateLetterPage = (() => {
       // Call archive API
       if (typeof ApiClient === 'undefined' || !ApiClient.archiveLetter) {
         console.error('❌ ApiClient not available');
+        setButtonLoading(saveButton, false, '', 'حفظ ومتابعة');
         return;
       }
 
@@ -319,6 +344,7 @@ const CreateLetterPage = (() => {
 
       if (!result) {
         console.error('❌ Letter save failed');
+        setButtonLoading(saveButton, false, '', 'حفظ ومتابعة');
         return;
       }
 
@@ -332,15 +358,13 @@ const CreateLetterPage = (() => {
         currentEditSession = null;
       }
 
-      // Show success and redirect
+      // Show success message without redirect
       if (typeof notify !== 'undefined') {
-        notify.success('تم حفظ الخطاب بنجاح');
+        notify.success('تم حفظ الخطاب بنجاح! قد يستغرق ظهوره في لوحة التحكم بضع دقائق.');
       }
 
-      // Redirect to letter history after a short delay
-      setTimeout(() => {
-        window.location.href = 'letter-history.html';
-      }, 1500);
+      // Reset button state
+      setButtonLoading(saveButton, false, '', 'حفظ ومتابعة');
 
     } catch (error) {
       console.error('❌ Error in letter saving:', error);
@@ -348,6 +372,9 @@ const CreateLetterPage = (() => {
       if (typeof notify !== 'undefined') {
         notify.error('حدث خطأ أثناء حفظ الخطاب');
       }
+
+      // Reset button state on error
+      setButtonLoading(saveButton, false, '', 'حفظ ومتابعة');
     }
   }
 
