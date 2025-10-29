@@ -299,29 +299,42 @@ textarea.input-field {
 
 /* ==================== Document Preview Background ==================== */
 
-/* Document preview - always readable in both modes */
+/* Document preview - always white background with dark text in both light/dark modes */
 .document-preview-bg {
-    /* Light mode: white background with dark text */
-    background-color: #FFFFFF;
-    color: #0D2823;
+    background-color: #FFFFFF !important;
+    color: #0D2823 !important;
 }
 
-/* Dark mode: light green shade background with dark text */
+/* Dark mode: keep white background (paper-like appearance) */
+[data-theme="dark"] .document-preview-bg,
 body.dark-mode .document-preview-bg {
-    background-color: #C8E6C9; /* Light green shade */
-    color: #0D2823; /* Keep text dark for readability */
+    background-color: #FFFFFF !important; /* White background in dark mode too */
+    color: #0D2823 !important; /* Dark text for readability */
 }
 
-/* Ensure prose content inside preview is always dark */
+/* Ensure all prose content inside preview has dark text (no white text) */
 .document-preview-bg .prose,
+.document-preview-bg .prose *,
 .document-preview-bg .prose p,
 .document-preview-bg .prose h1,
 .document-preview-bg .prose h2,
 .document-preview-bg .prose h3,
 .document-preview-bg .prose h4,
 .document-preview-bg .prose h5,
-.document-preview-bg .prose h6 {
+.document-preview-bg .prose h6,
+.document-preview-bg .prose span,
+.document-preview-bg .prose div {
     color: #0D2823 !important;
+}
+
+/* Ensure documentTemplate itself has white background */
+#documentTemplate {
+    background-color: #FFFFFF !important;
+}
+
+[data-theme="dark"] #documentTemplate,
+body.dark-mode #documentTemplate {
+    background-color: #FFFFFF !important;
 }
 
 /* ==================== Required Field Asterisks ==================== */

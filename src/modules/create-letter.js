@@ -245,18 +245,23 @@ const CreateLetterPage = (() => {
       // Call edit API with correct parameter order: (sessionId, userMessage, currentLetter, context)
       const result = await ApiClient.editLetter(currentEditSession, editFeedback, letterPreview);
 
-      // API returns { edited_letter, session_id }
-      if (!result || !result.edited_letter) {
-        console.error('❌ Letter editing failed');
+      // API returns { updated_letter, session_id, response_text, ... }
+      // Check for both updated_letter (new format) and edited_letter (old format)
+      const editedLetterContent = result?.updated_letter || result?.edited_letter;
+
+      if (!result || !editedLetterContent) {
+        console.error('❌ Letter editing failed - no updated letter in response');
+        console.error('Response:', result);
         setButtonLoading(editButton, false, '', 'تعديل');
         return;
       }
 
       console.log('✅ Letter edited successfully');
+      console.log('📝 Updated letter content:', editedLetterContent.substring(0, 100) + '...');
 
       // Normalize the result to match expected format (Letter property)
       const normalizedResult = {
-        Letter: result.edited_letter,
+        Letter: editedLetterContent,
         session_id: result.session_id
       };
 

@@ -409,7 +409,7 @@ const ApiClient = (() => {
       }
 
       const data = await makeRequest('chat/edit', 'POST', payload);
-      // API returns: { edited_letter, session_id }
+      // API returns: { updated_letter, session_id, response_text, change_summary, ... }
       return data;
     } catch (error) {
       console.error('Edit letter error:', error);
