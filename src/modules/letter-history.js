@@ -307,6 +307,24 @@ const LetterHistory = (() => {
     // Backend returns capital case field names (ID, Timestamp, Created_by, etc.)
     tbody.innerHTML = letters.map(letter => `
       <tr data-letter-id="${letter.ID}">
+        <td>${Utils.escapeHtml(letter.ID || '-')}</td>
+        <td>${formatDate(letter.Timestamp)}</td>
+        <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
+        <td>
+          <span class="status-badge ${getStatusClass(letter.Review_status)}">
+            ${Utils.escapeHtml(letter.Review_status || '-')}
+          </span>
+        </td>
+        <td>
+          <span class="status-badge ${getStatusClass(letter.sender || 'مرسل')}">
+            ${Utils.escapeHtml(letter.sender || 'مرسل')}
+          </span>
+        </td>
+        <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Subject || '-')}</td>
+        <td>${Utils.escapeHtml(letter.reviewer_name || '-')}</td>
+        <td>${Utils.escapeHtml(letter.notes || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Created_by || '-')}</td>
         <td>
           <div class="action-buttons">
             <button class="action-btn view" onclick="LetterHistory.viewLetter('${letter.ID}')" title="عرض">
@@ -327,24 +345,6 @@ const LetterHistory = (() => {
             </button>
           </div>
         </td>
-        <td>${Utils.escapeHtml(letter.Created_by || '-')}</td>
-        <td>${Utils.escapeHtml(letter.notes || '-')}</td>
-        <td>${Utils.escapeHtml(letter.reviewer_name || '-')}</td>
-        <td>${Utils.escapeHtml(letter.Subject || '-')}</td>
-        <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
-        <td>
-          <span class="status-badge ${getStatusClass(letter.sender || 'مرسل')}">
-            ${Utils.escapeHtml(letter.sender || 'مرسل')}
-          </span>
-        </td>
-        <td>
-          <span class="status-badge ${getStatusClass(letter.Review_status)}">
-            ${Utils.escapeHtml(letter.Review_status || '-')}
-          </span>
-        </td>
-        <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
-        <td>${formatDate(letter.Timestamp)}</td>
-        <td>${Utils.escapeHtml(letter.ID || '-')}</td>
       </tr>
     `).join('');
   }

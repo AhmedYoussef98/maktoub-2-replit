@@ -646,3 +646,46 @@ body:not(.dark-mode) .avatar-icon {
         line-height: 24px;
     }
 }
+
+/* ==================== Light Mode Overrides ==================== */
+[data-theme="light"] .profile-dropdown {
+    background: #E5E7EB;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .profile-dropdown-item {
+    color: #374151;
+}
+
+[data-theme="light"] .profile-dropdown-item-text {
+    color: #374151;
+    text-align: right;
+    font-family: "Janna LT";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+[data-theme="light"] .profile-dropdown-item.logout {
+    color: #F33043;
+    border-top: 1px solid rgba(55, 65, 81, 0.1);
+}
+
+[data-theme="light"] .profile-dropdown-item.logout .profile-dropdown-item-text {
+    color: #F33043;
+    text-align: right;
+    font-family: "Janna LT";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+[data-theme="light"] .profile-dropdown-item:hover {
+    background-color: rgba(55, 65, 81, 0.05);
+}
+
+[data-theme="light"] .profile-dropdown-item.logout:hover {
+    background-color: rgba(243, 48, 67, 0.05);
+}
