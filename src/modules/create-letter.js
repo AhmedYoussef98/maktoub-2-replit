@@ -149,8 +149,7 @@ const CreateLetterPage = (() => {
    */
   async function handleLetterEdit() {
     const editFeedback = document.getElementById('editFeedback')?.value;
-    const letterPreview = document.getElementById('letterPreview')?.value ||
-                         document.getElementById('mainLetterContent')?.textContent || '';
+    const letterPreview = document.getElementById('mainLetterContent')?.textContent || '';
 
     if (!editFeedback || editFeedback.trim() === '') {
       if (typeof notify !== 'undefined') {
@@ -247,8 +246,7 @@ const CreateLetterPage = (() => {
    * Handle letter save request
    */
   async function handleLetterSave() {
-    const letterContent = document.getElementById('letterPreview')?.value ||
-                         document.getElementById('mainLetterContent')?.textContent || '';
+    const letterContent = document.getElementById('mainLetterContent')?.textContent || '';
 
     if (!letterContent || letterContent.trim() === '') {
       if (typeof notify !== 'undefined') {

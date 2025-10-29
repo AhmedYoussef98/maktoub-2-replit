@@ -1129,7 +1129,7 @@ function validateFormWithNotifications(formData) {
     }
     
     if (!formData.content && !formData.prompt) {
-        const contentField = document.getElementById('letterPreview') || document.getElementById('prompt');
+        const contentField = document.getElementById('mainLetterContent') || document.getElementById('prompt');
         // Only warn if the field exists, is required, and is empty
         if (contentField && contentField.hasAttribute('required') && contentField.value.trim() === '') {
             errors.push('محتوى الخطاب مطلوب');

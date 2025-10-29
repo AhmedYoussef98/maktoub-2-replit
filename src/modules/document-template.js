@@ -83,12 +83,6 @@ function populateDocumentTemplate(letterData, formData) {
     if (senderNameEl) {
         senderNameEl.textContent = senderName;
     }
-    
-    // Also update the hidden textarea for backward compatibility
-    const letterPreviewEl = document.getElementById('letterPreview');
-    if (letterPreviewEl) {
-        letterPreviewEl.value = letterContent;
-    }
 }
 
 function formatLetterContent(content) {
@@ -125,16 +119,13 @@ function convertToHijri(gregorianDate) {
 
 function toggleTemplateView(templateType) {
     const documentTemplate = document.getElementById('documentTemplate');
-    const letterPreview = document.getElementById('letterPreview');
-    
+
     if (templateType === 'template1') {
         // Show document template
         if (documentTemplate) documentTemplate.style.display = 'block';
-        if (letterPreview) letterPreview.style.display = 'none';
     } else {
-        // Show simple textarea
+        // Hide document template
         if (documentTemplate) documentTemplate.style.display = 'none';
-        if (letterPreview) letterPreview.style.display = 'block';
     }
 }
 

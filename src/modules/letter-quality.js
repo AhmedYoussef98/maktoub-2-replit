@@ -343,8 +343,7 @@ const LetterQuality = (() => {
    * Refresh quality analysis for current letter
    */
   function refreshQualityAnalysis() {
-    const letterContent = document.getElementById('letterPreview')?.value ||
-                         document.getElementById('mainLetterContent')?.textContent || '';
+    const letterContent = document.getElementById('mainLetterContent')?.textContent || '';
 
     if (letterContent.trim().length > 0) {
       analyzeLetter(letterContent);

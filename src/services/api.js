@@ -861,12 +861,6 @@ const ApiClient = (() => {
           Date: result.Date || result.date,
         };
 
-        // Display in preview
-        const previewElement = Utils.getElement('letterPreview');
-        if (previewElement) {
-          previewElement.value = letterContent;
-        }
-
         // Populate document template if available
         if (typeof populateDocumentTemplate === 'function') {
           populateDocumentTemplate(letterData, formData);
