@@ -17,8 +17,12 @@ const AdminPanel = (() => {
       // Check if ApiClient is available
       if (typeof ApiClient === 'undefined') {
         console.error('❌ ApiClient is not defined!');
-        if (typeof notify !== 'undefined') {
-          notify.error('خطأ: لم يتم تحميل خدمة API بشكل صحيح');
+        try {
+          if (typeof notify !== 'undefined' && notify && notify.error) {
+            notify.error('خطأ: لم يتم تحميل خدمة API بشكل صحيح');
+          }
+        } catch (notifyError) {
+          console.warn('⚠️ Notify not available:', notifyError);
         }
         return;
       }
@@ -45,22 +49,34 @@ const AdminPanel = (() => {
           userCount.textContent = response.count || usersData.length;
         }
 
-        if (typeof notify !== 'undefined') {
-          notify.success('تم تحميل المستخدمين بنجاح');
+        try {
+          if (typeof notify !== 'undefined' && notify && notify.success) {
+            notify.success('تم تحميل المستخدمين بنجاح');
+          }
+        } catch (notifyError) {
+          console.warn('⚠️ Notify not available:', notifyError);
         }
       } else {
         console.warn('⚠️ No users data available or status not success');
         console.warn('⚠️ Response:', response);
         renderTable([]);
-        if (typeof notify !== 'undefined') {
-          notify.warning('لا توجد بيانات للمستخدمين');
+        try {
+          if (typeof notify !== 'undefined' && notify && notify.warning) {
+            notify.warning('لا توجد بيانات للمستخدمين');
+          }
+        } catch (notifyError) {
+          console.warn('⚠️ Notify not available:', notifyError);
         }
       }
     } catch (error) {
       console.error('❌ Failed to load users:', error);
       renderTable([]);
-      if (typeof notify !== 'undefined') {
-        notify.error('حدث خطأ أثناء تحميل المستخدمين');
+      try {
+        if (typeof notify !== 'undefined' && notify && notify.error) {
+          notify.error('حدث خطأ أثناء تحميل المستخدمين');
+        }
+      } catch (notifyError) {
+        console.warn('⚠️ Notify not available:', notifyError);
       }
     }
   }
@@ -164,8 +180,12 @@ const AdminPanel = (() => {
     } catch (error) {
       console.error('❌ Error rendering table:', error);
       tableContainer.innerHTML = '<div class="empty-state">حدث خطأ أثناء عرض البيانات</div>';
-      if (typeof notify !== 'undefined') {
-        notify.error('حدث خطأ أثناء عرض قائمة المستخدمين');
+      try {
+        if (typeof notify !== 'undefined' && notify && notify.error) {
+          notify.error('حدث خطأ أثناء عرض قائمة المستخدمين');
+        }
+      } catch (notifyError) {
+        console.warn('⚠️ Notify not available:', notifyError);
       }
     }
   }
@@ -216,16 +236,20 @@ const AdminPanel = (() => {
 
     // Validation
     if (!email || !username || !password) {
-      if (typeof notify !== 'undefined') {
-        notify.warning('الرجاء ملء جميع الحقول المطلوبة');
-      }
+      try {
+        if (typeof notify !== 'undefined' && notify && notify.warning) {
+          notify.warning('الرجاء ملء جميع الحقول المطلوبة');
+        }
+      } catch (e) {}
       return;
     }
 
     if (password.length < 6) {
-      if (typeof notify !== 'undefined') {
-        notify.warning('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-      }
+      try {
+        if (typeof notify !== 'undefined' && notify && notify.warning) {
+          notify.warning('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+        }
+      } catch (e) {}
       return;
     }
 
@@ -312,9 +336,11 @@ const AdminPanel = (() => {
 
     const email = editEmailInput.value.trim();
     if (!email) {
-      if (typeof notify !== 'undefined') {
-        notify.warning('البريد الإلكتروني مطلوب');
-      }
+      try {
+        if (typeof notify !== 'undefined' && notify && notify.warning) {
+          notify.warning('البريد الإلكتروني مطلوب');
+        }
+      } catch (e) {}
       return;
     }
 
@@ -338,9 +364,11 @@ const AdminPanel = (() => {
     }
 
     if (Object.keys(updates).length === 0) {
-      if (typeof notify !== 'undefined') {
-        notify.warning('لم يتم تغيير أي بيانات');
-      }
+      try {
+        if (typeof notify !== 'undefined' && notify && notify.warning) {
+          notify.warning('لم يتم تغيير أي بيانات');
+        }
+      } catch (e) {}
       return;
     }
 
