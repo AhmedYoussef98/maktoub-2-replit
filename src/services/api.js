@@ -670,12 +670,12 @@ const ApiClient = (() => {
 
       // Note: submission_id is included for proxy server to build URL
       // Server will remove it before forwarding to backend (REST best practice)
+      // Field names match backend response format: Review_status, Reviewer_email, Review_notes
       const payload = {
         submission_id: submissionId,  // Used by proxy to construct URL path
-        review_status: reviewStatus,
-        reviewer_name: reviewerName || '',
-        review_notes: reviewNotes || '',
-        reviewed_at: new Date().toISOString()
+        Review_status: reviewStatus,  // Backend expects PascalCase with underscore
+        Reviewer_email: reviewerName || '',
+        Review_notes: reviewNotes || ''
       };
 
       const data = await makeRequest(
