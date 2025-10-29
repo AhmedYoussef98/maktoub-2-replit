@@ -17,18 +17,20 @@
 
   /* Maktoub Teal Palette */
   --maktoub-teal-50: #F1FCFA;
-  --maktoub-teal-100: #D4F5EF;
-  --maktoub-teal-200: #A9EBE0;
+  --maktoub-teal-100: #CFF8EE;
+  --maktoub-teal-200: #9FF0DE;
   --maktoub-teal-300: #67E1CB;
-  --maktoub-teal-400: #3DCBB8;
+  --maktoub-teal-400: #38C9B4;
   --maktoub-teal-500: #1EA896;
-  --maktoub-teal-600: #178579;
-  --maktoub-teal-700: #136B62;
-  --maktoub-teal-800: #0F544E;
-  --maktoub-teal-900: #0D4541;
+  --maktoub-teal-600: #168B7F;
+  --maktoub-teal-700: #166F66;
+  --maktoub-teal-800: #165954;
+  --maktoub-teal-900: #174A46;
+  --maktoub-teal-950: #072C2A;
 
-  /* Secondary Teal Shades */
-  --teal-dark: #066458;
+  /* Secondary Brand Colors */
+  --maktoub-med: #066458;
+  --maktoub-accent: #A7F44A;
 
   /* Gray Scale */
   --gray-50: #F9FAFB;
