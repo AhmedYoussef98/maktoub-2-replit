@@ -77,86 +77,216 @@
 
             <div class="content-wrapper">
                 <!-- Page Title -->
-                <h1 class="page-title">مراجعة خطاب</h1>
+                <h1 class="page-title">خطاب المراجعة</h1>
 
-                <!-- Review Form -->
-                <div class="review-form-container" id="reviewForm">
-                    <form id="reviewFormElement">
+                <!-- Letter Details Table -->
+                <div class="letter-details-table" id="letterDetailsTable" style="
+                    background: var(--bg-card);
+                    border: 1px solid var(--border-primary);
+                    border-radius: 12px;
+                    padding: 24px;
+                    margin-bottom: 24px;
+                    overflow-x: auto;
+                ">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-primary);">
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">الكاتب</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">الملاحظات</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">اسم المراجع</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">الموضوع</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">المستلم</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">المراجعة</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">نوع الخطاب</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">التاريخ</th>
+                                <th style="padding: 12px; text-align: right; color: var(--text-secondary); font-size: 14px; font-weight: 600;">الرقم المرجعي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="letterDetailsBody">
+                            <tr>
+                                <td colspan="9" style="padding: 20px; text-align: center; color: var(--text-tertiary);">جاري التحميل...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Split Layout: Letter Preview + Review Form -->
+                <div class="review-split-container" style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 24px;
+                    margin-bottom: 24px;
+                ">
+                    <style>
+                        /* Responsive design for mobile */
+                        @media (max-width: 768px) {
+                            .review-split-container {
+                                grid-template-columns: 1fr !important;
+                            }
+
+                            .letter-details-table table {
+                                font-size: 12px;
+                            }
+
+                            .letter-details-table th,
+                            .letter-details-table td {
+                                padding: 8px !important;
+                            }
+
+                            #letterPreviewContainer {
+                                padding: 20px !important;
+                                min-height: 400px !important;
+                            }
+                        }
+
+                        /* Button hover effects */
+                        #readyButton:hover {
+                            opacity: 0.9;
+                            transform: translateY(-1px);
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+
+                        #rejectedButton:hover,
+                        #improvementButton:hover {
+                            background: var(--bg-hover);
+                        }
+
+                        /* Input focus styles */
+                        #reviewerName:focus,
+                        #reviewNotes:focus {
+                            outline: none;
+                            border-color: var(--color-primary);
+                            box-shadow: 0 0 0 3px rgba(30, 168, 150, 0.1);
+                        }
+
+                        /* Checkbox custom styling */
+                        #reviewComplete {
+                            accent-color: var(--color-primary);
+                        }
+
+                        /* Smooth transitions for theme changes */
+                        .review-split-container * {
+                            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+                        }
+                    </style>
+                    <!-- Left Side: Letter Preview -->
+                    <div class="letter-preview-section">
+                        <h2 style="
+                            color: var(--text-secondary);
+                            font-size: 18px;
+                            font-weight: 600;
+                            margin-bottom: 16px;
+                            text-align: center;
+                        ">معاينة الخطاب</h2>
+
+                        <div id="letterPreviewContainer" style="
+                            background: var(--bg-card);
+                            border: 1px solid var(--border-primary);
+                            border-radius: 12px;
+                            padding: 40px;
+                            min-height: 600px;
+                        ">
+                            <!-- Letter Preview Content -->
+                            <div id="letterPreviewContent" style="
+                                color: var(--text-primary);
+                                line-height: 2;
+                                font-size: 14px;
+                                text-align: right;
+                                direction: rtl;
+                            ">
+                                <div style="text-align: center; margin-bottom: 30px;">
+                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                        <!-- Theme-aware logo -->
+                                        <img src="/attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg" alt="Company Logo" class="logo-image logo-dark" style="height: 60px; width: auto;">
+                                        <img src="/attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg" alt="Company Logo" class="logo-image logo-light" style="height: 60px; width: auto;">
+                                    </div>
+                                    <div style="color: var(--text-secondary); font-size: 12px;">
+                                        <span id="previewCompanyName">اسم الشركة</span>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 12px; color: var(--text-tertiary);">
+                                    <div>
+                                        <div>التاريخ: <span id="previewDate">-</span></div>
+                                    </div>
+                                    <div>
+                                        <div>بسم الله الرحمن الرحيم</div>
+                                        <div>رقم الخطاب: <span id="previewReferenceNumber">-</span></div>
+                                    </div>
+                                </div>
+
+                                <div id="previewLetterBody" style="white-space: pre-wrap; min-height: 300px; color: var(--text-primary);">
+                                    جاري تحميل محتوى الخطاب...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Review Form -->
+                    <div class="review-form-section">
+                        <h2 style="
+                            color: var(--text-secondary);
+                            font-size: 18px;
+                            font-weight: 600;
+                            margin-bottom: 16px;
+                            text-align: center;
+                        ">تفاصيل المراجعة</h2>
+
                         <div style="
-                            background: rgba(13, 31, 28, 0.6);
-                            border: 1px solid rgba(6, 100, 88, 0.5);
+                            background: var(--bg-card);
+                            border: 1px solid var(--border-primary);
                             border-radius: 12px;
                             padding: 32px;
-                            margin-bottom: 24px;
                         ">
+                            <!-- Hidden fields to store letter data for updateReviewStatus function -->
+                            <input type="hidden" id="letterSelect" value="">
+                            <textarea id="letterContentReview" style="display: none;"></textarea>
+
                             <!-- Reviewer Name -->
                             <div style="margin-bottom: 24px;">
                                 <label for="reviewerName" style="
                                     display: block;
-                                    color: #A0ECDC;
+                                    color: var(--text-secondary);
                                     font-size: 14px;
                                     margin-bottom: 8px;
                                     text-align: right;
                                 ">
-                                    اسم المراجع <span style="color: #F87171;">*</span>
+                                    اسم المراجع
                                 </label>
-                                <input type="text" id="reviewerName" required style="
+                                <input type="text" id="reviewerName" style="
                                     width: 100%;
                                     padding: 12px 16px;
-                                    background: rgba(13, 31, 28, 0.8);
-                                    border: 1px solid rgba(6, 100, 88, 0.5);
+                                    background: var(--input-bg);
+                                    border: 1px solid var(--input-border);
                                     border-radius: 8px;
-                                    color: #FFF;
+                                    color: var(--text-primary);
                                     font-family: 'Janna LT', sans-serif;
                                     font-size: 14px;
                                     text-align: right;
-                                ">
-                            </div>
-
-                            <!-- Letter Content -->
-                            <div style="margin-bottom: 24px;">
-                                <label for="letterContentReview" style="
-                                    display: block;
-                                    color: #A0ECDC;
-                                    font-size: 14px;
-                                    margin-bottom: 8px;
-                                    text-align: right;
-                                ">محتوى الخطاب</label>
-                                <textarea id="letterContentReview" rows="10" style="
-                                    width: 100%;
-                                    padding: 12px 16px;
-                                    background: rgba(13, 31, 28, 0.8);
-                                    border: 1px solid rgba(6, 100, 88, 0.5);
-                                    border-radius: 8px;
-                                    color: #FFF;
-                                    font-family: 'Janna LT', sans-serif;
-                                    font-size: 14px;
-                                    text-align: right;
-                                    resize: vertical;
-                                "></textarea>
+                                " placeholder="أدخل اسم المراجع">
                             </div>
 
                             <!-- Review Notes -->
                             <div style="margin-bottom: 24px;">
                                 <label for="reviewNotes" style="
                                     display: block;
-                                    color: #A0ECDC;
+                                    color: var(--text-secondary);
                                     font-size: 14px;
                                     margin-bottom: 8px;
                                     text-align: right;
                                 ">الملاحظات</label>
-                                <textarea id="reviewNotes" rows="4" style="
+                                <textarea id="reviewNotes" rows="10" style="
                                     width: 100%;
                                     padding: 12px 16px;
-                                    background: rgba(13, 31, 28, 0.8);
-                                    border: 1px solid rgba(6, 100, 88, 0.5);
+                                    background: var(--input-bg);
+                                    border: 1px solid var(--input-border);
                                     border-radius: 8px;
-                                    color: #FFF;
+                                    color: var(--text-primary);
                                     font-family: 'Janna LT', sans-serif;
                                     font-size: 14px;
                                     text-align: right;
                                     resize: vertical;
-                                "></textarea>
+                                " placeholder="أدخل ملاحظات المراجعة"></textarea>
                             </div>
 
                             <!-- Review Complete Checkbox -->
@@ -165,13 +295,13 @@
                                     display: flex;
                                     align-items: center;
                                     gap: 8px;
-                                    color: #A0ECDC;
+                                    color: var(--text-secondary);
                                     font-size: 14px;
                                     cursor: pointer;
                                     flex-direction: row-reverse;
                                     justify-content: flex-end;
                                 ">
-                                    <span>تمت المراجعة</span>
+                                    <span>تم المراجعة</span>
                                     <input type="checkbox" id="reviewComplete" style="
                                         width: 20px;
                                         height: 20px;
@@ -187,12 +317,12 @@
                                 justify-content: flex-end;
                                 flex-wrap: wrap;
                             ">
-                                <button type="button" id="readyButton" disabled style="
+                                <button type="button" id="readyButton" style="
                                     padding: 12px 24px;
-                                    background: rgba(34, 197, 94, 0.2);
-                                    border: 1px solid #4ADE80;
+                                    background: var(--color-success);
+                                    border: none;
                                     border-radius: 8px;
-                                    color: #4ADE80;
+                                    color: #FFFFFF;
                                     font-family: 'Janna LT', sans-serif;
                                     font-size: 14px;
                                     cursor: pointer;
@@ -200,33 +330,17 @@
                                     display: flex;
                                     align-items: center;
                                     gap: 8px;
+                                    opacity: 1;
                                 ">
                                     <i class="fas fa-check"></i>
                                     <span>جاهز للإرسال</span>
                                 </button>
-                                <button type="button" id="improvementButton" disabled style="
+                                <button type="button" id="rejectedButton" style="
                                     padding: 12px 24px;
-                                    background: rgba(234, 179, 8, 0.2);
-                                    border: 1px solid #FDE047;
+                                    background: transparent;
+                                    border: 1px solid var(--border-primary);
                                     border-radius: 8px;
-                                    color: #FDE047;
-                                    font-family: 'Janna LT', sans-serif;
-                                    font-size: 14px;
-                                    cursor: pointer;
-                                    transition: all 0.2s ease;
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 8px;
-                                ">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <span>يحتاج إلى تحسينات</span>
-                                </button>
-                                <button type="button" id="rejectedButton" disabled style="
-                                    padding: 12px 24px;
-                                    background: rgba(239, 68, 68, 0.2);
-                                    border: 1px solid #F87171;
-                                    border-radius: 8px;
-                                    color: #F87171;
+                                    color: var(--text-secondary);
                                     font-family: 'Janna LT', sans-serif;
                                     font-size: 14px;
                                     cursor: pointer;
@@ -238,9 +352,26 @@
                                     <i class="fas fa-times"></i>
                                     <span>مرفوض</span>
                                 </button>
+                                <button type="button" id="improvementButton" style="
+                                    padding: 12px 24px;
+                                    background: transparent;
+                                    border: 1px solid var(--border-primary);
+                                    border-radius: 8px;
+                                    color: var(--text-secondary);
+                                    font-family: 'Janna LT', sans-serif;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                ">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>يحتاج الى تحسينات</span>
+                                </button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </main>
@@ -284,31 +415,153 @@
     <script src="/src/modules/mobile.js"></script>
 
     <script>
+        // Store current letter ID globally
+        let currentLetterId = null;
+
+        // Override the displayLetterForReview function for the new layout
+        window.displayLetterForReview = function(letter) {
+            console.log('📄 Displaying letter for review:', letter);
+
+            // Store the letter ID for the updateReviewStatus function
+            currentLetterId = letter.ID || letter.id;
+            const letterSelectHidden = document.getElementById('letterSelect');
+            if (letterSelectHidden) {
+                letterSelectHidden.value = currentLetterId;
+            }
+
+            // Populate the letter details table
+            const letterDetailsBody = document.getElementById('letterDetailsBody');
+            if (letterDetailsBody && letter) {
+                const statusClass = getReviewStatusClass(letter.Review_status || letter.reviewStatus);
+                const reviewStatus = letter.Review_status || letter.reviewStatus || '-';
+
+                letterDetailsBody.innerHTML = `
+                    <tr style="border-top: 1px solid var(--border-primary);">
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Created_by || letter.writer || 'إبراهيم محمد')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.notes || letter.reviewNotes || '-')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.reviewer_name || letter.reviewerName || 'فاطمة')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Subject || letter.subject || 'دعوة لحضور حفل تدشين...')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Recipient_name || letter.recipient || 'أحمد محمد')}</td>
+                        <td style="padding: 12px; text-align: right;">
+                            <span class="status-badge ${statusClass}" style="
+                                padding: 4px 12px;
+                                border-radius: 4px;
+                                font-size: 12px;
+                                background: ${getStatusBadgeStyle(reviewStatus).bg};
+                                color: ${getStatusBadgeStyle(reviewStatus).color};
+                            ">
+                                ${Utils.escapeHtml(reviewStatus)}
+                            </span>
+                        </td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Letter_type || letter.type || 'خطاب جديد')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${formatDateForDisplay(letter.Timestamp || letter.date)}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.ID || letter.id || 'AIZ-2025...')}</td>
+                    </tr>
+                `;
+            }
+
+            // Populate the letter preview section
+            const previewCompanyName = document.getElementById('previewCompanyName');
+            const previewDate = document.getElementById('previewDate');
+            const previewReferenceNumber = document.getElementById('previewReferenceNumber');
+            const previewLetterBody = document.getElementById('previewLetterBody');
+
+            if (previewCompanyName) {
+                previewCompanyName.textContent = letter.organization_name || letter.Organization_name || 'شركة سكواد';
+            }
+            if (previewDate) {
+                previewDate.textContent = formatDateForDisplay(letter.Timestamp || letter.date);
+            }
+            if (previewReferenceNumber) {
+                previewReferenceNumber.textContent = letter.ID || letter.id || '-';
+            }
+            if (previewLetterBody) {
+                // Display the letter content in the preview
+                const content = letter.Letter_body || letter.content || letter.prompt || 'محتوى الخطاب غير متوفر';
+                previewLetterBody.textContent = content;
+
+                // Also store in hidden textarea for updateReviewStatus function
+                const letterContentReview = document.getElementById('letterContentReview');
+                if (letterContentReview) {
+                    letterContentReview.value = content;
+                }
+            }
+
+            // Populate the review form fields
+            const reviewerNameInput = document.getElementById('reviewerName');
+            const reviewNotesInput = document.getElementById('reviewNotes');
+
+            if (reviewerNameInput) {
+                reviewerNameInput.value = letter.reviewer_name || letter.reviewerName || '';
+            }
+
+            if (reviewNotesInput) {
+                reviewNotesInput.value = letter.notes || letter.reviewNotes || '';
+            }
+        };
+
+        function getReviewStatusClass(status) {
+            const statusMap = {
+                'جاهز للإرسال': 'ready',
+                'في الانتظار': 'pending',
+                'يحتاج إلى تحسينات': 'improvements',
+                'مرفوض': 'rejected'
+            };
+            return statusMap[status] || 'pending';
+        }
+
+        function getStatusBadgeStyle(status) {
+            const styleMap = {
+                'جاهز للإرسال': { bg: 'rgba(34, 197, 94, 0.2)', color: '#4ADE80' },
+                'في الانتظار': { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' },
+                'يحتاج إلى تحسينات': { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' },
+                'مرفوض': { bg: 'rgba(239, 68, 68, 0.2)', color: '#F87171' },
+                'تحسينات': { bg: 'rgba(239, 68, 68, 0.2)', color: '#F87171' }
+            };
+            return styleMap[status] || { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' };
+        }
+
+        function formatDateForDisplay(dateString) {
+            if (!dateString) return '-';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            } catch (error) {
+                return dateString;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             loadLettersForReview();
             setupReviewForm();
 
-            // Enable buttons when review complete checkbox is checked
-            const reviewCompleteCheckbox = document.getElementById('reviewComplete');
+            // Button event listeners (always enabled now, but styled differently)
             const readyButton = document.getElementById('readyButton');
             const improvementButton = document.getElementById('improvementButton');
             const rejectedButton = document.getElementById('rejectedButton');
 
-            if (reviewCompleteCheckbox) {
-                reviewCompleteCheckbox.addEventListener('change', function() {
-                    const isChecked = this.checked;
-                    readyButton.disabled = !isChecked;
-                    improvementButton.disabled = !isChecked;
-                    rejectedButton.disabled = !isChecked;
-
-                    if (isChecked) {
-                        readyButton.style.opacity = '1';
-                        improvementButton.style.opacity = '1';
-                        rejectedButton.style.opacity = '1';
-                    } else {
-                        readyButton.style.opacity = '0.5';
-                        improvementButton.style.opacity = '0.5';
-                        rejectedButton.style.opacity = '0.5';
+            if (readyButton) {
+                readyButton.addEventListener('click', () => {
+                    if (typeof updateReviewStatus === 'function') {
+                        updateReviewStatus('جاهز للإرسال');
+                    }
+                });
+            }
+            if (improvementButton) {
+                improvementButton.addEventListener('click', () => {
+                    if (typeof updateReviewStatus === 'function') {
+                        updateReviewStatus('يحتاج إلى تحسينات');
+                    }
+                });
+            }
+            if (rejectedButton) {
+                rejectedButton.addEventListener('click', () => {
+                    if (typeof updateReviewStatus === 'function') {
+                        updateReviewStatus('مرفوض');
                     }
                 });
             }

@@ -907,16 +907,30 @@ async function updateReviewStatus(status) {
             }
         }
         
-        // Update the status in Google Sheets (for all statuses)
-        await updateReviewStatusInSheet(letterId, status, reviewerName, notes, letterContent);
-        
+        // Update the review status in backend (for all statuses)
+        console.log('📝 Calling updateSubmissionReview...');
+
+        if (typeof updateSubmissionReview === 'undefined') {
+            console.error('❌ updateSubmissionReview function not found!');
+            throw new Error('API function not available');
+        }
+
+        const result = await updateSubmissionReview(letterId, status, reviewerName, notes);
+
+        if (!result || result.status !== 'success') {
+            console.error('❌ Failed to update review status:', result);
+            throw new Error(result?.message || 'Failed to update review status');
+        }
+
+        console.log('✅ Review status updated successfully:', result);
+
         // Show success message
         if (typeof notify !== 'undefined') {
             notify.success(`تم تحديث حالة المراجعة إلى: ${status}`);
         } else {
             showSuccessMessage(`تم تحديث حالة المراجعة إلى: ${status}`);
         }
-        
+
         // Redirect to letter history with highlight
         setTimeout(() => {
             window.location.href = `letter-history.html?highlight=${letterId}`;
@@ -938,6 +952,13 @@ async function updateReviewStatus(status) {
         }
     }
 }
+
+// Backward compatibility alias for deprecated function name
+window.updateReviewStatusInSheet = async function(letterId, status, reviewerName, notes, letterContent) {
+    console.warn('⚠️ updateReviewStatusInSheet is deprecated - using updateSubmissionReview instead');
+    return await updateSubmissionReview(letterId, status, reviewerName, notes);
+};
+
 // ==============================================
 // HELPER FUNCTIONS
 // ==============================================

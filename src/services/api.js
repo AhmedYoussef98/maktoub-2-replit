@@ -76,7 +76,17 @@ const ApiClient = (() => {
       'letter/delete': 'delete-letter',
     };
 
-    return endpointMap[endpoint] || endpoint;
+    // Check if exact match exists
+    if (endpointMap[endpoint]) {
+      return endpointMap[endpoint];
+    }
+
+    // Handle dynamic endpoints with patterns
+    if (endpoint.startsWith('submissions/review/')) {
+      return 'update-submission-review';
+    }
+
+    return endpoint;
   }
 
   /**
@@ -646,6 +656,43 @@ const ApiClient = (() => {
     }
   }
 
+  /**
+   * Update submission review status, reviewer name, and notes
+   * @param {string} submissionId - Submission ID
+   * @param {string} reviewStatus - Review status (جاهز للإرسال, مرفوض, يحتاج إلى تحسينات)
+   * @param {string} reviewerName - Reviewer name
+   * @param {string} reviewNotes - Review notes/comments
+   * @returns {Promise<Object|null>} Update result or null on error
+   */
+  async function updateSubmissionReview(submissionId, reviewStatus, reviewerName, reviewNotes) {
+    try {
+      console.log('📝 Updating submission review:', { submissionId, reviewStatus, reviewerName });
+
+      const payload = {
+        submission_id: submissionId,
+        review_status: reviewStatus,
+        reviewer_name: reviewerName || '',
+        review_notes: reviewNotes || '',
+        reviewed_at: new Date().toISOString()
+      };
+
+      const data = await makeRequest(
+        `submissions/review/${submissionId}`,
+        'PUT',
+        payload
+      );
+
+      console.log('✅ Submission review updated successfully:', data);
+      return data;
+    } catch (error) {
+      console.error('❌ Failed to update submission review:', error);
+      if (typeof notify !== 'undefined') {
+        notify.error('فشل في تحديث حالة المراجعة');
+      }
+      return null;
+    }
+  }
+
   // ==================== Admin User Management ====================
 
   /**
@@ -870,6 +917,7 @@ const ApiClient = (() => {
     getSubmissions,
     getSubmission,
     getSubmissionsStats,
+    updateSubmissionReview,
     getAdminUsers,
     createAdminUser,
     updateAdminUser,
@@ -901,5 +949,6 @@ if (typeof window !== 'undefined') {
   window.getSubmissions = ApiClient.getSubmissions;
   window.getSubmission = ApiClient.getSubmission;
   window.getSubmissionsStats = ApiClient.getSubmissionsStats;
+  window.updateSubmissionReview = ApiClient.updateSubmissionReview;
   window.generateUniqueId = ApiClient.generateUniqueId;
 }
