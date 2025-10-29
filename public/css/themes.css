@@ -13,6 +13,7 @@
   --bg-tertiary: rgba(23, 74, 70, 0.6);
   --bg-card: #072C2A;
   --bg-hover: rgba(30, 168, 150, 0.1);
+  --bg-auth: #102320;
 
   /* Text Colors */
   --text-primary: #FFFFFF;
@@ -83,11 +84,12 @@
 /* ==================== Light Theme ==================== */
 [data-theme="light"] {
   /* Background Colors */
-  --bg-primary: #F1FCFA;
+  --bg-primary: #F3F4F6;
   --bg-secondary: #F9FAFB;
   --bg-tertiary: rgba(249, 250, 251, 0.8);
   --bg-card: #FFFFFF;
   --bg-hover: rgba(30, 168, 150, 0.05);
+  --bg-auth: #F1FCFA;
 
   /* Text Colors */
   --text-primary: #102320;
