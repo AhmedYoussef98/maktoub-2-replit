@@ -421,6 +421,13 @@
         // Override the displayLetterForReview function for the new layout
         window.displayLetterForReview = function(letter) {
             console.log('📄 [review-letter.html] Displaying letter for review:', letter);
+            console.log('📄 [review-letter.html] Letter keys available:', Object.keys(letter || {}));
+            console.log('📄 [review-letter.html] Checking content fields:');
+            console.log('  - Letter_body:', letter?.Letter_body);
+            console.log('  - content:', letter?.content);
+            console.log('  - prompt:', letter?.prompt);
+            console.log('  - letter:', letter?.letter);
+            console.log('  - Letter:', letter?.Letter);
 
             if (!letter) {
                 console.error('❌ No letter data provided to displayLetterForReview');
@@ -449,11 +456,11 @@
 
                 letterDetailsBody.innerHTML = `
                     <tr style="border-top: 1px solid var(--border-primary);">
-                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Created_by || letter.writer || 'إبراهيم محمد')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Created_by || letter.writer || '-')}</td>
                         <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.notes || letter.reviewNotes || '-')}</td>
-                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.reviewer_name || letter.reviewerName || 'فاطمة')}</td>
-                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Subject || letter.subject || 'دعوة لحضور حفل تدشين...')}</td>
-                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Recipient_name || letter.recipient || 'أحمد محمد')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.reviewer_name || letter.reviewerName || '-')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Subject || letter.subject || '-')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Recipient_name || letter.recipient || '-')}</td>
                         <td style="padding: 12px; text-align: right;">
                             <span class="status-badge ${statusClass}" style="
                                 padding: 4px 12px;
@@ -489,13 +496,26 @@
             }
             if (previewLetterBody) {
                 // Display the letter content in the preview
-                const content = letter.Letter_body || letter.content || letter.prompt || 'محتوى الخطاب غير متوفر';
+                // Try multiple possible field names for letter content
+                const content = letter.Letter_body ||
+                               letter.content ||
+                               letter.prompt ||
+                               letter.letter ||
+                               letter.Letter ||
+                               letter.letter_body ||
+                               letter.body ||
+                               'محتوى الخطاب غير متوفر';
+
+                console.log('📝 [review-letter.html] Selected content:', content);
+                console.log('📝 [review-letter.html] Content length:', content?.length);
+
                 previewLetterBody.textContent = content;
 
                 // Also store in hidden textarea for updateReviewStatus function
                 const letterContentReview = document.getElementById('letterContentReview');
                 if (letterContentReview) {
                     letterContentReview.value = content;
+                    console.log('✅ [review-letter.html] Content stored in hidden textarea');
                 }
             }
 

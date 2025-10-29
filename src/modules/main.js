@@ -843,21 +843,32 @@ function displayLetterError() {
  * @returns {string} English status for backend API
  */
 function mapReviewStatusToBackend(arabicStatus) {
+    // Normalize input: trim whitespace and normalize Arabic characters
+    const normalizedStatus = (arabicStatus || '').trim();
+
+    console.log(`📝 Input status (raw): "${arabicStatus}" (length: ${arabicStatus?.length})`);
+    console.log(`📝 Input status (normalized): "${normalizedStatus}" (length: ${normalizedStatus.length})`);
+    console.log(`📝 Input status (char codes):`, Array.from(normalizedStatus).map(c => c.charCodeAt(0)));
+
     const statusMap = {
         'جاهز للإرسال': 'Approved',      // Ready to Send
         'مرفوض': 'Rejected',              // Rejected
         'يحتاج إلى تحسينات': 'Pending'    // Needs Improvements
     };
 
-    const mappedStatus = statusMap[arabicStatus];
+    const mappedStatus = statusMap[normalizedStatus];
 
     if (!mappedStatus) {
-        console.error('❌ Unknown review status:', arabicStatus);
+        console.error('❌ Unknown review status:', normalizedStatus);
         console.error('❌ Available mappings:', Object.keys(statusMap));
+        console.error('❌ Available mappings (char codes):', Object.keys(statusMap).map(k => ({
+            key: k,
+            codes: Array.from(k).map(c => c.charCodeAt(0))
+        })));
         return 'Pending'; // Default fallback
     }
 
-    console.log(`📝 Status mapping: "${arabicStatus}" → "${mappedStatus}"`);
+    console.log(`✅ Status mapping: "${normalizedStatus}" → "${mappedStatus}"`);
     return mappedStatus;
 }
 
