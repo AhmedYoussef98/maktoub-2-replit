@@ -90,12 +90,38 @@ const CreateLetterPage = (() => {
   // ==================== Letter Generation ====================
 
   /**
+   * Set button loading state
+   */
+  function setButtonLoading(button, isLoading) {
+    const buttonText = button.querySelector('#generateButtonText') || button.querySelector('span');
+
+    if (isLoading) {
+      button.disabled = true;
+      button.classList.add('loading');
+      if (buttonText) {
+        buttonText.textContent = 'جاري الإنشاء...';
+      }
+    } else {
+      button.disabled = false;
+      button.classList.remove('loading');
+      if (buttonText) {
+        buttonText.textContent = 'إنشاء الخطاب';
+      }
+    }
+  }
+
+  /**
    * Handle letter generation form submission
    */
   async function handleLetterGeneration(event) {
     event.preventDefault();
 
+    const generateButton = document.getElementById('generateButton');
+
     try {
+      // Set button to loading state
+      setButtonLoading(generateButton, true);
+
       const formData = new FormData(event.target);
 
       console.log('📝 Generating letter...');
@@ -106,6 +132,7 @@ const CreateLetterPage = (() => {
         if (typeof notify !== 'undefined') {
           notify.error('خطأ في النظام. الرجاء إعادة تحميل الصفحة.');
         }
+        setButtonLoading(generateButton, false);
         return;
       }
 
@@ -113,6 +140,7 @@ const CreateLetterPage = (() => {
 
       if (!result) {
         console.error('❌ Letter generation failed');
+        setButtonLoading(generateButton, false);
         return;
       }
 
@@ -133,12 +161,18 @@ const CreateLetterPage = (() => {
         notify.success('تم إنشاء الخطاب بنجاح');
       }
 
+      // Reset button state
+      setButtonLoading(generateButton, false);
+
     } catch (error) {
       console.error('❌ Error in letter generation:', error);
 
       if (typeof notify !== 'undefined') {
         notify.error('حدث خطأ أثناء إنشاء الخطاب');
       }
+
+      // Reset button state on error
+      setButtonLoading(generateButton, false);
     }
   }
 
