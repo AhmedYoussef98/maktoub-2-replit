@@ -73,6 +73,7 @@ const ApiClient = (() => {
       'user/admin/users/create': 'admin-create-user',
       'user/admin/users/update': 'admin-update-user',
       'user/admin/users/delete': 'admin-delete-user',
+      'letter/delete': 'delete-letter',
     };
 
     return endpointMap[endpoint] || endpoint;
@@ -485,6 +486,27 @@ const ApiClient = (() => {
   }
 
   /**
+   * Delete a letter by ID
+   * @param {string} letterId - Letter ID (e.g., LET-20251028-12345)
+   * @returns {Promise<Object|null>} Delete result or null on error
+   */
+  async function deleteLetter(letterId) {
+    try {
+      if (!letterId) {
+        console.warn('No letter ID provided for deletion');
+        return null;
+      }
+
+      const data = await makeRequest('letter/delete', 'DELETE', { letter_id: letterId });
+      console.log('Letter deleted successfully:', data);
+      return data;
+    } catch (error) {
+      console.error('Error deleting letter:', error);
+      return null;
+    }
+  }
+
+  /**
    * List all chat sessions
    * @param {boolean} includeExpired - Include expired sessions
    * @returns {Promise<Array|null>} List of sessions or null on error
@@ -840,6 +862,7 @@ const ApiClient = (() => {
     getChatStatus,
     extendChatSession,
     deleteChatSession,
+    deleteLetter,
     listChatSessions,
     archiveLetter,
     getArchiveStatus,
@@ -870,6 +893,7 @@ if (typeof window !== 'undefined') {
   window.getChatStatus = ApiClient.getChatStatus;
   window.extendChatSession = ApiClient.extendChatSession;
   window.deleteChatSession = ApiClient.deleteChatSession;
+  window.deleteLetter = ApiClient.deleteLetter;
   window.listChatSessions = ApiClient.listChatSessions;
   window.archiveLetter = ApiClient.archiveLetter;
   window.getArchiveStatus = ApiClient.getArchiveStatus;

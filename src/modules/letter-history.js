@@ -498,18 +498,19 @@ ${letter.content || ''}
   async function deleteLetter(id) {
     if (confirm('هل أنت متأكد من حذف هذا الخطاب؟')) {
       try {
-        // TODO: Add delete endpoint to API when backend supports it
-        console.log('Delete letter:', id);
-        alert('عذراً، وظيفة الحذف غير متاحة حالياً');
-        // When backend adds delete endpoint:
-        // const response = await ApiClient.deleteSubmission(id);
-        // if (response && response.status === 'success') {
-        //   await loadStats();
-        //   await loadLetters();
-        // }
+        console.log('Deleting letter:', id);
+        const response = await ApiClient.deleteLetter(id);
+
+        if (response && response.status === 'success') {
+          NotificationsModule.show(response.message || 'تم حذف الخطاب بنجاح', 'success');
+          await loadStats();
+          await loadLetters();
+        } else {
+          throw new Error(response?.message || 'فشل حذف الخطاب');
+        }
       } catch (error) {
         console.error('Failed to delete letter:', error);
-        alert('حدث خطأ في حذف الخطاب');
+        NotificationsModule.show(error.message || 'حدث خطأ في حذف الخطاب', 'error');
       }
     }
   }
