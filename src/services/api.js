@@ -668,8 +668,10 @@ const ApiClient = (() => {
     try {
       console.log('📝 Updating submission review:', { submissionId, reviewStatus, reviewerName });
 
+      // Note: submission_id is included for proxy server to build URL
+      // Server will remove it before forwarding to backend (REST best practice)
       const payload = {
-        submission_id: submissionId,
+        submission_id: submissionId,  // Used by proxy to construct URL path
         review_status: reviewStatus,
         reviewer_name: reviewerName || '',
         review_notes: reviewNotes || '',

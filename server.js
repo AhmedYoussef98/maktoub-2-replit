@@ -228,7 +228,7 @@ app.all('/api/proxy', async (req, res) => {
                     targetUrl = `${API_BASE_URL}/api/v1/archive/update`;
                     break;
                 case 'update-submission-review':
-                    // Extract submission_id from data payload
+                    // Extract submission_id from data payload for URL construction
                     const submissionId = data.submission_id;
                     if (!submissionId) {
                         console.error('Missing submission_id in request data');
@@ -236,6 +236,11 @@ app.all('/api/proxy', async (req, res) => {
                     }
                     targetUrl = `${API_BASE_URL}/api/v1/submissions/review/${submissionId}`;
                     console.log('Updating submission review for ID:', submissionId);
+
+                    // Remove submission_id from data before forwarding (ID is in URL path per REST spec)
+                    const { submission_id, ...cleanData } = data;
+                    data = cleanData;
+                    console.log('Cleaned payload (submission_id removed from body):', data);
                     break;
                 default:
                     console.log('Invalid PUT endpoint:', endpoint);

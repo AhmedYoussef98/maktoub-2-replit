@@ -823,23 +823,11 @@ async function loadLetterForReview(id) {
     }
 }
 
-function displayLetterForReview(letter) {
-    const letterContent = document.getElementById('letterContentReview');
-    const reviewerNameInput = document.getElementById('reviewerName');
-    const reviewNotesInput = document.getElementById('reviewNotes');
-    
-    if (letterContent) {
-        letterContent.value = letter.content || 'محتوى الخطاب غير متوفر';
-    }
-    
-    if (reviewerNameInput) {
-        reviewerNameInput.value = letter.reviewerName || '';
-    }
-    
-    if (reviewNotesInput) {
-        reviewNotesInput.value = letter.reviewNotes || '';
-    }
-}
+// displayLetterForReview function removed - using comprehensive version in review-letter.html
+// The page-specific override in review-letter.html provides full functionality:
+// - Populates letter details table
+// - Displays letter preview with formatting
+// - Handles all data fields correctly
 
 function displayLetterError() {
     const letterContent = document.getElementById('letterContentReview');
