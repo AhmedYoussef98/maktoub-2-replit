@@ -457,8 +457,8 @@
                 letterDetailsBody.innerHTML = `
                     <tr style="border-top: 1px solid var(--border-primary);">
                         <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Created_by || letter.writer || '-')}</td>
-                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.notes || letter.reviewNotes || '-')}</td>
-                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.reviewer_name || letter.reviewerName || '-')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Review_notes || letter.notes || letter.reviewNotes || '-')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Reviewer_email || letter.reviewer_name || letter.reviewerName || '-')}</td>
                         <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Subject || letter.subject || '-')}</td>
                         <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Recipient_name || letter.recipient || '-')}</td>
                         <td style="padding: 12px; text-align: right;">
@@ -496,14 +496,11 @@
             }
             if (previewLetterBody) {
                 // Display the letter content in the preview
-                // Try multiple possible field names for letter content
-                const content = letter.Letter_body ||
+                // Backend returns Letter_content (confirmed from API response)
+                const content = letter.Letter_content ||
+                               letter.Letter_body ||
                                letter.content ||
                                letter.prompt ||
-                               letter.letter ||
-                               letter.Letter ||
-                               letter.letter_body ||
-                               letter.body ||
                                'محتوى الخطاب غير متوفر';
 
                 console.log('📝 [review-letter.html] Selected content:', content);
@@ -524,11 +521,11 @@
             const reviewNotesInput = document.getElementById('reviewNotes');
 
             if (reviewerNameInput) {
-                reviewerNameInput.value = letter.reviewer_name || letter.reviewerName || '';
+                reviewerNameInput.value = letter.Reviewer_email || letter.reviewer_name || letter.reviewerName || '';
             }
 
             if (reviewNotesInput) {
-                reviewNotesInput.value = letter.notes || letter.reviewNotes || '';
+                reviewNotesInput.value = letter.Review_notes || letter.notes || letter.reviewNotes || '';
             }
         };
 
