@@ -169,60 +169,7 @@
                             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
                         }
                     </style>
-                    <!-- Left Side: Letter Preview -->
-                    <div class="letter-preview-section">
-                        <h2 style="
-                            color: var(--text-secondary);
-                            font-size: 18px;
-                            font-weight: 600;
-                            margin-bottom: 16px;
-                            text-align: center;
-                        ">معاينة الخطاب</h2>
-
-                        <div id="letterPreviewContainer" style="
-                            background: var(--bg-card);
-                            border: 1px solid var(--border-primary);
-                            border-radius: 12px;
-                            padding: 40px;
-                            min-height: 600px;
-                        ">
-                            <!-- Letter Preview Content -->
-                            <div id="letterPreviewContent" style="
-                                color: var(--text-primary);
-                                line-height: 2;
-                                font-size: 14px;
-                                text-align: right;
-                                direction: rtl;
-                            ">
-                                <div style="text-align: center; margin-bottom: 30px;">
-                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                                        <!-- Theme-aware logo -->
-                                        <img src="/attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg" alt="Company Logo" class="logo-image logo-dark" style="height: 60px; width: auto;">
-                                        <img src="/attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg" alt="Company Logo" class="logo-image logo-light" style="height: 60px; width: auto;">
-                                    </div>
-                                    <div style="color: var(--text-secondary); font-size: 12px;">
-                                        <span id="previewCompanyName">اسم الشركة</span>
-                                    </div>
-                                </div>
-
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 12px; color: var(--text-tertiary);">
-                                    <div>
-                                        <div>التاريخ: <span id="previewDate">-</span></div>
-                                    </div>
-                                    <div>
-                                        <div>بسم الله الرحمن الرحيم</div>
-                                        <div>رقم الخطاب: <span id="previewReferenceNumber">-</span></div>
-                                    </div>
-                                </div>
-
-                                <div id="previewLetterBody" style="white-space: pre-wrap; min-height: 300px; color: var(--text-primary);">
-                                    جاري تحميل محتوى الخطاب...
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Side: Review Form -->
+                    <!-- Left Side: Review Form -->
                     <div class="review-form-section">
                         <h2 style="
                             color: var(--text-secondary);
@@ -372,6 +319,59 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Right Side: Letter Preview -->
+                    <div class="letter-preview-section">
+                        <h2 style="
+                            color: var(--text-secondary);
+                            font-size: 18px;
+                            font-weight: 600;
+                            margin-bottom: 16px;
+                            text-align: center;
+                        ">معاينة الخطاب</h2>
+
+                        <div id="letterPreviewContainer" style="
+                            background: var(--bg-card);
+                            border: 1px solid var(--border-primary);
+                            border-radius: 12px;
+                            padding: 40px;
+                            min-height: 600px;
+                        ">
+                            <!-- Letter Preview Content -->
+                            <div id="letterPreviewContent" style="
+                                color: var(--text-primary);
+                                line-height: 2;
+                                font-size: 14px;
+                                text-align: right;
+                                direction: rtl;
+                            ">
+                                <div style="text-align: center; margin-bottom: 30px;">
+                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                        <!-- Theme-aware logo -->
+                                        <img src="/attached_assets/Logo 2/Secondary Logo/Maktoub secondary logo.svg" alt="Company Logo" class="logo-image logo-dark" style="height: 60px; width: auto;">
+                                        <img src="/attached_assets/Logo 2/Primary logo/Maktoub primary logo.svg" alt="Company Logo" class="logo-image logo-light" style="height: 60px; width: auto;">
+                                    </div>
+                                    <div style="color: var(--text-secondary); font-size: 12px;">
+                                        <span id="previewCompanyName">اسم الشركة</span>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 12px; color: var(--text-tertiary);">
+                                    <div>
+                                        <div>التاريخ: <span id="previewDate">-</span></div>
+                                    </div>
+                                    <div>
+                                        <div>بسم الله الرحمن الرحيم</div>
+                                        <div>رقم الخطاب: <span id="previewReferenceNumber">-</span></div>
+                                    </div>
+                                </div>
+
+                                <div id="previewLetterBody" style="white-space: pre-wrap; min-height: 300px; color: var(--text-primary);">
+                                    جاري تحميل محتوى الخطاب...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -420,13 +420,23 @@
 
         // Override the displayLetterForReview function for the new layout
         window.displayLetterForReview = function(letter) {
-            console.log('📄 Displaying letter for review:', letter);
+            console.log('📄 [review-letter.html] Displaying letter for review:', letter);
+
+            if (!letter) {
+                console.error('❌ No letter data provided to displayLetterForReview');
+                return;
+            }
 
             // Store the letter ID for the updateReviewStatus function
             currentLetterId = letter.ID || letter.id;
+            console.log('✅ Letter ID:', currentLetterId);
+
             const letterSelectHidden = document.getElementById('letterSelect');
             if (letterSelectHidden) {
                 letterSelectHidden.value = currentLetterId;
+                console.log('✅ Letter ID stored in hidden field');
+            } else {
+                console.warn('⚠️ letterSelect hidden field not found');
             }
 
             // Populate the letter details table
@@ -546,22 +556,34 @@
 
             if (readyButton) {
                 readyButton.addEventListener('click', () => {
-                    if (typeof updateReviewStatus === 'function') {
-                        updateReviewStatus('جاهز للإرسال');
+                    console.log('🟢 Ready button clicked');
+                    if (typeof window.updateReviewStatus === 'function') {
+                        window.updateReviewStatus('جاهز للإرسال');
+                    } else {
+                        console.error('❌ updateReviewStatus function not found!');
+                        alert('خطأ: وظيفة التحديث غير متوفرة. الرجاء تحديث الصفحة.');
                     }
                 });
             }
             if (improvementButton) {
                 improvementButton.addEventListener('click', () => {
-                    if (typeof updateReviewStatus === 'function') {
-                        updateReviewStatus('يحتاج إلى تحسينات');
+                    console.log('🟡 Improvement button clicked');
+                    if (typeof window.updateReviewStatus === 'function') {
+                        window.updateReviewStatus('يحتاج إلى تحسينات');
+                    } else {
+                        console.error('❌ updateReviewStatus function not found!');
+                        alert('خطأ: وظيفة التحديث غير متوفرة. الرجاء تحديث الصفحة.');
                     }
                 });
             }
             if (rejectedButton) {
                 rejectedButton.addEventListener('click', () => {
-                    if (typeof updateReviewStatus === 'function') {
-                        updateReviewStatus('مرفوض');
+                    console.log('🔴 Rejected button clicked');
+                    if (typeof window.updateReviewStatus === 'function') {
+                        window.updateReviewStatus('مرفوض');
+                    } else {
+                        console.error('❌ updateReviewStatus function not found!');
+                        alert('خطأ: وظيفة التحديث غير متوفرة. الرجاء تحديث الصفحة.');
                     }
                 });
             }

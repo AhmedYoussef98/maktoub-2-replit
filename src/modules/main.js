@@ -786,28 +786,30 @@ function setupReviewForm() {
     }
 }
 
-function loadLetterForReview(id) {
+async function loadLetterForReview(id) {
     console.log('📄 Loading letter for review:', id);
-    
-    // Try cache first
-    const cachedLetters = letterCache ? letterCache.get('submissions_data') : null;
-    let letter = cachedLetters ? cachedLetters.find(l => l.id === id) : null;
-    
-    if (letter) {
-        displayLetterForReview(letter);
-    } else {
-        // Load from server if not in cache
-        loadSubmissionsDataOptimized().then(letters => {
-            letter = letters.find(l => l.id === id);
-            if (letter) {
-                displayLetterForReview(letter);
-            } else {
-                displayLetterError();
-            }
-        }).catch(error => {
-            console.error('Error loading letter:', error);
+
+    try {
+        // Use the API client to fetch the specific submission
+        if (typeof ApiClient === 'undefined' || !ApiClient.getSubmission) {
+            console.error('❌ ApiClient.getSubmission not available');
             displayLetterError();
-        });
+            return;
+        }
+
+        const response = await ApiClient.getSubmission(id);
+
+        if (response && response.status === 'success' && response.data) {
+            const letter = response.data;
+            console.log('✅ Letter loaded successfully:', letter);
+            displayLetterForReview(letter);
+        } else {
+            console.error('❌ Failed to load letter:', response);
+            displayLetterError();
+        }
+    } catch (error) {
+        console.error('❌ Error loading letter:', error);
+        displayLetterError();
     }
 }
 
