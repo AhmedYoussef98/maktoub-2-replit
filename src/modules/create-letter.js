@@ -245,7 +245,8 @@ const CreateLetterPage = (() => {
       // Call edit API with correct parameter order: (sessionId, userMessage, currentLetter, context)
       const result = await ApiClient.editLetter(currentEditSession, editFeedback, letterPreview);
 
-      if (!result || !result.Letter) {
+      // API returns { edited_letter, session_id }
+      if (!result || !result.edited_letter) {
         console.error('❌ Letter editing failed');
         setButtonLoading(editButton, false, '', 'تعديل');
         return;
@@ -253,8 +254,14 @@ const CreateLetterPage = (() => {
 
       console.log('✅ Letter edited successfully');
 
+      // Normalize the result to match expected format (Letter property)
+      const normalizedResult = {
+        Letter: result.edited_letter,
+        session_id: result.session_id
+      };
+
       // Update current letter data
-      currentLetterData = result;
+      currentLetterData = normalizedResult;
 
       // Refresh preview with updated content
       // This will update both the display and quality analysis
@@ -264,7 +271,7 @@ const CreateLetterPage = (() => {
         const formData = letterForm ? new FormData(letterForm) : null;
 
         // Show preview (updates content, shows UI elements, and analyzes quality)
-        LetterQuality.showPreview(result, formData);
+        LetterQuality.showPreview(normalizedResult, formData);
       }
 
       // Clear edit feedback
