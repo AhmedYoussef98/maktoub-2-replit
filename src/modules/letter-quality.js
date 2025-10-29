@@ -205,7 +205,10 @@ const LetterQuality = (() => {
       return null;
     }
 
-    console.log('🔍 Analyzing letter content...', letterContent.substring(0, 100) + '...');
+    console.log('🔍 Analyzing letter content...');
+    console.log('📄 Total content length:', letterContent.length);
+    console.log('📄 Content preview (first 150 chars):', letterContent.substring(0, 150) + '...');
+    console.log('📄 Content preview (last 150 chars):', '...' + letterContent.substring(letterContent.length - 150));
 
     // Perform quality checks
     const checks = {
@@ -217,14 +220,22 @@ const LetterQuality = (() => {
 
     console.log('📋 Quality checks results:', checks);
 
-    // Calculate statistics
+    // Calculate statistics WITH DETAILED LOGGING
+    const charCount = calculateCharCount(letterContent);
+    const wordCount = calculateWordCount(letterContent);
+    const lineCount = calculateLineCount(letterContent);
+
     const statistics = {
-      charCount: calculateCharCount(letterContent),
-      wordCount: calculateWordCount(letterContent),
-      lineCount: calculateLineCount(letterContent)
+      charCount,
+      wordCount,
+      lineCount
     };
 
-    console.log('📊 Statistics calculated:', statistics);
+    console.log('📊 Statistics calculated:');
+    console.log('  ✓ Character count (no spaces):', charCount);
+    console.log('  ✓ Word count:', wordCount);
+    console.log('  ✓ Line count:', lineCount);
+    console.log('  ✓ Line breaks (\\n) found:', (letterContent.match(/\n/g) || []).length);
 
     // Update UI with results
     updateCheckIcon('checkBasmala', checks.basmala);
@@ -298,13 +309,20 @@ const LetterQuality = (() => {
       populateDocumentTemplate(letterData, formData);
     }
 
-    // Analyze the letter content
+    // Store the raw letter content for analysis (preserving original line breaks)
     const letterContent = letterData.Letter || letterData.content || '';
 
     console.log('📄 Letter content found:', letterContent ? `${letterContent.length} chars` : 'NO CONTENT');
 
+    // Store raw content in mainLetterContent's data attribute for future analysis
+    const mainLetterContentEl = document.getElementById('mainLetterContent');
+    if (mainLetterContentEl && letterContent) {
+      mainLetterContentEl.setAttribute('data-raw-content', letterContent);
+      console.log('💾 Stored raw content in data-raw-content attribute');
+    }
+
     if (letterContent && letterContent.trim().length > 0) {
-      console.log('🔍 Running quality analysis...');
+      console.log('🔍 Running quality analysis on raw content...');
       analyzeLetter(letterContent);
     } else {
       console.warn('⚠️ No letter content to analyze in showPreview');
@@ -366,14 +384,22 @@ const LetterQuality = (() => {
       return;
     }
 
-    // Get text content (strips HTML tags)
-    const letterContent = mainLetterContentEl.textContent || mainLetterContentEl.innerText || '';
+    // Get RAW content from data attribute (preserves original line breaks and formatting)
+    // This ensures consistent analysis between initial load and refresh
+    let letterContent = mainLetterContentEl.getAttribute('data-raw-content');
 
+    if (!letterContent || letterContent.trim().length === 0) {
+      console.warn('⚠️ No raw content found in data-raw-content, falling back to textContent');
+      letterContent = mainLetterContentEl.textContent || mainLetterContentEl.innerText || '';
+    }
+
+    console.log('📄 Letter content source:', mainLetterContentEl.getAttribute('data-raw-content') ? 'data-raw-content (ACCURATE)' : 'textContent (FALLBACK)');
     console.log('📄 Letter content length:', letterContent.length);
     console.log('📄 Letter content preview:', letterContent.substring(0, 100) + '...');
+    console.log('📄 Line breaks in content:', (letterContent.match(/\n/g) || []).length);
 
     if (letterContent.trim().length > 0) {
-      console.log('✅ Analyzing letter...');
+      console.log('✅ Analyzing letter with preserved formatting...');
       const result = analyzeLetter(letterContent);
 
       console.log('📊 Analysis result:', result);
