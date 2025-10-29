@@ -703,7 +703,11 @@ const ApiClient = (() => {
    */
   async function getAdminUsers() {
     try {
+      console.log('🔍 API Client: Fetching admin users...');
       const data = await makeRequest(AppConstants.ENDPOINTS.ADMIN_USERS, 'GET');
+      console.log('🔍 API Client: Raw response data:', data);
+      console.log('🔍 API Client: data.users type:', typeof data?.users);
+      console.log('🔍 API Client: data.users is array?', Array.isArray(data?.users));
       // API returns: { status, count, client_id, users: [...] }
       return data;
     } catch (error) {

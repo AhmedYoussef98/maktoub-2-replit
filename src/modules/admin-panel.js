@@ -27,9 +27,15 @@ const AdminPanel = (() => {
 
       const response = await ApiClient.getAdminUsers();
 
+      console.log('📦 Full API response:', response);
+      console.log('📦 Response type:', typeof response);
+      console.log('📦 Response.users:', response?.users);
+      console.log('📦 Response.count:', response?.count);
+
       if (response && response.status === 'success') {
         usersData = response.users || [];
         console.log(`✅ Loaded ${usersData.length} users`);
+        console.log('📋 Users data:', usersData);
 
         renderTable(usersData);
 
@@ -43,7 +49,8 @@ const AdminPanel = (() => {
           notify.success('تم تحميل المستخدمين بنجاح');
         }
       } else {
-        console.warn('⚠️ No users data available');
+        console.warn('⚠️ No users data available or status not success');
+        console.warn('⚠️ Response:', response);
         renderTable([]);
         if (typeof notify !== 'undefined') {
           notify.warning('لا توجد بيانات للمستخدمين');
