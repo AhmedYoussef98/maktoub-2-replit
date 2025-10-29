@@ -120,12 +120,10 @@ function convertToHijri(gregorianDate) {
 function toggleTemplateView(templateType) {
     const documentTemplate = document.getElementById('documentTemplate');
 
-    if (templateType === 'template1') {
-        // Show document template
-        if (documentTemplate) documentTemplate.style.display = 'block';
-    } else {
-        // Hide document template
-        if (documentTemplate) documentTemplate.style.display = 'none';
+    // Always keep document template visible once a letter is generated
+    // The edit section visibility is controlled by create-letter.js
+    if (documentTemplate) {
+        documentTemplate.style.display = 'block';
     }
 }
 
