@@ -83,7 +83,7 @@
 /* ==================== Light Theme ==================== */
 [data-theme="light"] {
   /* Background Colors */
-  --bg-primary: #FFFFFF;
+  --bg-primary: #F3F4F6;
   --bg-secondary: #F9FAFB;
   --bg-tertiary: rgba(249, 250, 251, 0.8);
   --bg-card: #FFFFFF;
