@@ -442,8 +442,10 @@
             // Populate the letter details table
             const letterDetailsBody = document.getElementById('letterDetailsBody');
             if (letterDetailsBody && letter) {
-                const statusClass = getReviewStatusClass(letter.Review_status || letter.reviewStatus);
-                const reviewStatus = letter.Review_status || letter.reviewStatus || '-';
+                const rawStatus = letter.Review_status || letter.reviewStatus || '-';
+                // Map English status to Arabic for display
+                const displayStatus = mapBackendStatusToArabic(rawStatus);
+                const statusClass = getReviewStatusClass(rawStatus);
 
                 letterDetailsBody.innerHTML = `
                     <tr style="border-top: 1px solid var(--border-primary);">
@@ -457,10 +459,10 @@
                                 padding: 4px 12px;
                                 border-radius: 4px;
                                 font-size: 12px;
-                                background: ${getStatusBadgeStyle(reviewStatus).bg};
-                                color: ${getStatusBadgeStyle(reviewStatus).color};
+                                background: ${getStatusBadgeStyle(rawStatus).bg};
+                                color: ${getStatusBadgeStyle(rawStatus).color};
                             ">
-                                ${Utils.escapeHtml(reviewStatus)}
+                                ${Utils.escapeHtml(displayStatus)}
                             </span>
                         </td>
                         <td style="padding: 12px; text-align: right; color: var(--text-primary);">${Utils.escapeHtml(letter.Letter_type || letter.type || 'خطاب جديد')}</td>
@@ -512,23 +514,52 @@
 
         function getReviewStatusClass(status) {
             const statusMap = {
+                // Arabic status
                 'جاهز للإرسال': 'ready',
                 'في الانتظار': 'pending',
                 'يحتاج إلى تحسينات': 'improvements',
-                'مرفوض': 'rejected'
+                'مرفوض': 'rejected',
+                // English status from backend
+                'Approved': 'ready',
+                'Pending': 'pending',
+                'Rejected': 'rejected'
             };
             return statusMap[status] || 'pending';
         }
 
         function getStatusBadgeStyle(status) {
             const styleMap = {
+                // Arabic status
                 'جاهز للإرسال': { bg: 'rgba(34, 197, 94, 0.2)', color: '#4ADE80' },
                 'في الانتظار': { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' },
                 'يحتاج إلى تحسينات': { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' },
                 'مرفوض': { bg: 'rgba(239, 68, 68, 0.2)', color: '#F87171' },
-                'تحسينات': { bg: 'rgba(239, 68, 68, 0.2)', color: '#F87171' }
+                'تحسينات': { bg: 'rgba(239, 68, 68, 0.2)', color: '#F87171' },
+                // English status from backend
+                'Approved': { bg: 'rgba(34, 197, 94, 0.2)', color: '#4ADE80' },
+                'Pending': { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' },
+                'Rejected': { bg: 'rgba(239, 68, 68, 0.2)', color: '#F87171' }
             };
             return styleMap[status] || { bg: 'rgba(234, 179, 8, 0.2)', color: '#FDE047' };
+        }
+
+        // Map English backend status to Arabic for display
+        function mapBackendStatusToArabic(englishStatus) {
+            const statusMap = {
+                'Approved': 'جاهز للإرسال',
+                'Rejected': 'مرفوض',
+                'Pending': 'في الانتظار'
+            };
+
+            // If already Arabic, return as-is
+            if (englishStatus === 'جاهز للإرسال' ||
+                englishStatus === 'مرفوض' ||
+                englishStatus === 'في الانتظار' ||
+                englishStatus === 'يحتاج إلى تحسينات') {
+                return englishStatus;
+            }
+
+            return statusMap[englishStatus] || englishStatus;
         }
 
         function formatDateForDisplay(dateString) {

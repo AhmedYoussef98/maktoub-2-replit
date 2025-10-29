@@ -848,12 +848,58 @@ function displayLetterError() {
     }
 }
 
-// Replace the existing updateReviewStatus function in main.js with this updated version
+/**
+ * Map Arabic review status to English backend values
+ * Backend expects: 'Approved', 'Rejected', 'Pending'
+ * @param {string} arabicStatus - Arabic status from UI
+ * @returns {string} English status for backend API
+ */
+function mapReviewStatusToBackend(arabicStatus) {
+    const statusMap = {
+        'جاهز للإرسال': 'Approved',      // Ready to Send
+        'مرفوض': 'Rejected',              // Rejected
+        'يحتاج إلى تحسينات': 'Pending'    // Needs Improvements
+    };
 
-// Replace the existing updateReviewStatus function in main.js with this updated version
+    const mappedStatus = statusMap[arabicStatus];
+
+    if (!mappedStatus) {
+        console.error('❌ Unknown review status:', arabicStatus);
+        console.error('❌ Available mappings:', Object.keys(statusMap));
+        return 'Pending'; // Default fallback
+    }
+
+    console.log(`📝 Status mapping: "${arabicStatus}" → "${mappedStatus}"`);
+    return mappedStatus;
+}
+
+/**
+ * Map English backend status to Arabic for display
+ * @param {string} englishStatus - English status from backend
+ * @returns {string} Arabic status for display
+ */
+function mapBackendStatusToArabic(englishStatus) {
+    const statusMap = {
+        'Approved': 'جاهز للإرسال',
+        'Rejected': 'مرفوض',
+        'Pending': 'في الانتظار'
+    };
+
+    // If already Arabic, return as-is
+    if (statusMap['Approved'] === englishStatus ||
+        statusMap['Rejected'] === englishStatus ||
+        statusMap['Pending'] === englishStatus ||
+        englishStatus === 'في الانتظار' ||
+        englishStatus === 'يحتاج إلى تحسينات') {
+        return englishStatus;
+    }
+
+    return statusMap[englishStatus] || englishStatus;
+}
 
 async function updateReviewStatus(status) {
     console.log('📝 Updating review status to:', status);
+    console.log('📝 Arabic status from UI:', status);
     
     const reviewerName = document.getElementById('reviewerName')?.value;
     const notes = document.getElementById('reviewNotes')?.value;
@@ -927,7 +973,11 @@ async function updateReviewStatus(status) {
             throw new Error('API function not available');
         }
 
-        const result = await updateSubmissionReview(letterId, status, reviewerName, notes);
+        // Map Arabic status to English backend value
+        const backendStatus = mapReviewStatusToBackend(status);
+        console.log('📤 Sending to backend:', {letterId, backendStatus, reviewerName, notes});
+
+        const result = await updateSubmissionReview(letterId, backendStatus, reviewerName, notes);
 
         if (!result || result.status !== 'success') {
             console.error('❌ Failed to update review status:', result);
