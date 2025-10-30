@@ -907,9 +907,9 @@ async function updateReviewStatus(status) {
     
     if (!reviewerName) {
         if (typeof notify !== 'undefined') {
-            notify.warning('الرجاء إدخال اسم المراجع');
+            notify.warning('الرجاء إدخال ايميل المراجع');
         } else {
-            alert('الرجاء إدخال اسم المراجع');
+            alert('الرجاء إدخال ايميل المراجع');
         }
         return;
     }

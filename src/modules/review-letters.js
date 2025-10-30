@@ -284,7 +284,7 @@ const ReviewLetters = (() => {
         </td>
         <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
         <td>${Utils.escapeHtml(letter.Subject || '-')}</td>
-        <td>${Utils.escapeHtml(letter.reviewer_name || '-')}</td>
+        <td>${Utils.escapeHtml(letter.Reviewer_email || '-')}</td>
         <td>${Utils.escapeHtml(letter.notes || '-')}</td>
         <td>${Utils.escapeHtml(letter.Created_by || '-')}</td>
         <td>
