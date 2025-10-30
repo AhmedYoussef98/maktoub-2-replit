@@ -264,7 +264,8 @@ const ApiClient = (() => {
           ? AppConstants.DEFAULTS.RECIPIENT_NAME
           : formData.get('recipient'),
         is_first: formData.get('is_first') === 'true',
-        recipient_job_title: formData.get('recipient_job_title') || getFinalRecipientTitle(formData),
+        recipient_title: getFinalRecipientTitle(formData),
+        recipient_job_title: formData.get('recipient_job_title'),
       };
 
       // Add optional fields
@@ -273,9 +274,9 @@ const ApiClient = (() => {
         payload.organization_name = organizationName;
       }
 
-      const memberName = formData.get('member_name');
-      if (!Utils.isEmpty(memberName)) {
-        payload.member_name = memberName;
+      const memberEmail = formData.get('member_name');
+      if (!Utils.isEmpty(memberEmail)) {
+        payload.member_email = memberEmail;
       }
 
       // Handle previous letter for follow-ups
