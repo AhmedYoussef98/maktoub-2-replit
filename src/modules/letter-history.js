@@ -53,6 +53,39 @@ const LetterHistory = (() => {
   ];
 
   /**
+   * Convert Google Drive view URL to download URL
+   * @param {string} url - Google Drive URL
+   * @returns {string} Download URL or original URL if conversion fails
+   */
+  function convertDriveUrlToDownload(url) {
+    if (!url || typeof url !== 'string') {
+      return '';
+    }
+
+    // Extract file ID from various Google Drive URL formats
+    const patterns = [
+      /\/file\/d\/([a-zA-Z0-9-_]+)/,
+      /open\?id=([a-zA-Z0-9-_]+)/,
+      /id=([a-zA-Z0-9-_]+)/
+    ];
+
+    let fileId = null;
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        fileId = match[1];
+        break;
+      }
+    }
+
+    if (fileId) {
+      return `https://drive.google.com/uc?export=download&id=${fileId}`;
+    }
+
+    return url; // Return original if we can't extract file ID
+  }
+
+  /**
    * Initialize the letter history module
    */
   function init() {
@@ -333,11 +366,28 @@ const LetterHistory = (() => {
                 <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <button class="action-btn download" onclick="LetterHistory.downloadLetter('${letter.ID}')" title="تحميل">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10M17.5 13.9524C18.4583 13.2953 19.1667 12.2142 19.1667 11C19.1667 9.15906 17.6743 7.66668 15.8334 7.66668C15.6061 7.66668 15.3834 7.68759 15.1676 7.72754C14.5867 5.39198 12.5469 3.66668 10.0834 3.66668C7.13781 3.66668 4.75002 6.05447 4.75002 9.00001C4.75002 9.60569 4.84314 10.1896 5.01592 10.738C3.36225 11.2208 2.16669 12.7391 2.16669 14.5C2.16669 16.6591 3.92395 18.4167 6.08335 18.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+            <div class="download-btn-container">
+              <button class="action-btn download" onclick="LetterHistory.toggleDownloadOptions(event, '${letter.ID}')" title="تحميل">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10M17.5 13.9524C18.4583 13.2953 19.1667 12.2142 19.1667 11C19.1667 9.15906 17.6743 7.66668 15.8334 7.66668C15.6061 7.66668 15.3834 7.68759 15.1676 7.72754C14.5867 5.39198 12.5469 3.66668 10.0834 3.66668C7.13781 3.66668 4.75002 6.05447 4.75002 9.00001C4.75002 9.60569 4.84314 10.1896 5.01592 10.738C3.36225 11.2208 2.16669 12.7391 2.16669 14.5C2.16669 16.6591 3.92395 18.4167 6.08335 18.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="download-dropdown" data-letter-id="${letter.ID}">
+                <button class="dropdown-item" onclick="LetterHistory.viewLetterPDF('${letter.ID}'); event.stopPropagation();">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.66669 10C1.66669 10 4.16669 4.16667 10 4.16667C15.8334 4.16667 18.3334 10 18.3334 10C18.3334 10 15.8334 15.8333 10 15.8333C4.16669 15.8333 1.66669 10 1.66669 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>عرض PDF</span>
+                </button>
+                <button class="dropdown-item" onclick="LetterHistory.downloadLetterPDF('${letter.ID}'); event.stopPropagation();">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10M17.5 13.9524C18.4583 13.2953 19.1667 12.2142 19.1667 11C19.1667 9.15906 17.6743 7.66668 15.8334 7.66668C15.6061 7.66668 15.3834 7.68759 15.1676 7.72754C14.5867 5.39198 12.5469 3.66668 10.0834 3.66668C7.13781 3.66668 4.75002 6.05447 4.75002 9.00001C4.75002 9.60569 4.84314 10.1896 5.01592 10.738C3.36225 11.2208 2.16669 12.7391 2.16669 14.5C2.16669 16.6591 3.92395 18.4167 6.08335 18.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>تحميل PDF</span>
+                </button>
+              </div>
+            </div>
             <button class="action-btn delete" onclick="LetterHistory.deleteLetter('${letter.ID}')" title="حذف">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.5 5H4.16667M4.16667 5H17.5M4.16667 5V16.6667C4.16667 17.1087 4.34226 17.5326 4.65482 17.8452C4.96738 18.1577 5.39131 18.3333 5.83333 18.3333H14.1667C14.6087 18.3333 15.0326 18.1577 15.3452 17.8452C15.6577 17.5326 15.8333 17.1087 15.8333 16.6667V5H4.16667ZM6.66667 5V3.33333C6.66667 2.89131 6.84226 2.46738 7.15482 2.15482C7.46738 1.84226 7.89131 1.66667 8.33333 1.66667H11.6667C12.1087 1.66667 12.5326 1.84226 12.8452 2.15482C13.1577 2.46738 13.3333 2.89131 13.3333 3.33333V5M8.33333 9.16667V14.1667M11.6667 9.16667V14.1667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -456,40 +506,111 @@ const LetterHistory = (() => {
   }
 
   /**
-   * Download letter
+   * Show download options dropdown
    */
-  async function downloadLetter(id) {
+  function toggleDownloadOptions(event, id) {
+    event.stopPropagation();
+
+    // Close all other dropdowns
+    document.querySelectorAll('.download-dropdown').forEach(dropdown => {
+      if (dropdown.dataset.letterId !== id) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    // Toggle this dropdown
+    const dropdown = event.currentTarget.querySelector('.download-dropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('active');
+    }
+  }
+
+  /**
+   * View letter PDF (opens in new tab)
+   */
+  async function viewLetterPDF(id) {
     try {
       const response = await ApiClient.getSubmission(id);
       if (response && response.status === 'success' && response.data) {
         const letter = response.data;
-        // Create a downloadable file
-        const content = `
-الرقم المرجعي: ${letter.reference_number || '-'}
-التاريخ: ${formatDate(letter.created_at)}
-نوع الخطاب: ${letter.letter_type || '-'}
-المستلم: ${letter.recipient || '-'}
-الموضوع: ${letter.subject || '-'}
 
-${letter.content || ''}
-        `.trim();
-
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `letter-${letter.reference_number || id}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // Check if Final_letter_url exists
+        if (letter.Final_letter_url) {
+          console.log('📄 Opening PDF:', letter.Final_letter_url);
+          window.open(letter.Final_letter_url, '_blank');
+        } else {
+          console.warn('⚠️ No Final_letter_url found for letter:', id);
+          alert('لا يوجد رابط PDF لهذا الخطاب');
+        }
       } else {
         alert('حدث خطأ في تحميل الخطاب');
       }
     } catch (error) {
-      console.error('Failed to download letter:', error);
+      console.error('Failed to view letter PDF:', error);
+      alert('حدث خطأ في فتح الخطاب');
+    }
+  }
+
+  /**
+   * Download letter PDF
+   */
+  async function downloadLetterPDF(id) {
+    try {
+      const response = await ApiClient.getSubmission(id);
+      if (response && response.status === 'success' && response.data) {
+        const letter = response.data;
+
+        // Check if Final_letter_url exists
+        if (letter.Final_letter_url) {
+          console.log('📥 Downloading PDF:', letter.Final_letter_url);
+          const downloadUrl = convertDriveUrlToDownload(letter.Final_letter_url);
+          window.open(downloadUrl, '_blank');
+        } else {
+          // Fallback: Create text file if no PDF URL
+          console.warn('⚠️ No Final_letter_url, falling back to text file');
+          downloadLetterAsText(letter, id);
+        }
+      } else {
+        alert('حدث خطأ في تحميل الخطاب');
+      }
+    } catch (error) {
+      console.error('Failed to download letter PDF:', error);
       alert('حدث خطأ في تحميل الخطاب');
     }
+  }
+
+  /**
+   * Download letter as text file (fallback)
+   */
+  function downloadLetterAsText(letter, id) {
+    // Backend returns capital case field names
+    const content = `
+الرقم المرجعي: ${letter.ID || '-'}
+التاريخ: ${formatDate(letter.Timestamp)}
+نوع الخطاب: ${letter.Letter_type || '-'}
+المستلم: ${letter.Recipient_name || '-'}
+الموضوع: ${letter.Subject || '-'}
+
+${letter.Letter_content || letter.content || ''}
+    `.trim();
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `letter-${letter.ID || id}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Legacy download function (kept for backward compatibility)
+   */
+  async function downloadLetter(id) {
+    // Redirect to new download PDF function
+    await downloadLetterPDF(id);
   }
 
   /**
@@ -567,21 +688,23 @@ ${letter.content || ''}
   async function exportAll() {
     try {
       // Get all letters (max pages)
-      const response = await ApiClient.getSubmissions(1, 1000, 'created_at', 'desc');
+      const response = await ApiClient.getSubmissions(1, 1000, 'Timestamp', 'desc');
       if (response && response.status === 'success' && response.data) {
         const letters = response.data;
         console.log('📤 Exporting letters:', letters);
 
-        // Create CSV content
-        const headers = ['الرقم المرجعي', 'التاريخ', 'نوع الخطاب', 'حالة المراجعة', 'المستلم', 'الموضوع', 'الكاتب'];
+        // Create CSV content with Final_letter_url column
+        // Backend returns capital case field names: ID, Timestamp, Letter_type, Review_status, etc.
+        const headers = ['الرقم المرجعي', 'التاريخ', 'نوع الخطاب', 'حالة المراجعة', 'المستلم', 'الموضوع', 'الكاتب', 'رابط PDF'];
         const rows = letters.map(letter => [
-          letter.reference_number || '-',
-          formatDate(letter.created_at),
-          letter.letter_type || '-',
-          letter.review_status || '-',
-          letter.recipient || '-',
-          letter.subject || '-',
-          letter.writer || '-'
+          letter.ID || '-',
+          formatDate(letter.Timestamp),
+          letter.Letter_type || '-',
+          letter.Review_status || '-',
+          letter.Recipient_name || '-',
+          letter.Subject || '-',
+          letter.Created_by || '-',
+          letter.Final_letter_url || '-'
         ]);
 
         const csvContent = [headers, ...rows]
@@ -598,6 +721,8 @@ ${letter.content || ''}
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        console.log(`✅ Exported ${letters.length} letters with PDF links`);
       } else {
         alert('لا توجد خطابات للتصدير');
       }
@@ -660,6 +785,15 @@ ${letter.content || ''}
     // Close dropdowns when clicking outside
     document.addEventListener('click', closeAllDropdowns);
 
+    // Close download dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.download-btn-container')) {
+        document.querySelectorAll('.download-dropdown').forEach(dropdown => {
+          dropdown.classList.remove('active');
+        });
+      }
+    });
+
     console.log('✅ Event listeners set up');
   }
 
@@ -669,6 +803,9 @@ ${letter.content || ''}
     goToPage,
     viewLetter,
     downloadLetter,
+    viewLetterPDF,
+    downloadLetterPDF,
+    toggleDownloadOptions,
     deleteLetter,
     applyFilters
   };
