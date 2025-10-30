@@ -45,6 +45,12 @@
   --badge-draft: #A0ECDC;
   --badge-rejected: #F87171;
 
+  /* Role Badge Colors */
+  --badge-purple-bg: rgba(168, 85, 247, 0.2);
+  --badge-purple-text: #C084FC;
+  --badge-blue-bg: rgba(96, 165, 250, 0.2);
+  --badge-blue-text: #93C5FD;
+
   /* Shadow Colors */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
@@ -120,6 +126,12 @@
   --badge-review: #3B82F6;
   --badge-draft: #6B7280;
   --badge-rejected: #EF4444;
+
+  /* Role Badge Colors */
+  --badge-purple-bg: rgba(139, 92, 246, 0.15);
+  --badge-purple-text: #7C3AED;
+  --badge-blue-bg: rgba(59, 130, 246, 0.15);
+  --badge-blue-text: #3B82F6;
 
   /* Shadow Colors */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
