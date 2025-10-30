@@ -289,16 +289,11 @@ const ReviewLetters = (() => {
         <td>${Utils.escapeHtml(letter.Created_by || '-')}</td>
         <td>
           <div class="action-buttons">
-            <button class="action-btn view" onclick="ReviewLetters.viewLetter('${letter.ID}')" title="عرض">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.66669 10C1.66669 10 4.16669 4.16667 10 4.16667C15.8334 4.16667 18.3334 10 18.3334 10C18.3334 10 15.8334 15.8333 10 15.8333C4.16669 15.8333 1.66669 10 1.66669 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <button class="action-btn review" onclick="ReviewLetters.startReview('${letter.ID}')" title="بدء المراجعة">
+            <button class="action-btn review review-with-text" onclick="ReviewLetters.startReview('${letter.ID}')" title="بدء المراجعة">
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V17C5 17.5304 5.21071 18.0391 5.58579 18.4142C5.96086 18.7893 6.46957 19 7 19H17C17.5304 19 18.0391 18.7893 18.4142 18.4142C18.7893 18.0391 19 17.5304 19 17V15M14 5L16 7M17 4C17.3978 3.60217 17.9467 3.37868 18.5178 3.37868C19.0889 3.37868 19.6378 3.60217 20.0355 4C20.4333 4.39782 20.6568 4.94669 20.6568 5.51777C20.6568 6.08885 20.4333 6.63772 20.0355 7.03554L8.5 18.5H6V16L17 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
+              <span>بدء المراجعة</span>
             </button>
           </div>
         </td>

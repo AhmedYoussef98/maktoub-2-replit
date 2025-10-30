@@ -368,6 +368,27 @@ body {
     background: rgba(30, 168, 150, 0.15);
 }
 
+/* Review Button with Text */
+.action-btn.review-with-text {
+    width: auto;
+    padding: 8px 16px;
+    gap: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn.review-with-text span {
+    font-family: 'Janna LT', sans-serif;
+    font-size: 14px;
+    color: var(--Maktoub-Main);
+    white-space: nowrap;
+}
+
+.action-btn.review-with-text:hover span {
+    color: var(--Maktoub-Main);
+}
+
 /* Pagination */
 .pagination-container {
     display: flex;
