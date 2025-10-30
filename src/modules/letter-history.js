@@ -121,6 +121,7 @@ const LetterHistory = (() => {
     console.log('📊 Loading statistics...');
 
     try {
+      // Get statistics from API
       const response = await ApiClient.getSubmissionsStats();
 
       console.log('📊 Raw statistics response:', response);
@@ -133,26 +134,25 @@ const LetterHistory = (() => {
         console.log('📊 Stats object:', stats);
         console.log('📊 Total submissions:', stats.total_submissions);
         console.log('📊 By review status:', stats.by_review_status);
-        console.log('📊 This month count:', stats.this_month_count);
 
-        // Update stats cards
+        // Update stats cards from API
         const totalLetters = stats.total_submissions || 0;
         const pendingReview = (stats.by_review_status && stats.by_review_status['Pending']) ||
                              (stats.by_review_status && stats.by_review_status['في الانتظار']) || 0;
         const readyToSend = (stats.by_review_status && stats.by_review_status['Approved']) ||
                            (stats.by_review_status && stats.by_review_status['جاهز للإرسال']) || 0;
-        const thisMonth = stats.this_month_count || 0;
+
+        document.getElementById('total-letters').textContent = totalLetters;
+        document.getElementById('pending-review').textContent = pendingReview;
+        document.getElementById('ready-to-send').textContent = readyToSend;
+
+        // Calculate THIS MONTH count from actual letter dates (more accurate)
+        await calculateThisMonthCount();
 
         console.log('📊 Setting statistics:');
         console.log('  - Total letters:', totalLetters);
         console.log('  - Pending review:', pendingReview);
         console.log('  - Ready to send:', readyToSend);
-        console.log('  - This month:', thisMonth);
-
-        document.getElementById('total-letters').textContent = totalLetters;
-        document.getElementById('pending-review').textContent = pendingReview;
-        document.getElementById('ready-to-send').textContent = readyToSend;
-        document.getElementById('this-month').textContent = thisMonth;
 
         console.log('✅ Statistics updated successfully');
       } else {
@@ -164,6 +164,71 @@ const LetterHistory = (() => {
       console.error('❌ Failed to load stats:', error);
       console.error('Error details:', error.message, error.stack);
       setDefaultStats();
+    }
+  }
+
+  /**
+   * Calculate and display count of letters created this month from actual dates
+   */
+  async function calculateThisMonthCount() {
+    try {
+      console.log('📅 Calculating this month count from letter dates...');
+
+      // Get current month and year
+      const now = new Date();
+      const currentMonth = now.getMonth(); // 0-11
+      const currentYear = now.getFullYear();
+
+      console.log('📅 Current month:', currentMonth, 'Current year:', currentYear);
+
+      // Fetch all submissions (with large page size to get all letters)
+      const response = await ApiClient.getSubmissions(1, 1000, 'Timestamp', 'desc');
+
+      if (response && response.status === 'success' && response.data) {
+        const letters = response.data;
+
+        console.log('📅 Total letters fetched:', letters.length);
+
+        // Count letters from this month by checking Timestamp field
+        const thisMonthLetters = letters.filter(letter => {
+          if (!letter.Timestamp) {
+            return false;
+          }
+
+          // Parse the timestamp - format: "2025-10-29 12:04:16" or ISO format
+          const letterDate = new Date(letter.Timestamp);
+
+          // Check if valid date
+          if (isNaN(letterDate.getTime())) {
+            console.warn('⚠️ Invalid date for letter:', letter.ID, letter.Timestamp);
+            return false;
+          }
+
+          const letterMonth = letterDate.getMonth();
+          const letterYear = letterDate.getFullYear();
+
+          return letterMonth === currentMonth && letterYear === currentYear;
+        });
+
+        const thisMonthCount = thisMonthLetters.length;
+
+        console.log('📅 Letters this month:', thisMonthCount);
+        console.log('📅 Sample dates:', thisMonthLetters.slice(0, 3).map(l => ({
+          id: l.ID,
+          timestamp: l.Timestamp
+        })));
+
+        // Update the card
+        document.getElementById('this-month').textContent = thisMonthCount;
+
+        console.log('✅ This month count updated:', thisMonthCount);
+      } else {
+        console.warn('⚠️ Could not fetch letters for this month calculation');
+        document.getElementById('this-month').textContent = '0';
+      }
+    } catch (error) {
+      console.error('❌ Failed to calculate this month count:', error);
+      document.getElementById('this-month').textContent = '0';
     }
   }
 
