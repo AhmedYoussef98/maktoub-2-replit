@@ -1384,25 +1384,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 setupReviewForm();
             }
             break;
-            
+
         case 'create-letter.html':
-            console.log('✏️ Initializing create letter page...');
-            // Initialize form validation if form exists
-            const letterForm = document.getElementById('letterForm');
-            if (letterForm) {
-                letterForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const formData = new FormData(this);
-                    const data = Object.fromEntries(formData.entries());
-                    
-                    if (validateFormWithNotifications(data)) {
-                        console.log('✅ Form validated, proceeding...');
-                        // Continue with form submission
-                    }
-                });
-            }
+            console.log('✏️ Create letter page - initialized by create-letter.js module');
+            // Note: Form handling is done by create-letter.js module to avoid duplicate event listeners
             break;
-            
+
         default:
             console.log('🏠 Initializing default page...');
             break;
