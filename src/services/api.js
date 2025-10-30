@@ -73,6 +73,7 @@ const ApiClient = (() => {
       'user/admin/users/create': 'admin-create-user',
       'user/admin/users/update': 'admin-update-user',
       'user/admin/users/delete': 'admin-delete-user',
+      'user/users': 'users',
       'letter/delete': 'delete-letter',
     };
 
@@ -828,6 +829,23 @@ const ApiClient = (() => {
   }
 
   /**
+   * Get users (for contact officer dropdown)
+   * @returns {Promise<Object|null>} Users data with emails or null on error
+   */
+  async function getUsers() {
+    try {
+      console.log('🔍 API Client: Fetching users...');
+      const data = await makeRequest(AppConstants.ENDPOINTS.USER_USERS, 'GET');
+      console.log('🔍 API Client: Users response:', data);
+      // API returns: { status, client_id, count, emails: [...] }
+      return data;
+    } catch (error) {
+      console.error('Failed to get users:', error);
+      return null;
+    }
+  }
+
+  /**
    * Generate unique ID for letters
    * @returns {string} Unique letter ID
    */
@@ -937,6 +955,7 @@ const ApiClient = (() => {
     createAdminUser,
     updateAdminUser,
     deleteAdminUser,
+    getUsers,
     generateUniqueId,
   };
 })();

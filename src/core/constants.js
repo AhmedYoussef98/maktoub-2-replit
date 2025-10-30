@@ -92,6 +92,7 @@ const AppConstants = (() => {
     USER_CREATE: 'user/create-user',
     USER_CLIENT: 'user/client',
     USER_CLIENTS: 'user/clients',
+    USER_USERS: 'user/users',
 
     // Letter endpoints
     LETTER_GENERATE: 'letter/generate',

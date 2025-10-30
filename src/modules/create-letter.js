@@ -12,6 +12,64 @@ const CreateLetterPage = (() => {
   // ==================== Form Initialization ====================
 
   /**
+   * Populate contact officer dropdown with emails from API
+   */
+  async function populateContactOfficerDropdown() {
+    const dropdown = document.getElementById('letterStyle');
+    if (!dropdown) {
+      console.warn('⚠️ Contact officer dropdown not found');
+      return;
+    }
+
+    try {
+      console.log('📧 Fetching contact officer emails...');
+
+      // Call API to get users
+      if (typeof ApiClient === 'undefined' || !ApiClient.getUsers) {
+        console.error('❌ ApiClient.getUsers not available');
+        return;
+      }
+
+      const result = await ApiClient.getUsers();
+
+      if (!result || result.status !== 'success') {
+        console.error('❌ Failed to fetch users:', result);
+        return;
+      }
+
+      // Extract emails array from response
+      const emails = result.emails || [];
+
+      if (!Array.isArray(emails) || emails.length === 0) {
+        console.warn('⚠️ No emails found in response');
+        return;
+      }
+
+      console.log(`✅ Found ${emails.length} contact officer emails`);
+
+      // Clear existing options except the first one (placeholder)
+      const firstOption = dropdown.querySelector('option');
+      dropdown.innerHTML = '';
+      if (firstOption) {
+        dropdown.appendChild(firstOption);
+      }
+
+      // Add email options
+      emails.forEach(email => {
+        const option = document.createElement('option');
+        option.value = email;
+        option.textContent = email;
+        dropdown.appendChild(option);
+      });
+
+      console.log('✅ Contact officer dropdown populated successfully');
+
+    } catch (error) {
+      console.error('❌ Error populating contact officer dropdown:', error);
+    }
+  }
+
+  /**
    * Initialize form event listeners
    */
   function initForm() {
@@ -83,6 +141,9 @@ const CreateLetterPage = (() => {
     if (saveButton) {
       saveButton.addEventListener('click', handleLetterSave);
     }
+
+    // Populate contact officer dropdown
+    populateContactOfficerDropdown();
 
     console.log('✅ Create Letter form initialized');
   }
