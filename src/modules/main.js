@@ -899,21 +899,15 @@ function mapBackendStatusToArabic(englishStatus) {
 async function updateReviewStatus(status) {
     console.log('📝 Updating review status to:', status);
     console.log('📝 Arabic status from UI:', status);
-    
+
     const reviewerName = document.getElementById('reviewerName')?.value;
     const notes = document.getElementById('reviewNotes')?.value;
     const letterId = document.getElementById('letterSelect')?.value;
     const letterContent = document.getElementById('letterContentReview')?.value;
-    
-    if (!reviewerName) {
-        if (typeof notify !== 'undefined') {
-            notify.warning('الرجاء إدخال ايميل المراجع');
-        } else {
-            alert('الرجاء إدخال ايميل المراجع');
-        }
-        return;
-    }
-    
+
+    // Reviewer email is now automatically fetched from backend
+    console.log('📧 Reviewer email (auto-fetched):', reviewerName);
+
     if (!letterId) {
         if (typeof notify !== 'undefined') {
             notify.warning('الرجاء اختيار خطاب للمراجعة');
