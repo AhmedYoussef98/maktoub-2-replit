@@ -111,6 +111,9 @@ app.all('/api/proxy', async (req, res) => {
                 case 'admin-users':
                     targetUrl = `${API_BASE_URL}/api/v1/user/admin/users`;
                     break;
+                case 'users':
+                    targetUrl = `${API_BASE_URL}/api/v1/user/users`;
+                    break;
                 case 'letter-by-id':
                     targetUrl = `${API_BASE_URL}/api/v1/letter/${letter_id}`;
                     break;
