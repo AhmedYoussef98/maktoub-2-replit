@@ -601,6 +601,7 @@ const LetterHistory = (() => {
    */
   function toggleDownloadOptions(event, id) {
     event.stopPropagation();
+    console.log('🔽 Toggle download options for letter:', id);
 
     // Close all other dropdowns
     document.querySelectorAll('.download-dropdown').forEach(dropdown => {
@@ -609,10 +610,13 @@ const LetterHistory = (() => {
       }
     });
 
-    // Toggle this dropdown
-    const dropdown = event.currentTarget.querySelector('.download-dropdown');
+    // Toggle this dropdown (dropdown is sibling of button, inside parent container)
+    const dropdown = event.currentTarget.parentElement.querySelector('.download-dropdown');
     if (dropdown) {
+      console.log('✅ Dropdown found, toggling visibility');
       dropdown.classList.toggle('active');
+    } else {
+      console.error('❌ Dropdown not found!');
     }
   }
 
@@ -620,6 +624,13 @@ const LetterHistory = (() => {
    * View letter PDF (opens in new tab)
    */
   async function viewLetterPDF(id) {
+    console.log('📄 View PDF button clicked for letter ID:', id);
+
+    // Close the dropdown
+    document.querySelectorAll('.download-dropdown').forEach(dropdown => {
+      dropdown.classList.remove('active');
+    });
+
     try {
       const response = await ApiClient.getSubmission(id);
       if (response && response.status === 'success' && response.data) {
@@ -646,17 +657,28 @@ const LetterHistory = (() => {
    * Download letter PDF
    */
   async function downloadLetterPDF(id) {
+    console.log('📥 Download PDF button clicked for letter ID:', id);
+
+    // Close the dropdown
+    document.querySelectorAll('.download-dropdown').forEach(dropdown => {
+      dropdown.classList.remove('active');
+    });
+
     try {
       const response = await ApiClient.getSubmission(id);
+      console.log('📊 API Response:', response);
+
       if (response && response.status === 'success' && response.data) {
         const letter = response.data;
 
         // Check if Final_letter_url exists
         if (letter.Final_letter_url) {
-          console.log('📥 Downloading PDF:', letter.Final_letter_url);
+          console.log('✅ Final_letter_url found:', letter.Final_letter_url);
+          console.log('🎨 Showing export notification modal...');
 
           // Show themed notification modal before opening PDF
           showExportNotificationModal(() => {
+            console.log('✅ User confirmed - opening PDF...');
             const downloadUrl = convertDriveUrlToDownload(letter.Final_letter_url);
             window.open(downloadUrl, '_blank');
           });
@@ -666,10 +688,11 @@ const LetterHistory = (() => {
           downloadLetterAsText(letter, id);
         }
       } else {
+        console.error('❌ Invalid API response');
         alert('حدث خطأ في تحميل الخطاب');
       }
     } catch (error) {
-      console.error('Failed to download letter PDF:', error);
+      console.error('❌ Failed to download letter PDF:', error);
       alert('حدث خطأ في تحميل الخطاب');
     }
   }
@@ -678,10 +701,14 @@ const LetterHistory = (() => {
    * Show export notification modal (theme-aware)
    */
   function showExportNotificationModal(onConfirm) {
+    console.log('🎨 Creating export notification modal...');
+
     // Create modal overlay
     const overlay = document.createElement('div');
     overlay.className = 'export-notification-overlay';
-    overlay.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') || 'light');
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    overlay.setAttribute('data-theme', theme);
+    console.log('🎨 Modal theme:', theme);
 
     // Create modal
     const modal = document.createElement('div');
@@ -713,6 +740,7 @@ const LetterHistory = (() => {
 
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+    console.log('✅ Modal added to DOM');
 
     // Prevent body scroll
     document.body.style.overflow = 'hidden';
@@ -720,30 +748,45 @@ const LetterHistory = (() => {
     // Add show class after a brief delay for animation
     setTimeout(() => {
       overlay.classList.add('show');
+      console.log('✅ Modal animation triggered (show class added)');
     }, 10);
 
     // Handle buttons
     const confirmBtn = document.getElementById('exportConfirmBtn');
     const cancelBtn = document.getElementById('exportCancelBtn');
 
+    if (!confirmBtn || !cancelBtn) {
+      console.error('❌ Modal buttons not found!', { confirmBtn, cancelBtn });
+      return;
+    }
+
+    console.log('✅ Modal buttons found and event listeners attached');
+
     const closeModal = () => {
+      console.log('🚪 Closing modal...');
       overlay.classList.remove('show');
       setTimeout(() => {
         document.body.removeChild(overlay);
         document.body.style.overflow = '';
+        console.log('✅ Modal removed from DOM');
       }, 300);
     };
 
     confirmBtn.addEventListener('click', () => {
+      console.log('✅ Confirm button clicked');
       closeModal();
       if (onConfirm) onConfirm();
     });
 
-    cancelBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', () => {
+      console.log('❌ Cancel button clicked');
+      closeModal();
+    });
 
     // Close on overlay click
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
+        console.log('🚪 Overlay clicked - closing modal');
         closeModal();
       }
     });
