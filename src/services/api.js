@@ -646,13 +646,28 @@ const ApiClient = (() => {
    * @returns {Promise<Object|null>} Statistics data or null on error
    */
   async function getSubmissionsStats() {
+    toggleLoader(true);
+
     try {
+      console.log('🔍 API Client: Fetching submissions statistics...');
       const data = await makeRequest(AppConstants.ENDPOINTS.SUBMISSIONS_STATS, 'GET');
-      // API returns: { status, data: { total_submissions, by_review_status, by_letter_type } }
+
+      console.log('🔍 API Client: Stats response received:', data);
+      console.log('🔍 API Client: Stats data structure:', JSON.stringify(data, null, 2));
+
+      // API returns: { status, data: { total_submissions, by_review_status, by_letter_type, this_month_count } }
       return data;
     } catch (error) {
-      console.error('Failed to get submissions stats:', error);
+      console.error('❌ Failed to get submissions stats:', error);
+      console.error('Error details:', error.message, error.stack);
+
+      if (typeof notify !== 'undefined') {
+        notify.error('فشل في تحميل الإحصائيات');
+      }
+
       return null;
+    } finally {
+      toggleLoader(false);
     }
   }
 

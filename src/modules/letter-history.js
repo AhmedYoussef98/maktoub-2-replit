@@ -118,25 +118,51 @@ const LetterHistory = (() => {
    * Load and display statistics
    */
   async function loadStats() {
+    console.log('📊 Loading statistics...');
+
     try {
       const response = await ApiClient.getSubmissionsStats();
+
+      console.log('📊 Raw statistics response:', response);
+      console.log('📊 Response status:', response?.status);
+      console.log('📊 Response data:', response?.data);
 
       if (response && response.status === 'success' && response.data) {
         const stats = response.data;
 
+        console.log('📊 Stats object:', stats);
+        console.log('📊 Total submissions:', stats.total_submissions);
+        console.log('📊 By review status:', stats.by_review_status);
+        console.log('📊 This month count:', stats.this_month_count);
+
         // Update stats cards
-        document.getElementById('total-letters').textContent = stats.total_submissions || 0;
-        document.getElementById('pending-review').textContent =
-          (stats.by_review_status && stats.by_review_status['في الانتظار']) || 0;
-        document.getElementById('ready-to-send').textContent =
-          (stats.by_review_status && stats.by_review_status['جاهز للإرسال']) || 0;
-        document.getElementById('this-month').textContent = stats.this_month_count || 0;
+        const totalLetters = stats.total_submissions || 0;
+        const pendingReview = (stats.by_review_status && stats.by_review_status['Pending']) ||
+                             (stats.by_review_status && stats.by_review_status['في الانتظار']) || 0;
+        const readyToSend = (stats.by_review_status && stats.by_review_status['Approved']) ||
+                           (stats.by_review_status && stats.by_review_status['جاهز للإرسال']) || 0;
+        const thisMonth = stats.this_month_count || 0;
+
+        console.log('📊 Setting statistics:');
+        console.log('  - Total letters:', totalLetters);
+        console.log('  - Pending review:', pendingReview);
+        console.log('  - Ready to send:', readyToSend);
+        console.log('  - This month:', thisMonth);
+
+        document.getElementById('total-letters').textContent = totalLetters;
+        document.getElementById('pending-review').textContent = pendingReview;
+        document.getElementById('ready-to-send').textContent = readyToSend;
+        document.getElementById('this-month').textContent = thisMonth;
+
+        console.log('✅ Statistics updated successfully');
       } else {
-        console.warn('⚠️ No stats data available');
+        console.warn('⚠️ No stats data available or invalid response structure');
+        console.warn('Response:', response);
         setDefaultStats();
       }
     } catch (error) {
       console.error('❌ Failed to load stats:', error);
+      console.error('Error details:', error.message, error.stack);
       setDefaultStats();
     }
   }
