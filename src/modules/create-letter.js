@@ -431,13 +431,19 @@ const CreateLetterPage = (() => {
         currentEditSession = null;
       }
 
-      // Show success message without redirect
+      // Show success message and redirect
       if (typeof notify !== 'undefined') {
         notify.success('تم حفظ الخطاب بنجاح! قد يستغرق ظهوره في لوحة التحكم بضع دقائق.');
       }
 
       // Reset button state
       setButtonLoading(saveButton, false, '', 'حفظ ومتابعة');
+
+      // Redirect to letter history after a brief delay
+      setTimeout(() => {
+        console.log('🔄 Redirecting to letter-history page...');
+        window.location.href = 'letter-history.html';
+      }, 2000); // Wait 2 seconds to show the success message
 
     } catch (error) {
       console.error('❌ Error in letter saving:', error);

@@ -493,12 +493,14 @@
                 }
             }
 
-            // Store reviewer email in hidden field (fetched from backend)
+            // Store reviewer email in hidden field (from logged-in user)
             const reviewerNameField = document.getElementById('reviewerName');
             if (reviewerNameField) {
-                const reviewerEmail = letter.Reviewer_email || letter.reviewer_name || letter.reviewerName || '';
+                // Get the current logged-in user's email
+                const currentUser = AuthService.getCurrentUser();
+                const reviewerEmail = currentUser?.email || '';
                 reviewerNameField.value = reviewerEmail;
-                console.log('✅ [review-letter.html] Reviewer email stored:', reviewerEmail);
+                console.log('✅ [review-letter.html] Reviewer email (from logged-in user):', reviewerEmail);
             }
 
             // Populate the review notes field

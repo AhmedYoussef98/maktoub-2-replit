@@ -1009,6 +1009,12 @@ async function updateReviewStatus(status) {
 
         console.log('✅ Review submission completed successfully');
 
+        // Redirect to review-letters page after successful review
+        setTimeout(() => {
+            console.log('🔄 Redirecting to review-letters page...');
+            window.location.href = 'review-letters.html';
+        }, 2000); // Wait 2 seconds to show the success message
+
     } catch (error) {
         console.error('Error updating review status:', error);
         
