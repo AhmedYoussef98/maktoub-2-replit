@@ -654,8 +654,12 @@ const LetterHistory = (() => {
         // Check if Final_letter_url exists
         if (letter.Final_letter_url) {
           console.log('📥 Downloading PDF:', letter.Final_letter_url);
-          const downloadUrl = convertDriveUrlToDownload(letter.Final_letter_url);
-          window.open(downloadUrl, '_blank');
+
+          // Show themed notification modal before opening PDF
+          showExportNotificationModal(() => {
+            const downloadUrl = convertDriveUrlToDownload(letter.Final_letter_url);
+            window.open(downloadUrl, '_blank');
+          });
         } else {
           // Fallback: Create text file if no PDF URL
           console.warn('⚠️ No Final_letter_url, falling back to text file');
@@ -668,6 +672,81 @@ const LetterHistory = (() => {
       console.error('Failed to download letter PDF:', error);
       alert('حدث خطأ في تحميل الخطاب');
     }
+  }
+
+  /**
+   * Show export notification modal (theme-aware)
+   */
+  function showExportNotificationModal(onConfirm) {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'export-notification-overlay';
+    overlay.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') || 'light');
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'export-notification-modal';
+
+    modal.innerHTML = `
+      <div class="export-notification-content">
+        <div class="export-notification-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="export-notification-title">جاري فتح الخطاب</h3>
+        <p class="export-notification-message">سيتم فتح ملف PDF الخاص بالخطاب في نافذة جديدة</p>
+        <div class="export-notification-buttons">
+          <button class="export-notification-btn export-notification-btn-cancel" id="exportCancelBtn">
+            إلغاء
+          </button>
+          <button class="export-notification-btn export-notification-btn-confirm" id="exportConfirmBtn">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            فتح الخطاب
+          </button>
+        </div>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    // Add show class after a brief delay for animation
+    setTimeout(() => {
+      overlay.classList.add('show');
+    }, 10);
+
+    // Handle buttons
+    const confirmBtn = document.getElementById('exportConfirmBtn');
+    const cancelBtn = document.getElementById('exportCancelBtn');
+
+    const closeModal = () => {
+      overlay.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(overlay);
+        document.body.style.overflow = '';
+      }, 300);
+    };
+
+    confirmBtn.addEventListener('click', () => {
+      closeModal();
+      if (onConfirm) onConfirm();
+    });
+
+    cancelBtn.addEventListener('click', closeModal);
+
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeModal();
+      }
+    });
   }
 
   /**

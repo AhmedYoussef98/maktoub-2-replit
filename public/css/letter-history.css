@@ -897,3 +897,186 @@ body {
         left: auto;
     }
 }
+
+/* ==================== Export Notification Modal (Theme-Aware) ==================== */
+
+/* Overlay */
+.export-notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.export-notification-overlay.show {
+    opacity: 1;
+}
+
+/* Modal */
+.export-notification-modal {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 480px;
+    width: 90%;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.export-notification-overlay.show .export-notification-modal {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Dark mode modal styling */
+[data-theme="dark"] .export-notification-modal {
+    background-color: var(--bg-card);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Content */
+.export-notification-content {
+    padding: 32px;
+    text-align: center;
+}
+
+/* Icon */
+.export-notification-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgba(0, 166, 81, 0.1);
+    margin-bottom: 24px;
+}
+
+.export-notification-icon svg {
+    color: var(--color-primary);
+}
+
+[data-theme="dark"] .export-notification-icon {
+    background-color: rgba(0, 166, 81, 0.2);
+}
+
+/* Title */
+.export-notification-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+/* Message */
+.export-notification-message {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+/* Buttons */
+.export-notification-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.export-notification-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    min-width: 120px;
+    justify-content: center;
+}
+
+/* Cancel button */
+.export-notification-btn-cancel {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+}
+
+.export-notification-btn-cancel:hover {
+    background-color: var(--bg-hover);
+}
+
+[data-theme="dark"] .export-notification-btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Confirm button */
+.export-notification-btn-confirm {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.export-notification-btn-confirm:hover {
+    background-color: #008840;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 166, 81, 0.3);
+}
+
+.export-notification-btn-confirm svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .export-notification-modal {
+        width: 95%;
+        margin: 0 10px;
+    }
+
+    .export-notification-content {
+        padding: 24px;
+    }
+
+    .export-notification-icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 20px;
+    }
+
+    .export-notification-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .export-notification-title {
+        font-size: 20px;
+    }
+
+    .export-notification-message {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .export-notification-buttons {
+        flex-direction: column-reverse;
+    }
+
+    .export-notification-btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
