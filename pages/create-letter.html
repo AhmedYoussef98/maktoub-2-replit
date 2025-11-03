@@ -24,10 +24,19 @@
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.classList.add('theme-initializing');
 
+        // Set background immediately to prevent flash (especially for Tailwind pages)
+        const darkBg = '#102320';
+        const lightBg = '#F3F4F6';
+        document.documentElement.style.backgroundColor = theme === 'dark' ? darkBg : lightBg;
+        document.body.style.backgroundColor = theme === 'dark' ? darkBg : lightBg;
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
                 requestAnimationFrame(function() {
                     document.documentElement.classList.remove('theme-initializing');
+                    // Remove inline styles after theme CSS takes over
+                    document.documentElement.style.backgroundColor = '';
+                    document.body.style.backgroundColor = '';
                 });
             });
         }
