@@ -683,7 +683,9 @@ const ApiClient = (() => {
    */
   async function updateSubmissionReview(submissionId, reviewStatus, reviewerName, reviewNotes) {
     try {
-      console.log('📝 Updating submission review:', { submissionId, reviewStatus, reviewerName });
+      console.log('📝 Updating submission review:', { submissionId, reviewStatus, reviewerName, reviewNotes });
+      console.log('📝 Review notes value:', reviewNotes);
+      console.log('📝 Review notes length:', reviewNotes?.length);
 
       // Note: submission_id is included for proxy server to build URL
       // Server will remove it before forwarding to backend (REST best practice)
@@ -694,6 +696,8 @@ const ApiClient = (() => {
         Reviewer_email: reviewerName || '',
         Review_notes: reviewNotes || ''
       };
+
+      console.log('📤 Full payload being sent:', JSON.stringify(payload, null, 2));
 
       const data = await makeRequest(
         `submissions/review/${submissionId}`,

@@ -905,8 +905,11 @@ async function updateReviewStatus(status) {
     const letterId = document.getElementById('letterSelect')?.value;
     const letterContent = document.getElementById('letterContentReview')?.value;
 
-    // Reviewer email is now automatically fetched from backend
+    // Log all captured values for debugging
     console.log('📧 Reviewer email (auto-fetched):', reviewerName);
+    console.log('📝 Review notes captured:', notes);
+    console.log('📝 Review notes length:', notes?.length);
+    console.log('📋 Letter ID:', letterId);
 
     if (!letterId) {
         if (typeof notify !== 'undefined') {
