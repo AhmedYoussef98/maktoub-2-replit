@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اختر خطاباً للمراجعة - Maktoub</title>
 
+    <!-- Critical: Inline theme script to prevent FOUC (Flash of Unstyled Content) -->
+    <script>
+    (function() {
+        const STORAGE_KEY = 'theme';
+        const DEFAULT_THEME = 'dark';
+        let theme = DEFAULT_THEME;
+
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved === 'light' || saved === 'dark') {
+                theme = saved;
+            }
+        } catch (e) {
+            // localStorage blocked or unavailable
+        }
+
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.classList.add('theme-initializing');
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                requestAnimationFrame(function() {
+                    document.documentElement.classList.remove('theme-initializing');
+                });
+            });
+        }
+    })();
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/attached_assets/Favicon/SVG/32x32.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="/attached_assets/Favicon/PNG/32x32.png">
