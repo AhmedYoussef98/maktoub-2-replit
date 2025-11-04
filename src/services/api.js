@@ -873,66 +873,6 @@ const ApiClient = (() => {
     return true;
   }
 
-  /**
-   * Handle form submission for letter generation
-   * @private
-   */
-  function initializeFormHandler() {
-    const letterForm = Utils.getElement('letterForm');
-    if (!letterForm) return;
-
-    letterForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      // Validate recipient name
-      const recipientInput = Utils.getElement('recipient');
-      if (recipientInput && !validateRecipientName(recipientInput)) {
-        return;
-      }
-
-      // Generate letter
-      const formData = new FormData(e.target);
-      const result = await generateLetter(formData);
-
-      if (result) {
-        // Extract letter content from response
-        const letterContent =
-          result.Letter || result.letter || 'محتوى الخطاب المُنشأ سيظهر هنا...';
-        const letterData = {
-          Letter: letterContent,
-          Title: result.Title || result.title || 'خطاب',
-          ID: result.ID || result.id || generateUniqueId(),
-          Date: result.Date || result.date,
-        };
-
-        // Populate document template if available
-        if (typeof populateDocumentTemplate === 'function') {
-          populateDocumentTemplate(letterData, formData);
-        }
-
-        // Show preview section
-        const previewSection = Utils.getElement('previewSection');
-        if (previewSection) {
-          Utils.show(previewSection);
-        }
-
-        // Store generated letter data globally
-        window.generatedLetterData = letterData;
-
-        // Auto-validate if function is available
-        if (typeof validateAndDisplayResults === 'function') {
-          await validateAndDisplayResults(letterContent);
-        }
-      }
-    });
-  }
-
-  // Initialize form handler when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeFormHandler);
-  } else {
-    initializeFormHandler();
-  }
 
   // ==================== Public API ====================
 

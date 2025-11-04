@@ -1390,20 +1390,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
         case 'create-letter.html':
             console.log('✏️ Initializing create letter page...');
-            // Initialize form validation if form exists
-            const letterForm = document.getElementById('letterForm');
-            if (letterForm) {
-                letterForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const formData = new FormData(this);
-                    const data = Object.fromEntries(formData.entries());
-                    
-                    if (validateFormWithNotifications(data)) {
-                        console.log('✅ Form validated, proceeding...');
-                        // Continue with form submission
-                    }
-                });
-            }
+            // Form handling is done in create-letter.js module
             break;
             
         default:

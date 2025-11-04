@@ -645,8 +645,15 @@ function setupTouchEnhancements() {
 // ============================================
 function setupMobileFormValidation() {
     const forms = document.querySelectorAll('form');
-    
+
     forms.forEach(form => {
+        // Skip forms that have their own dedicated handlers
+        // letterForm has its own complete handler in create-letter.js
+        if (form.id === 'letterForm') {
+            console.log('⏭️ Skipping mobile validation for #letterForm (has dedicated handler)');
+            return;
+        }
+
         const inputs = form.querySelectorAll('input, select, textarea');
         
         inputs.forEach(input => {
