@@ -116,11 +116,68 @@ const AuthService = (() => {
   }
 
   /**
+   * Helper function to set item in appropriate storage
+   * @private
+   * @param {string} key - Storage key
+   * @param {*} value - Value to store
+   * @param {boolean} useLocalStorage - Whether to use localStorage
+   */
+  function setStorageItem(key, value, useLocalStorage) {
+    try {
+      const storage = useLocalStorage ? localStorage : sessionStorage;
+      storage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (error) {
+      console.error(`Error writing to ${useLocalStorage ? 'localStorage' : 'sessionStorage'} (${key}):`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Helper function to get item from storage (checks localStorage first, then sessionStorage)
+   * @private
+   * @param {string} key - Storage key
+   * @param {*} defaultValue - Default value if not found
+   * @returns {*} Retrieved value or defaultValue
+   */
+  function getStorageItem(key, defaultValue = null) {
+    try {
+      // Check localStorage first (for remembered sessions)
+      let item = localStorage.getItem(key);
+      if (item) {
+        return JSON.parse(item);
+      }
+
+      // Fall back to sessionStorage
+      item = sessionStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (error) {
+      console.error(`Error reading from storage (${key}):`, error);
+      return defaultValue;
+    }
+  }
+
+  /**
+   * Helper function to remove item from both storage types
+   * @private
+   * @param {string} key - Storage key
+   */
+  function removeStorageItem(key) {
+    try {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    } catch (error) {
+      console.error(`Error removing from storage (${key}):`, error);
+    }
+  }
+
+  /**
    * Store user session data with JWT token
    * @private
    * @param {Object} authData - Authentication data from API
+   * @param {boolean} rememberMe - Whether to persist session across browser restarts
    */
-  function storeUserSession(authData) {
+  function storeUserSession(authData, rememberMe = false) {
     if (!authData) {
       console.error('❌ Cannot store user session: authData is null or undefined');
       throw new Error('Invalid auth data');
@@ -128,7 +185,7 @@ const AuthService = (() => {
 
     // Store JWT token
     if (authData.token) {
-      Utils.setSessionItem(AppConfig.AUTH.JWT_TOKEN_KEY, authData.token);
+      setStorageItem(AppConfig.AUTH.JWT_TOKEN_KEY, authData.token, rememberMe);
     }
 
     // Parse JWT to get user info
@@ -151,7 +208,7 @@ const AuthService = (() => {
       userData = { ...userData, ...authData.user };
     }
 
-    Utils.setSessionItem(AppConfig.AUTH.SESSION_STORAGE_KEY, userData);
+    setStorageItem(AppConfig.AUTH.SESSION_STORAGE_KEY, userData, rememberMe);
   }
 
   /**
@@ -215,9 +272,10 @@ const AuthService = (() => {
    * Handle email/password login
    * @param {string} email - User email
    * @param {string} password - User password
+   * @param {boolean} rememberMe - Whether to persist session across browser restarts
    * @returns {Promise<boolean>} Success status
    */
-  async function login(email, password) {
+  async function login(email, password, rememberMe = false) {
     try {
       // Validate email format
       if (!Utils.isValidEmail(email)) {
@@ -247,7 +305,7 @@ const AuthService = (() => {
       // API returns: { token, sheet_id, google_drive_id }
       if (result && result.token) {
         console.log('✅ Login successful');
-        storeUserSession(result);
+        storeUserSession(result, rememberMe);
 
         if (typeof notify !== 'undefined') {
           notify.success(AppConstants.SUCCESS_MESSAGES.LOGIN_SUCCESS);
@@ -371,9 +429,9 @@ const AuthService = (() => {
    * Logout current user
    */
   function logout() {
-    // Remove JWT token and session data
-    Utils.removeSessionItem(AppConfig.AUTH.JWT_TOKEN_KEY);
-    Utils.removeSessionItem(AppConfig.AUTH.SESSION_STORAGE_KEY);
+    // Remove JWT token and session data from both localStorage and sessionStorage
+    removeStorageItem(AppConfig.AUTH.JWT_TOKEN_KEY);
+    removeStorageItem(AppConfig.AUTH.SESSION_STORAGE_KEY);
 
     if (typeof notify !== 'undefined') {
       notify.success(AppConstants.SUCCESS_MESSAGES.LOGOUT_SUCCESS);
@@ -387,7 +445,7 @@ const AuthService = (() => {
    * @returns {Object|null} User data or null
    */
   function getCurrentUser() {
-    return Utils.getSessionItem(AppConfig.AUTH.SESSION_STORAGE_KEY);
+    return getStorageItem(AppConfig.AUTH.SESSION_STORAGE_KEY);
   }
 
   /**
@@ -395,7 +453,7 @@ const AuthService = (() => {
    * @returns {boolean} Login status
    */
   function isLoggedIn() {
-    const token = Utils.getSessionItem(AppConfig.AUTH.JWT_TOKEN_KEY);
+    const token = getStorageItem(AppConfig.AUTH.JWT_TOKEN_KEY);
     const user = getCurrentUser();
     return token !== null && user !== null;
   }
@@ -405,7 +463,7 @@ const AuthService = (() => {
    * @returns {string|null} JWT token or null
    */
   function getToken() {
-    return Utils.getSessionItem(AppConfig.AUTH.JWT_TOKEN_KEY);
+    return getStorageItem(AppConfig.AUTH.JWT_TOKEN_KEY);
   }
 
 
@@ -424,6 +482,7 @@ const AuthService = (() => {
 
         const email = Utils.getElement('email')?.value;
         const password = Utils.getElement('password')?.value;
+        const rememberMe = Utils.getElement('remember')?.checked || false;
 
         if (email && password) {
           const submitButton = loginForm.querySelector('button[type="submit"]');
@@ -432,7 +491,7 @@ const AuthService = (() => {
           }
 
           try {
-            await login(email, password);
+            await login(email, password, rememberMe);
           } finally {
             if (submitButton) {
               toggleSubmitButton(submitButton, false);
