@@ -315,7 +315,7 @@ app.all('/api/proxy', async (req, res) => {
                 console.log('Parsed fields:', fields);
                 console.log('Parsed files:', Object.keys(files));
 
-                const targetUrl = `${API_BASE_URL}/api/v1/archive/letter`;
+                const targetUrl = `${API_BASE_URL}/api/v1/archive/letter/docx`;
                 const formData = new FormData();
 
                 for (const key in fields) {
@@ -432,7 +432,7 @@ app.all('/api/proxy', async (req, res) => {
                     targetUrl = `${API_BASE_URL}/api/v1/chat/cleanup`;
                     break;
                 case 'archive-letter':
-                    targetUrl = `${API_BASE_URL}/api/v1/archive/letter`;
+                    targetUrl = `${API_BASE_URL}/api/v1/archive/letter/docx`;
                     break;
                 case 'update-archive':
                     targetUrl = `${API_BASE_URL}/api/v1/archive/update`;

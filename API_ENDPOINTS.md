@@ -209,7 +209,7 @@ GET /api/v1/user/clients
 
 ### 1. Archive Letter (Generate PDF)
 ```
-POST /api/v1/archive/letter
+POST /api/v1/archive/letter/docx
 Authorization: Bearer <JWT>
 ```
 **Payload:**
