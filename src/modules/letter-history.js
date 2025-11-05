@@ -20,6 +20,7 @@ const LetterHistory = (() => {
     reviewStatus: 'all',
     search: ''
   };
+  let currentLetters = []; // Store current letters data for modal access
 
   // Dropdown options from the image
   const sortOptions = [
@@ -415,6 +416,9 @@ const LetterHistory = (() => {
   function renderTable(letters) {
     const tbody = document.getElementById('letters-tbody');
 
+    // Store letters for modal access
+    currentLetters = letters;
+
     if (letters.length === 0) {
       tbody.innerHTML = `
         <tr>
@@ -447,7 +451,14 @@ const LetterHistory = (() => {
         <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
         <td>${Utils.escapeHtml(letter.Subject || '-')}</td>
         <td>${Utils.escapeHtml(letter.Reviewer_email || '-')}</td>
-        <td>${Utils.escapeHtml(letter.Review_notes || '-')}</td>
+        <td>
+          ${letter.Review_notes && letter.Review_notes !== '-' ? `
+            <div class="review-notes-cell">
+              <span class="review-notes-preview">${Utils.escapeHtml(letter.Review_notes.substring(0, 50))}${letter.Review_notes.length > 50 ? '...' : ''}</span>
+              ${letter.Review_notes.length > 50 ? `<button class="read-more-btn" onclick="LetterHistory.showReviewNotesModal('${letter.ID}', event)" title="اقرأ المزيد">اقرأ المزيد</button>` : ''}
+            </div>
+          ` : '-'}
+        </td>
         <td>${Utils.escapeHtml(letter.Created_by || '-')}</td>
         <td>
           <div class="action-buttons">
@@ -946,6 +957,115 @@ ${letter.Letter_content || letter.content || ''}
   }
 
   /**
+   * Show review notes modal
+   */
+  function showReviewNotesModal(letterId, event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    console.log('📖 Opening review notes modal for letter:', letterId);
+
+    // Find the letter in current data
+    const letter = currentLetters.find(l => l.ID === letterId);
+
+    if (!letter || !letter.Review_notes || letter.Review_notes === '-') {
+      console.warn('⚠️ No review notes found for letter:', letterId);
+      if (typeof notify !== 'undefined') {
+        notify.warning('لا توجد ملاحظات مراجعة لهذا الخطاب');
+      } else {
+        alert('لا توجد ملاحظات مراجعة لهذا الخطاب');
+      }
+      return;
+    }
+
+    console.log('✅ Review notes found:', letter.Review_notes);
+
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'review-notes-modal-overlay';
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    overlay.setAttribute('data-theme', theme);
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'review-notes-modal';
+
+    modal.innerHTML = `
+      <div class="review-notes-modal-header">
+        <h3 class="review-notes-modal-title">ملاحظات المراجعة</h3>
+        <button class="review-notes-modal-close" id="closeReviewNotesModal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="review-notes-modal-content">
+        <div class="review-notes-letter-info">
+          <p><strong>رقم الخطاب:</strong> ${Utils.escapeHtml(letter.ID)}</p>
+          <p><strong>الموضوع:</strong> ${Utils.escapeHtml(letter.Subject || '-')}</p>
+          <p><strong>المراجع:</strong> ${Utils.escapeHtml(letter.Reviewer_email || '-')}</p>
+        </div>
+        <div class="review-notes-text">
+          ${Utils.escapeHtml(letter.Review_notes).replace(/\n/g, '<br>')}
+        </div>
+      </div>
+      <div class="review-notes-modal-footer">
+        <button class="review-notes-modal-btn" id="closeReviewNotesBtn">
+          إغلاق
+        </button>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    // Add show class after a brief delay for animation
+    setTimeout(() => {
+      overlay.classList.add('show');
+    }, 10);
+
+    // Handle close buttons
+    const closeBtn = document.getElementById('closeReviewNotesBtn');
+    const closeIcon = document.getElementById('closeReviewNotesModal');
+
+    const closeModal = () => {
+      overlay.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(overlay);
+        document.body.style.overflow = '';
+      }, 300);
+    };
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (closeIcon) {
+      closeIcon.addEventListener('click', closeModal);
+    }
+
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeModal();
+      }
+    });
+
+    // Close on Escape key
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', handleEscape);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+  }
+
+  /**
    * Setup event listeners
    */
   function setupEventListeners() {
@@ -1020,6 +1140,7 @@ ${letter.Letter_content || letter.content || ''}
     downloadLetterPDF,
     toggleDownloadOptions,
     deleteLetter,
+    showReviewNotesModal,
     applyFilters
   };
 })();
