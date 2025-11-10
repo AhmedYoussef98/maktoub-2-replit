@@ -10,7 +10,7 @@ body {
 
 /* Navigation */
 nav {
-    background: var(--bg-primary) !important;
+    background: var(--bg-card) !important;
     border-color: var(--border-primary) !important;
 }
 
