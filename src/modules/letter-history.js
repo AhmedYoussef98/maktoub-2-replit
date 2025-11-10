@@ -437,10 +437,16 @@ const LetterHistory = (() => {
       <tr data-letter-id="${letter.ID}">
         <td>${Utils.escapeHtml(letter.ID || '-')}</td>
         <td>${formatDate(letter.Timestamp)}</td>
-        <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
         <td>
-          <span class="status-badge ${getStatusClass(letter.Review_status)}">
-            ${Utils.escapeHtml(letter.Review_status || '-')}
+          <div style="display: flex; align-items: center; justify-content: flex-start; gap: 6px;">
+            ${getLetterTypeIcon(letter.Letter_type)}
+            <span>${Utils.escapeHtml(letter.Letter_type || '-')}</span>
+          </div>
+        </td>
+        <td>
+          <span class="status-badge ${getStatusClass(letter.Review_status)}" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: fit-content;">
+            ${getStatusIcon(letter.Review_status)}
+            <span>${Utils.escapeHtml(letter.Review_status || '-')}</span>
           </span>
         </td>
         <td>
@@ -463,16 +469,11 @@ const LetterHistory = (() => {
         <td>
           <div class="action-buttons">
             <button class="action-btn view" onclick="LetterHistory.viewLetter('${letter.ID}')" title="عرض">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.66669 10C1.66669 10 4.16669 4.16667 10 4.16667C15.8334 4.16667 18.3334 10 18.3334 10C18.3334 10 15.8334 15.8333 10 15.8333C4.16669 15.8333 1.66669 10 1.66669 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <img src="/attached_assets/New_Icons/Frame-1.svg" alt="" width="18" height="18" style="filter: var(--icon-filter);">
             </button>
             <div class="download-btn-container">
               <button class="action-btn download" onclick="LetterHistory.toggleDownloadOptions(event, '${letter.ID}')" title="تحميل">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.66669 14.1667L10 17.5M10 17.5L13.3334 14.1667M10 17.5V10M17.5 13.9524C18.4583 13.2953 19.1667 12.2142 19.1667 11C19.1667 9.15906 17.6743 7.66668 15.8334 7.66668C15.6061 7.66668 15.3834 7.68759 15.1676 7.72754C14.5867 5.39198 12.5469 3.66668 10.0834 3.66668C7.13781 3.66668 4.75002 6.05447 4.75002 9.00001C4.75002 9.60569 4.84314 10.1896 5.01592 10.738C3.36225 11.2208 2.16669 12.7391 2.16669 14.5C2.16669 16.6591 3.92395 18.4167 6.08335 18.4167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <img src="/attached_assets/New_Icons/Frame-2.svg" alt="" width="18" height="18" style="filter: var(--icon-filter);">
               </button>
               <div class="download-dropdown" data-letter-id="${letter.ID}">
                 <button class="dropdown-item" onclick="LetterHistory.viewLetterPDF('${letter.ID}'); event.stopPropagation();">
@@ -491,9 +492,7 @@ const LetterHistory = (() => {
               </div>
             </div>
             <button class="action-btn delete" onclick="LetterHistory.deleteLetter('${letter.ID}')" title="حذف">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2.5 5H4.16667M4.16667 5H17.5M4.16667 5V16.6667C4.16667 17.1087 4.34226 17.5326 4.65482 17.8452C4.96738 18.1577 5.39131 18.3333 5.83333 18.3333H14.1667C14.6087 18.3333 15.0326 18.1577 15.3452 17.8452C15.6577 17.5326 15.8333 17.1087 15.8333 16.6667V5H4.16667ZM6.66667 5V3.33333C6.66667 2.89131 6.84226 2.46738 7.15482 2.15482C7.46738 1.84226 7.89131 1.66667 8.33333 1.66667H11.6667C12.1087 1.66667 12.5326 1.84226 12.8452 2.15482C13.1577 2.46738 13.3333 2.89131 13.3333 3.33333V5M8.33333 9.16667V14.1667M11.6667 9.16667V14.1667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <img src="/attached_assets/New_Icons/Frame-3.svg" alt="" width="18" height="18" style="filter: var(--icon-filter);">
             </button>
           </div>
         </td>
@@ -525,9 +524,40 @@ const LetterHistory = (() => {
     const statusMap = {
       'جاهز للإرسال': 'ready',
       'في الانتظار': 'pending',
-      'يحتاج إلى تحسين': 'improvements'
+      'يحتاج إلى تحسين': 'improvements',
+      'مرفوض': 'rejected'
     };
     return statusMap[status] || 'pending';
+  }
+
+  /**
+   * Get icon for status badge
+   */
+  function getStatusIcon(status) {
+    const iconMap = {
+      'جاهز للإرسال': '<img src="/attached_assets/New_Icons/Check.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'في الانتظار': '<img src="/attached_assets/New_Icons/Clock.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'يحتاج إلى تحسين': '<img src="/attached_assets/New_Icons/Exclamation.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'مرفوض': '<img src="/attached_assets/New_Icons/X.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">'
+    };
+    return iconMap[status] || '';
+  }
+
+  /**
+   * Get icon for letter type
+   */
+  function getLetterTypeIcon(type) {
+    const iconMap = {
+      'خطاب جديد': '<img src="/attached_assets/New_Icons/Document.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'رد على خطاب من الجهة': '<img src="/attached_assets/New_Icons/Switch horizontal.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'خطاب إلحاقي': '<img src="/attached_assets/New_Icons/Receipt refund.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'طلب': '<img src="/attached_assets/New_Icons/Document add.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'جدولة اجتماع': '<img src="/attached_assets/New_Icons/Frame.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'دعوة حضور': '<img src="/attached_assets/New_Icons/Mail open.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'تهنئة': '<img src="/attached_assets/New_Icons/Document.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'إشعار بانتهاء...': '<img src="/attached_assets/New_Icons/Annotation.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">'
+    };
+    return iconMap[type] || '<img src="/attached_assets/New_Icons/Document.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">';
   }
 
   /**

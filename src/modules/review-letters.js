@@ -271,10 +271,16 @@ const ReviewLetters = (() => {
       <tr data-letter-id="${letter.ID}">
         <td>${Utils.escapeHtml(letter.ID || '-')}</td>
         <td>${formatDate(letter.Timestamp)}</td>
-        <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
         <td>
-          <span class="status-badge ${getStatusClass(letter.Review_status)}">
-            ${Utils.escapeHtml(letter.Review_status || '-')}
+          <div style="display: flex; align-items: center; justify-content: flex-start; gap: 6px;">
+            ${getLetterTypeIcon(letter.Letter_type)}
+            <span>${Utils.escapeHtml(letter.Letter_type || '-')}</span>
+          </div>
+        </td>
+        <td>
+          <span class="status-badge ${getStatusClass(letter.Review_status)}" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: fit-content;">
+            ${getStatusIcon(letter.Review_status)}
+            <span>${Utils.escapeHtml(letter.Review_status || '-')}</span>
           </span>
         </td>
         <td>
@@ -325,9 +331,40 @@ const ReviewLetters = (() => {
     const statusMap = {
       'جاهز للإرسال': 'ready',
       'في الانتظار': 'pending',
-      'يحتاج إلى تحسين': 'improvements'
+      'يحتاج إلى تحسين': 'improvements',
+      'مرفوض': 'rejected'
     };
     return statusMap[status] || 'pending';
+  }
+
+  /**
+   * Get icon for status badge
+   */
+  function getStatusIcon(status) {
+    const iconMap = {
+      'جاهز للإرسال': '<img src="/attached_assets/New_Icons/Check.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'في الانتظار': '<img src="/attached_assets/New_Icons/Clock.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'يحتاج إلى تحسين': '<img src="/attached_assets/New_Icons/Exclamation.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'مرفوض': '<img src="/attached_assets/New_Icons/X.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">'
+    };
+    return iconMap[status] || '';
+  }
+
+  /**
+   * Get icon for letter type
+   */
+  function getLetterTypeIcon(type) {
+    const iconMap = {
+      'خطاب جديد': '<img src="/attached_assets/New_Icons/Document.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'رد على خطاب من الجهة': '<img src="/attached_assets/New_Icons/Switch horizontal.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'خطاب إلحاقي': '<img src="/attached_assets/New_Icons/Receipt refund.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'طلب': '<img src="/attached_assets/New_Icons/Document add.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'جدولة اجتماع': '<img src="/attached_assets/New_Icons/Frame.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'دعوة حضور': '<img src="/attached_assets/New_Icons/Mail open.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'تهنئة': '<img src="/attached_assets/New_Icons/Document.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">',
+      'إشعار بانتهاء...': '<img src="/attached_assets/New_Icons/Annotation.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">'
+    };
+    return iconMap[type] || '<img src="/attached_assets/New_Icons/Document.svg" alt="" width="16" height="16" style="filter: var(--icon-filter); margin-left: 6px;">';
   }
 
   /**
