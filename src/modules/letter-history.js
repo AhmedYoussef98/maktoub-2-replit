@@ -24,33 +24,34 @@ const LetterHistory = (() => {
 
   // Dropdown options from the image
   const sortOptions = [
-    { value: 'newest', label: 'التاريخ الأحدث أولاً' },
-    { value: 'oldest', label: 'التاريخ الأقدم أولاً' },
-    { value: 'recipient-asc', label: 'المستلم: أ - ي' },
-    { value: 'recipient-desc', label: 'المستلم: ي - أ' },
-    { value: 'subject-asc', label: 'الموضوع: أ - ي' },
-    { value: 'subject-desc', label: 'الموضوع: ي - أ' },
-    { value: 'type-asc', label: 'النوع: أ - ي' },
-    { value: 'review-status', label: 'حالة المراجعة' },
-    { value: 'writer-asc', label: 'الكاتب: أ - ي' }
+    { value: 'newest', label: 'التاريخ الأحدث أولاً', icon: 'Frame.svg' },
+    { value: 'oldest', label: 'التاريخ الأقدم أولاً', icon: 'Frame.svg' },
+    { value: 'recipient-asc', label: 'المستلم: أ - ي', icon: 'User.svg' },
+    { value: 'recipient-desc', label: 'المستلم: ي - أ', icon: 'User.svg' },
+    { value: 'subject-asc', label: 'الموضوع: أ - ي', icon: 'Document.svg' },
+    { value: 'subject-desc', label: 'الموضوع: ي - أ', icon: 'Document.svg' },
+    { value: 'type-asc', label: 'النوع: أ - ي', icon: 'Document.svg' },
+    { value: 'review-status', label: 'حالة المراجعة', icon: 'Clipboard check.svg' },
+    { value: 'writer-asc', label: 'الكاتب: أ - ي', icon: 'User.svg' }
   ];
 
   const letterTypeOptions = [
-    { value: 'all', label: 'جميع أنواع الخطابات' },
-    { value: 'خطاب جديد', label: 'خطاب جديد' },
-    { value: 'رد على خطاب من الجهة', label: 'رد على خطاب من الجهة' },
-    { value: 'خطاب إلحاقي', label: 'خطاب إلحاقي' },
-    { value: 'طلب', label: 'طلب' },
-    { value: 'جدولة اجتماع', label: 'جدولة اجتماع' },
-    { value: 'دعوة حضور', label: 'دعوة حضور' },
-    { value: 'تهنئة', label: 'تهنئة' }
+    { value: 'all', label: 'جميع أنواع الخطابات', icon: 'Document.svg' },
+    { value: 'خطاب جديد', label: 'خطاب جديد', icon: 'Document.svg' },
+    { value: 'رد على خطاب من الجهة', label: 'رد على خطاب من الجهة', icon: 'Switch horizontal.svg' },
+    { value: 'خطاب إلحاقي', label: 'خطاب إلحاقي', icon: 'Receipt refund.svg' },
+    { value: 'طلب', label: 'طلب', icon: 'Document add.svg' },
+    { value: 'جدولة اجتماع', label: 'جدولة اجتماع', icon: 'Frame.svg' },
+    { value: 'دعوة حضور', label: 'دعوة حضور', icon: 'Mail open.svg' },
+    { value: 'تهنئة', label: 'تهنئة', icon: 'Document.svg' }
   ];
 
   const reviewStatusOptions = [
-    { value: 'all', label: 'جميع حالات المراجعة' },
-    { value: 'جاهز للإرسال', label: 'جاهز للإرسال' },
-    { value: 'في الانتظار', label: 'في الانتظار' },
-    { value: 'يحتاج إلى تحسين', label: 'يحتاج إلى تحسين' }
+    { value: 'all', label: 'جميع حالات المراجعة', icon: 'Clipboard check.svg' },
+    { value: 'جاهز للإرسال', label: 'جاهز للإرسال', icon: 'Check.svg' },
+    { value: 'في الانتظار', label: 'في الانتظار', icon: 'Clock.svg' },
+    { value: 'يحتاج إلى تحسين', label: 'يحتاج إلى تحسين', icon: 'Exclamation.svg' },
+    { value: 'مرفوض', label: 'مرفوض', icon: 'X.svg' }
   ];
 
   /**
@@ -284,8 +285,10 @@ const LetterHistory = (() => {
     // Populate menu items
     menu.innerHTML = options.map(option => `
       <div class="dropdown-menu-item ${option.value === currentValue ? 'active' : ''}"
-           data-value="${option.value}">
-        ${option.label}
+           data-value="${option.value}"
+           style="display: flex; align-items: center; gap: 8px; justify-content: flex-start;">
+        ${option.icon ? `<img src="/attached_assets/New_Icons/${option.icon}" alt="" width="16" height="16" style="filter: var(--icon-filter);">` : ''}
+        <span>${option.label}</span>
       </div>
     `).join('');
 
@@ -437,16 +440,10 @@ const LetterHistory = (() => {
       <tr data-letter-id="${letter.ID}">
         <td>${Utils.escapeHtml(letter.ID || '-')}</td>
         <td>${formatDate(letter.Timestamp)}</td>
+        <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
         <td>
-          <div style="display: flex; align-items: center; justify-content: flex-start; gap: 6px;">
-            ${getLetterTypeIcon(letter.Letter_type)}
-            <span>${Utils.escapeHtml(letter.Letter_type || '-')}</span>
-          </div>
-        </td>
-        <td>
-          <span class="status-badge ${getStatusClass(letter.Review_status)}" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: fit-content;">
-            ${getStatusIcon(letter.Review_status)}
-            <span>${Utils.escapeHtml(letter.Review_status || '-')}</span>
+          <span class="status-badge ${getStatusClass(letter.Review_status)}">
+            ${Utils.escapeHtml(letter.Review_status || '-')}
           </span>
         </td>
         <td>
