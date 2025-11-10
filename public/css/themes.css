@@ -75,6 +75,10 @@
   --btn-secondary-text: #FFFFFF;
   --btn-secondary-border: rgba(160, 236, 220, 0.3);
 
+  /* Teal Shade Variables */
+  --Maktoub-teal-800: #165954;
+  --Maktoub-teal-950: #072C2A;
+
   /* Table Colors */
   --table-header-bg: rgba(13, 31, 28, 0.8);
   --table-row-hover: rgba(30, 168, 150, 0.1);
@@ -156,6 +160,10 @@
   --btn-secondary-bg: #FFFFFF;
   --btn-secondary-text: #102320;
   --btn-secondary-border: rgba(6, 100, 88, 0.2);
+
+  /* Teal Shade Variables */
+  --Maktoub-teal-800: rgba(6, 100, 88, 0.3);
+  --Maktoub-teal-950: #FFFFFF;
 
   /* Table Colors */
   --table-header-bg: #F9FAFB;
