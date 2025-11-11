@@ -497,6 +497,28 @@ body:not(.dark-mode) .avatar-icon {
     color: var(--white);
 }
 
+/* Light theme - Primary button text styling */
+[data-theme="light"] .btn-primary,
+[data-theme="light"] .btn-primary span {
+    color: var(--Maktoub-White, #FFF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 20px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 28px !important;
+}
+
+/* Dark theme - Primary button text styling */
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-primary span {
+    color: var(--Maktoub-White, #FFF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 20px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 28px !important;
+}
+
 .btn svg {
     width: 24px;
     height: 24px;
