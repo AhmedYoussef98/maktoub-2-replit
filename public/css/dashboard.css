@@ -500,7 +500,7 @@ body:not(.dark-mode) .avatar-icon {
 /* Light theme - Primary button text styling */
 [data-theme="light"] .btn-primary,
 [data-theme="light"] .btn-primary span {
-    color: var(--Maktoub-White, #FFF) !important;
+    color: #FFFFFF !important;
     font-family: "Janna LT" !important;
     font-size: 20px !important;
     font-style: normal !important;
@@ -511,7 +511,7 @@ body:not(.dark-mode) .avatar-icon {
 /* Dark theme - Primary button text styling */
 [data-theme="dark"] .btn-primary,
 [data-theme="dark"] .btn-primary span {
-    color: var(--Maktoub-White, #FFF) !important;
+    color: #FFFFFF !important;
     font-family: "Janna LT" !important;
     font-size: 20px !important;
     font-style: normal !important;
