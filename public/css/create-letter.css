@@ -431,8 +431,8 @@ span.text-red-400 {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
-    justify-content: space-between;
+    padding: 9px 13px;
+    justify-content: flex-end;
     background: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: 6px;
