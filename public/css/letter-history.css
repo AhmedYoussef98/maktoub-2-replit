@@ -115,15 +115,10 @@ body {
 
 /* Filters and Actions - Single Horizontal Row */
 .filters-section {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px 24px;
-    margin-bottom: 24px;
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
 }
 
 .filter-left {
@@ -439,17 +434,12 @@ body {
 /* Pagination */
 .pagination-container {
     display: flex;
-    padding: 0 24px;
     justify-content: space-between;
     align-items: center;
     direction: rtl;
     height: 38px;
     width: 100%;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
     margin-bottom: 32px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .pagination-info {
