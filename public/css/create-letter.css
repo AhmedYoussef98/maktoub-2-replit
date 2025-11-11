@@ -58,13 +58,23 @@ section {
 /* Dark Mode - White labels */
 [data-theme="dark"] .input-label,
 [data-theme="dark"] label:not(.flex) {
-    color: #FFFFFF !important;
+    color: var(--Maktoub-White, #FFF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: normal !important;
 }
 
 /* Light Mode - Black labels */
 [data-theme="light"] .input-label,
 [data-theme="light"] label:not(.flex) {
     color: #102320 !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: normal !important;
 }
 
 /* Keep "بيانات الخطاب" green in both modes */
