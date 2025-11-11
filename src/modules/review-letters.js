@@ -259,7 +259,7 @@ const ReviewLetters = (() => {
     if (letters.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="11" style="text-align: center; padding: 40px;">
+          <td colspan="10" style="text-align: center; padding: 40px;">
             <div style="color: var(--Maktoub-Light); font-size: 16px;">
               لا توجد خطابات مطابقة للبحث
             </div>
@@ -278,11 +278,6 @@ const ReviewLetters = (() => {
         <td>
           <span class="status-badge ${getStatusClass(letter.Review_status)}">
             ${Utils.escapeHtml(letter.Review_status || '-')}
-          </span>
-        </td>
-        <td>
-          <span class="status-badge ${getStatusClass(letter.sender || 'مرسل')}">
-            ${Utils.escapeHtml(letter.sender || 'مرسل')}
           </span>
         </td>
         <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
