@@ -444,6 +444,8 @@ span.text-red-400 {
     transition: all 0.2s ease;
     width: 100%;
     min-width: unset;
+    direction: rtl;
+    text-align: right;
 }
 
 .dropdown-btn:hover {
@@ -481,6 +483,8 @@ span.text-red-400 {
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.3s ease, opacity 0.3s ease;
+    direction: rtl;
+    text-align: right;
 }
 
 .filter-dropdown.active .dropdown-menu {
@@ -502,6 +506,8 @@ span.text-red-400 {
     cursor: pointer;
     transition: background-color 0.2s ease;
     border-bottom: 1px solid rgba(160, 236, 220, 0.1);
+    direction: rtl;
+    text-align: right;
 }
 
 .dropdown-menu-item:last-child {
