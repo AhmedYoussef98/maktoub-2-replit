@@ -39,6 +39,11 @@ span:not(.check-label):not(.stat-label-text) {
     border: 1px solid var(--border-primary);
 }
 
+/* Remove hover effect on cards */
+.card:hover {
+    border-color: var(--border-primary) !important;
+}
+
 /* Section backgrounds */
 section {
     background: var(--bg-card) !important;
