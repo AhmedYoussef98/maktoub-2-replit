@@ -74,7 +74,7 @@ const CreateLetterPage = (() => {
    */
   function setupLetterTypeDropdown() {
     const letterTypeOptions = [
-      { value: '', label: 'اختر نوع الخطاب', icon: 'Document.svg' },
+      // Placeholder "اختر نوع الخطاب" is button text only, not a selectable option
       { value: 'خطاب جديد', label: 'خطاب جديد', icon: 'Document.svg' },
       { value: 'خطاب رد على خطاب من الجهة', label: 'خطاب رد على خطاب من الجهة', icon: 'Switch horizontal.svg' },
       { value: 'خطاب إلحاقي', label: 'خطاب إلحاقي', icon: 'Receipt refund.svg' },
@@ -97,7 +97,7 @@ const CreateLetterPage = (() => {
 
     // Populate menu items with icons
     menu.innerHTML = letterTypeOptions.map(option => `
-      <div class="dropdown-menu-item ${option.value === '' ? 'active' : ''}" data-value="${option.value}">
+      <div class="dropdown-menu-item" data-value="${option.value}">
         ${option.icon ? `<img src="/attached_assets/New_Icons/${option.icon}" alt="" width="16" height="16" style="filter: var(--icon-filter);">` : ''}
         <span>${option.label}</span>
       </div>

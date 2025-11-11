@@ -425,6 +425,7 @@ span.text-red-400 {
 
 .filter-dropdown {
     position: relative;
+    width: 100%;
 }
 
 .dropdown-btn {
