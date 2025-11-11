@@ -252,6 +252,48 @@ textarea.input-field {
     line-height: 20px !important;
 }
 
+/* Dark theme - SELECT placeholder options (empty value) */
+[data-theme="dark"] select.input-field option[value=""],
+[data-theme="dark"] select option[value=""] {
+    color: var(--Maktoub-teal-600, #168B7F) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
+/* Light theme - SELECT placeholder options (empty value) */
+[data-theme="light"] select.input-field option[value=""],
+[data-theme="light"] select option[value=""] {
+    color: var(--coolGray-400, #9CA3AF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
+/* Dark theme - Custom dropdown placeholder text */
+[data-theme="dark"] #letterType-selected {
+    color: var(--Maktoub-teal-600, #168B7F) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
+/* Light theme - Custom dropdown placeholder text */
+[data-theme="light"] #letterType-selected {
+    color: var(--coolGray-400, #9CA3AF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
 /* ==================== Placeholder Styling ==================== */
 
 #previewPlaceholder {
