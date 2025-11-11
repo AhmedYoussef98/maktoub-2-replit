@@ -111,90 +111,111 @@
             <section class="card bg-maktoub-teal-800">
                 <h2 class="text-2xl font-bold mb-6 section-title">بيانات الخطاب</h2>
 
-                <form id="letterForm" class="space-y-6">
-                    <!-- Organization Name -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="organizationName" class="input-label text-right">
-                            اسم الجهة <span class="text-red-400">*</span>
-                        </label>
-                        <input type="text"
-                               id="organizationName"
-                               name="organization_name"
-                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
-                               required>
-                    </div>
-
-                    <!-- Recipient Job Title -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="recipientJobTitle" class="input-label text-right">
-                            المسمى الوظيفي للمرسل إليه <span class="text-red-400">*</span>
-                        </label>
-                        <input type="text"
-                               id="recipientJobTitle"
-                               name="recipient_job_title"
-                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
-                               required>
-                    </div>
-
-                    <!-- Recipient Title -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="recipientTitle" class="input-label text-right">
-                            لقب المرسل إليه <span class="text-red-400">*</span>
-                        </label>
-                        <select id="recipientTitle"
-                                name="recipient_title"
-                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
-                                required>
-                            <option value="">اختر اللقب</option>
-                            <option value="صاحب السمو الملكي">صاحب السمو الملكي</option>
-                            <option value="صاحب السمو">صاحب السمو</option>
-                            <option value="صاحب المعالي">صاحب المعالي</option>
-                            <option value="معالي">معالي</option>
-                            <option value="سعادة">سعادة</option>
-                            <option value="السادة">السادة</option>
-                            <option value="أخرى">أخرى</option>
-                        </select>
-                        <input type="text"
-                               id="otherRecipientTitle"
-                               name="other_recipient_title"
-                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600 mt-2"
-                               style="display:none;"
-                               placeholder="أدخل اللقب الآخر">
-                    </div>
-
-                    <!-- Recipient Name -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="recipient" class="input-label text-right">
-                            اسم المرسل إليه
-                        </label>
-                        <input type="text"
-                               id="recipient"
-                               name="recipient"
-                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
-                               placeholder="الثنائي أو الثلاثي إن وجد">
-                    </div>
-
-                    <!-- Letter Type -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="letterType" class="input-label text-right">
-                            نوع الخطاب <span class="text-red-400">*</span>
-                        </label>
-                        <div class="filter-dropdown" id="letterType-dropdown">
-                            <button type="button" class="dropdown-btn" id="letterType-btn">
-                                <span id="letterType-selected">اختر نوع الخطاب</span>
-                                <img src="/attached_assets/New_Icons/Chevron down.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
-                            </button>
-                            <div class="dropdown-menu" id="letterType-menu">
-                                <!-- Options will be populated by JavaScript -->
-                            </div>
+                <form id="letterForm" class="form-grid">
+                    <!-- Row 1: Organization Name (right) + Recipient Job Title (left) -->
+                    <div class="form-row">
+                        <!-- Organization Name -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="organizationName" class="input-label text-right">
+                                اسم الجهة <span class="required-asterisk">*</span>
+                            </label>
+                            <input type="text"
+                                   id="organizationName"
+                                   name="organization_name"
+                                   class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                   required>
                         </div>
-                        <input type="hidden" id="letterType" name="category" value="" required>
+
+                        <!-- Recipient Job Title -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="recipientJobTitle" class="input-label text-right">
+                                المسمى الوظيفي للمرسل إليه <span class="required-asterisk">*</span>
+                            </label>
+                            <input type="text"
+                                   id="recipientJobTitle"
+                                   name="recipient_job_title"
+                                   class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                   required>
+                        </div>
                     </div>
 
-                    <!-- Previous Letter (conditional) -->
-                    <div id="previousLetterGroup" class="flex flex-col items-end gap-1" style="display: none;">
+                    <!-- Row 2: Recipient Title (right) + Recipient Name (left) -->
+                    <div class="form-row">
+                        <!-- Recipient Title -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="recipientTitle" class="input-label text-right">
+                                لقب المرسل إليه <span class="required-asterisk">*</span>
+                            </label>
+                            <select id="recipientTitle"
+                                    name="recipient_title"
+                                    class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                    required>
+                                <option value="">اختر اللقب</option>
+                                <option value="صاحب السمو الملكي">صاحب السمو الملكي</option>
+                                <option value="صاحب السمو">صاحب السمو</option>
+                                <option value="صاحب المعالي">صاحب المعالي</option>
+                                <option value="معالي">معالي</option>
+                                <option value="سعادة">سعادة</option>
+                                <option value="السادة">السادة</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                            <input type="text"
+                                   id="otherRecipientTitle"
+                                   name="other_recipient_title"
+                                   class="input-field bg-maktoub-teal-700 border-maktoub-teal-600 mt-2"
+                                   style="display:none;"
+                                   placeholder="أدخل اللقب الآخر">
+                        </div>
+
+                        <!-- Recipient Name -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="recipient" class="input-label text-right">
+                                اسم المرسل إليه
+                            </label>
+                            <input type="text"
+                                   id="recipient"
+                                   name="recipient"
+                                   class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                   placeholder="الثنائي أو الثلاثي إن وجد">
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Letter Type (right) + Letter Purpose (left) -->
+                    <div class="form-row">
+                        <!-- Letter Type -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="letterType" class="input-label text-right">
+                                نوع الخطاب <span class="required-asterisk">*</span>
+                            </label>
+                            <div class="filter-dropdown" id="letterType-dropdown">
+                                <button type="button" class="dropdown-btn" id="letterType-btn">
+                                    <span id="letterType-selected">اختر نوع الخطاب</span>
+                                    <img src="/attached_assets/New_Icons/Chevron down.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
+                                </button>
+                                <div class="dropdown-menu" id="letterType-menu">
+                                    <!-- Options will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            <input type="hidden" id="letterType" name="category" value="" required>
+                        </div>
+
+                        <!-- Letter Purpose -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="letterPurpose" class="input-label text-right">
+                                الغرض من الخطاب <span class="required-asterisk">*</span>
+                            </label>
+                            <input type="text"
+                                   id="letterPurpose"
+                                   name="title"
+                                   class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
+                                   required>
+                        </div>
+                    </div>
+
+                    <!-- Previous Letter (conditional) - Full width when shown -->
+                    <div id="previousLetterGroup" class="flex flex-col items-end gap-1 form-full-width" style="display: none;">
                         <label for="previousLetter" class="input-label text-right">
-                            الخطاب السابق <span class="text-red-400">*</span>
+                            الخطاب السابق <span class="required-asterisk">*</span>
                         </label>
                         <select id="previousLetter"
                                 name="previous_letter_id"
@@ -203,10 +224,10 @@
                         </select>
                     </div>
 
-                    <!-- Received Letter (conditional) -->
-                    <div id="receivedLetterGroup" class="flex flex-col items-end gap-1" style="display: none;">
+                    <!-- Received Letter (conditional) - Full width when shown -->
+                    <div id="receivedLetterGroup" class="flex flex-col items-end gap-1 form-full-width" style="display: none;">
                         <label for="receivedLetter" class="input-label text-right">
-                            الخطاب المستلم <span class="text-red-400">*</span>
+                            الخطاب المستلم <span class="required-asterisk">*</span>
                         </label>
                         <select id="receivedLetter"
                                 name="received_letter_id"
@@ -215,22 +236,10 @@
                         </select>
                     </div>
 
-                    <!-- Letter Purpose -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="letterPurpose" class="input-label text-right">
-                            الغرض من الخطاب <span class="text-red-400">*</span>
-                        </label>
-                        <input type="text"
-                               id="letterPurpose"
-                               name="title"
-                               class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
-                               required>
-                    </div>
-
-                    <!-- Letter Content -->
-                    <div class="flex flex-col items-end gap-1">
+                    <!-- Row 4: Letter Content (Full Width) -->
+                    <div class="flex flex-col items-end gap-1 form-full-width">
                         <label for="letterContent" class="input-label text-right">
-                            محتوى الخطاب <span class="text-red-400">*</span>
+                            محتوى الخطاب <span class="required-asterisk">*</span>
                         </label>
                         <textarea id="letterContent"
                                   name="prompt"
@@ -239,35 +248,38 @@
                                   required></textarea>
                     </div>
 
-                    <!-- Is First Communication -->
-                    <div class="flex flex-col items-end gap-2">
-                        <label class="input-label text-right">
-                            هل هذه أول مراسلة؟ <span class="text-red-400">*</span>
-                        </label>
-                        <div class="flex gap-6 flex-row-reverse">
-                            <label class="flex items-center gap-2">
-                                <span>نعم</span>
-                                <input type="radio" name="is_first" value="true" required
-                                       class="w-4 h-4 text-maktoub-primary">
+                    <!-- Row 5: Is First Communication (right) + Contact Officer (left) -->
+                    <div class="form-row">
+                        <!-- Is First Communication -->
+                        <div class="flex flex-col items-end gap-2">
+                            <label class="input-label text-right">
+                                هل هذه أول مراسلة؟ <span class="required-asterisk">*</span>
                             </label>
-                            <label class="flex items-center gap-2">
-                                <span>لا</span>
-                                <input type="radio" name="is_first" value="false" required
-                                       class="w-4 h-4 text-maktoub-primary">
-                            </label>
+                            <div class="flex gap-6 flex-row-reverse">
+                                <label class="flex items-center gap-2">
+                                    <span>نعم</span>
+                                    <input type="radio" name="is_first" value="true" required
+                                           class="w-4 h-4 text-maktoub-primary">
+                                </label>
+                                <label class="flex items-center gap-2">
+                                    <span>لا</span>
+                                    <input type="radio" name="is_first" value="false" required
+                                           class="w-4 h-4 text-maktoub-primary">
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Contact Officer -->
-                    <div class="flex flex-col items-end gap-1">
-                        <label for="letterStyle" class="input-label text-right">
-                            ضابط الاتصال
-                        </label>
-                        <select id="letterStyle"
-                                name="member_name"
-                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600">
-                            <option value="">اختر الاسم (اختياري)</option>
-                        </select>
+                        <!-- Contact Officer -->
+                        <div class="flex flex-col items-end gap-1">
+                            <label for="letterStyle" class="input-label text-right">
+                                ضابط الاتصال
+                            </label>
+                            <select id="letterStyle"
+                                    name="member_name"
+                                    class="input-field bg-maktoub-teal-700 border-maktoub-teal-600">
+                                <option value="">اختر الاسم (اختياري)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
