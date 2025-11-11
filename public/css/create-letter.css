@@ -27,7 +27,7 @@ p {
 }
 
 /* Span elements (general) */
-span:not(.check-label):not(.stat-label-text) {
+span:not(.check-label):not(.stat-label-text):not(.required-asterisk) {
     color: var(--text-primary) !important;
 }
 
@@ -432,7 +432,7 @@ span.text-red-400 {
     align-items: center;
     gap: 12px;
     padding: 12px 14px;
-    justify-content: center;
+    justify-content: space-between;
     background: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: 6px;
