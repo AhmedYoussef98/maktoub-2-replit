@@ -12,6 +12,31 @@ const CreateLetterPage = (() => {
   // ==================== Form Initialization ====================
 
   /**
+   * Handle select placeholder styling
+   * Adds 'placeholder-active' class when empty value is selected
+   */
+  function handleSelectPlaceholderStyling() {
+    const selects = document.querySelectorAll('select.input-field');
+
+    selects.forEach(select => {
+      // Function to update placeholder class
+      const updatePlaceholderClass = () => {
+        if (select.value === '' || select.value === null) {
+          select.classList.add('placeholder-active');
+        } else {
+          select.classList.remove('placeholder-active');
+        }
+      };
+
+      // Initial check
+      updatePlaceholderClass();
+
+      // Update on change
+      select.addEventListener('change', updatePlaceholderClass);
+    });
+  }
+
+  /**
    * Populate contact officer dropdown with emails from API
    */
   async function populateContactOfficerDropdown() {
@@ -200,6 +225,9 @@ const CreateLetterPage = (() => {
 
     // Setup custom letter type dropdown with icons
     setupLetterTypeDropdown();
+
+    // Handle select placeholder styling
+    handleSelectPlaceholderStyling();
 
     // Letter generation form submission
     if (letterForm) {

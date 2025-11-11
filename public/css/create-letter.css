@@ -262,9 +262,11 @@ textarea.input-field {
     line-height: 20px !important;
 }
 
-/* Dark theme - SELECT placeholder options (empty value) */
-[data-theme="dark"] select.input-field option[value=""],
-[data-theme="dark"] select option[value=""] {
+/* Dark theme - SELECT placeholder (when no value selected - :invalid state or .placeholder-active) */
+[data-theme="dark"] select.input-field:invalid,
+[data-theme="dark"] select:invalid,
+[data-theme="dark"] select.input-field.placeholder-active,
+[data-theme="dark"] select.placeholder-active {
     color: var(--Maktoub-teal-600, #168B7F) !important;
     font-family: "Janna LT" !important;
     font-size: 14px !important;
@@ -273,15 +275,29 @@ textarea.input-field {
     line-height: 20px !important;
 }
 
-/* Light theme - SELECT placeholder options (empty value) */
-[data-theme="light"] select.input-field option[value=""],
-[data-theme="light"] select option[value=""] {
+/* Light theme - SELECT placeholder (when no value selected - :invalid state or .placeholder-active) */
+[data-theme="light"] select.input-field:invalid,
+[data-theme="light"] select:invalid,
+[data-theme="light"] select.input-field.placeholder-active,
+[data-theme="light"] select.placeholder-active {
     color: var(--coolGray-400, #9CA3AF) !important;
     font-family: "Janna LT" !important;
     font-size: 14px !important;
     font-style: normal !important;
     font-weight: 400 !important;
     line-height: 20px !important;
+}
+
+/* Dark theme - SELECT with value selected (normal text color) */
+[data-theme="dark"] select.input-field:valid,
+[data-theme="dark"] select:valid {
+    color: var(--text-primary) !important;
+}
+
+/* Light theme - SELECT with value selected (normal text color) */
+[data-theme="light"] select.input-field:valid,
+[data-theme="light"] select:valid {
+    color: #102320 !important;
 }
 
 /* Dark theme - Custom dropdown placeholder text */
