@@ -226,6 +226,32 @@ textarea.input-field {
     color: var(--text-primary) !important;
 }
 
+/* ==================== Input Placeholder Styling ==================== */
+
+/* Dark theme placeholder */
+[data-theme="dark"] .input-field::placeholder,
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--Maktoub-teal-600, #168B7F) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
+/* Light theme placeholder */
+[data-theme="light"] .input-field::placeholder,
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+    color: var(--coolGray-400, #9CA3AF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
 /* ==================== Placeholder Styling ==================== */
 
 #previewPlaceholder {
