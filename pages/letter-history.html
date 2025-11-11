@@ -143,14 +143,16 @@
             <!-- Filters and Actions -->
             <div class="filters-section">
                 <div class="filter-left">
-                    <button class="export-btn" id="export-btn">
-                        <img src="/attached_assets/New_Icons/External link.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
-                        <span>تصدير الكل</span>
-                    </button>
+                    <div class="search-box">
+                        <img src="/attached_assets/New_Icons/Search.svg" alt="" width="20" height="20" style="filter: var(--icon-filter);">
+                        <input type="text" id="search-input" placeholder="ابحث عن المستلم أو الرقم المرجعي أو الكاتب...">
+                    </div>
+                </div>
 
-                    <div class="filter-dropdown" id="sort-dropdown">
+                <div class="filter-right">
+                    <div class="filter-dropdown" id="status-dropdown">
                         <button class="dropdown-btn">
-                            <span>التاريخ الأحدث أولاً</span>
+                            <span>جميع حالات المراجعة</span>
                             <img src="/attached_assets/New_Icons/Chevron down.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
                         </button>
                     </div>
@@ -162,19 +164,17 @@
                         </button>
                     </div>
 
-                    <div class="filter-dropdown" id="status-dropdown">
+                    <div class="filter-dropdown" id="sort-dropdown">
                         <button class="dropdown-btn">
-                            <span>جميع حالات المراجعة</span>
+                            <span>التاريخ الأحدث أولاً</span>
                             <img src="/attached_assets/New_Icons/Chevron down.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
                         </button>
                     </div>
-                </div>
 
-                <div class="filter-right">
-                    <div class="search-box">
-                        <img src="/attached_assets/New_Icons/Search.svg" alt="" width="20" height="20" style="filter: var(--icon-filter);">
-                        <input type="text" id="search-input" placeholder="ابحث عن المستلم أو الرقم المرجعي أو الكاتب...">
-                    </div>
+                    <button class="export-btn" id="export-btn">
+                        <img src="/attached_assets/New_Icons/External link.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
+                        <span>تصدير الكل</span>
+                    </button>
                 </div>
             </div>
 
