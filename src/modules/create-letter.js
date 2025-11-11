@@ -70,6 +70,95 @@ const CreateLetterPage = (() => {
   }
 
   /**
+   * Setup custom letter type dropdown with icons
+   */
+  function setupLetterTypeDropdown() {
+    const letterTypeOptions = [
+      { value: '', label: 'اختر نوع الخطاب', icon: 'Document.svg' },
+      { value: 'خطاب جديد', label: 'خطاب جديد', icon: 'Document.svg' },
+      { value: 'خطاب رد على خطاب من الجهة', label: 'خطاب رد على خطاب من الجهة', icon: 'Switch horizontal.svg' },
+      { value: 'خطاب إلحاقي', label: 'خطاب إلحاقي', icon: 'Receipt refund.svg' },
+      { value: 'طلب', label: 'طلب', icon: 'Document add.svg' },
+      { value: 'جدولة اجتماع', label: 'جدولة اجتماع', icon: 'Frame.svg' },
+      { value: 'دعوة حضور', label: 'دعوة حضور', icon: 'Mail open.svg' },
+      { value: 'تهنئة', label: 'تهنئة', icon: 'Document.svg' }
+    ];
+
+    const dropdown = document.getElementById('letterType-dropdown');
+    const btn = document.getElementById('letterType-btn');
+    const menu = document.getElementById('letterType-menu');
+    const selectedSpan = document.getElementById('letterType-selected');
+    const hiddenInput = document.getElementById('letterType');
+
+    if (!dropdown || !btn || !menu || !selectedSpan || !hiddenInput) {
+      console.warn('⚠️ Letter type dropdown elements not found');
+      return;
+    }
+
+    // Populate menu items with icons
+    menu.innerHTML = letterTypeOptions.map(option => `
+      <div class="dropdown-menu-item ${option.value === '' ? 'active' : ''}" data-value="${option.value}">
+        ${option.icon ? `<img src="/attached_assets/New_Icons/${option.icon}" alt="" width="16" height="16" style="filter: var(--icon-filter);">` : ''}
+        <span>${option.label}</span>
+      </div>
+    `).join('');
+
+    // Toggle dropdown
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('active');
+    });
+
+    // Handle option selection
+    menu.querySelectorAll('.dropdown-menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const value = item.dataset.value;
+        const label = item.querySelector('span').textContent;
+
+        // Update UI
+        selectedSpan.textContent = label;
+        hiddenInput.value = value;
+
+        // Update active state
+        menu.querySelectorAll('.dropdown-menu-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        // Close dropdown
+        dropdown.classList.remove('active');
+
+        // Trigger conditional field display
+        handleLetterTypeChange(value);
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      dropdown.classList.remove('active');
+    });
+  }
+
+  /**
+   * Handle letter type change for conditional fields
+   */
+  function handleLetterTypeChange(selectedType) {
+    const previousLetterGroup = document.getElementById('previousLetterGroup');
+    const receivedLetterGroup = document.getElementById('receivedLetterGroup');
+
+    if (!previousLetterGroup || !receivedLetterGroup) return;
+
+    if (selectedType === 'خطاب إلحاقي') {
+      previousLetterGroup.style.display = 'flex';
+      receivedLetterGroup.style.display = 'none';
+    } else if (selectedType === 'خطاب رد على خطاب من الجهة') {
+      receivedLetterGroup.style.display = 'flex';
+      previousLetterGroup.style.display = 'none';
+    } else {
+      previousLetterGroup.style.display = 'none';
+      receivedLetterGroup.style.display = 'none';
+    }
+  }
+
+  /**
    * Initialize form event listeners
    */
   function initForm() {
@@ -109,23 +198,8 @@ const CreateLetterPage = (() => {
       });
     }
 
-    // Show/hide conditional letter groups based on letter type
-    if (letterTypeSelect && previousLetterGroup && receivedLetterGroup) {
-      letterTypeSelect.addEventListener('change', function() {
-        const selectedType = this.value;
-
-        if (selectedType === 'خطاب إلحاقي') {
-          previousLetterGroup.style.display = 'flex';
-          receivedLetterGroup.style.display = 'none';
-        } else if (selectedType === 'خطاب رد على خطاب من الجهة') {
-          receivedLetterGroup.style.display = 'flex';
-          previousLetterGroup.style.display = 'none';
-        } else {
-          previousLetterGroup.style.display = 'none';
-          receivedLetterGroup.style.display = 'none';
-        }
-      });
-    }
+    // Setup custom letter type dropdown with icons
+    setupLetterTypeDropdown();
 
     // Letter generation form submission
     if (letterForm) {

@@ -347,8 +347,9 @@ body.dark-mode #documentTemplate {
 /* Override text-red-400 with brand color for required field indicators */
 .text-red-400,
 label .text-red-400,
-label span.text-red-400 {
-    color: var(--color-danger) !important;
+label span.text-red-400,
+span.text-red-400 {
+    color: #EF4444 !important;
 }
 
 /* ==================== Button Loading States ==================== */
@@ -383,4 +384,105 @@ label span.text-red-400 {
 /* Show spinner when loading */
 .btn-primary.loading .spinner {
     display: inline-block;
+}
+
+/* ==================== Custom Dropdown Styles ==================== */
+
+.filter-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    justify-content: space-between;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'Janna LT', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.dropdown-btn:hover {
+    background: rgba(160, 236, 220, 0.05);
+}
+
+.dropdown-btn:focus {
+    outline: none;
+    border-color: var(--Maktoub-Main);
+    box-shadow: 0 0 0 2px rgba(30, 168, 150, 0.2);
+}
+
+.dropdown-btn img {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.filter-dropdown.active .dropdown-btn img {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    z-index: 100;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.filter-dropdown.active .dropdown-menu {
+    max-height: 400px;
+    opacity: 1;
+    overflow-y: auto;
+}
+
+.dropdown-menu-item {
+    display: flex;
+    padding: 8px 16px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    color: var(--text-primary);
+    font-family: 'Janna LT', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid rgba(160, 236, 220, 0.1);
+}
+
+.dropdown-menu-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu-item:hover {
+    background: rgba(160, 236, 220, 0.1);
+}
+
+.dropdown-menu-item.active {
+    background: rgba(30, 168, 150, 0.2);
+    color: var(--text-primary);
+}
+
+.dropdown-menu-item img {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
 }

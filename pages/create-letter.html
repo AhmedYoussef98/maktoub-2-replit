@@ -179,19 +179,16 @@
                         <label for="letterType" class="input-label text-right">
                             نوع الخطاب <span class="text-red-400">*</span>
                         </label>
-                        <select id="letterType"
-                                name="category"
-                                class="input-field bg-maktoub-teal-700 border-maktoub-teal-600"
-                                required>
-                            <option value="">اختر نوع الخطاب</option>
-                            <option value="خطاب جديد">خطاب جديد</option>
-                            <option value="خطاب رد على خطاب من الجهة">خطاب رد على خطاب من الجهة</option>
-                            <option value="خطاب إلحاقي">خطاب إلحاقي</option>
-                            <option value="طلب">طلب</option>
-                            <option value="جدولة اجتماع">جدولة اجتماع</option>
-                            <option value="دعوة حضور">دعوة حضور</option>
-                            <option value="تهنئة">تهنئة</option>
-                        </select>
+                        <div class="filter-dropdown" id="letterType-dropdown">
+                            <button type="button" class="dropdown-btn" id="letterType-btn">
+                                <span id="letterType-selected">اختر نوع الخطاب</span>
+                                <img src="/attached_assets/New_Icons/Chevron down.svg" alt="" width="16" height="16" style="filter: var(--icon-filter);">
+                            </button>
+                            <div class="dropdown-menu" id="letterType-menu">
+                                <!-- Options will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        <input type="hidden" id="letterType" name="category" value="" required>
                     </div>
 
                     <!-- Previous Letter (conditional) -->
