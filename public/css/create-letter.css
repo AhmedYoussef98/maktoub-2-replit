@@ -390,7 +390,6 @@ span.text-red-400 {
 
 .filter-dropdown {
     position: relative;
-    width: 100%;
 }
 
 .dropdown-btn {
@@ -398,16 +397,16 @@ span.text-red-400 {
     align-items: center;
     gap: 12px;
     padding: 12px 14px;
-    justify-content: space-between;
+    justify-content: center;
     background: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    color: var(--text-primary);
+    color: var(--Maktoub-Light);
     font-family: 'Janna LT', sans-serif;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
-    width: 100%;
+    min-width: 180px;
 }
 
 .dropdown-btn:hover {
@@ -460,7 +459,7 @@ span.text-red-400 {
     align-items: center;
     gap: 8px;
     align-self: stretch;
-    color: var(--text-primary);
+    color: var(--white);
     font-family: 'Janna LT', sans-serif;
     font-size: 14px;
     cursor: pointer;
@@ -478,7 +477,7 @@ span.text-red-400 {
 
 .dropdown-menu-item.active {
     background: rgba(30, 168, 150, 0.2);
-    color: var(--text-primary);
+    color: var(--white);
 }
 
 .dropdown-menu-item img {
