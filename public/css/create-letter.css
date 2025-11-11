@@ -447,6 +447,32 @@ span.text-red-400 {
     color: #F33043 !important;
 }
 
+/* ==================== Button Text Styling ==================== */
+
+/* Dark theme button text */
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-primary span,
+[data-theme="dark"] #generateButtonText {
+    color: var(--white, #FFF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: 20px !important;
+}
+
+/* Light theme button text */
+[data-theme="light"] .btn-primary,
+[data-theme="light"] .btn-primary span,
+[data-theme="light"] #generateButtonText {
+    color: var(--white, #FFF) !important;
+    font-family: "Janna LT" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: 20px !important;
+}
+
 /* ==================== Button Loading States ==================== */
 
 /* Disabled button state */
