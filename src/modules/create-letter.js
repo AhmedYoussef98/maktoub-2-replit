@@ -95,6 +95,222 @@ const CreateLetterPage = (() => {
   }
 
   /**
+   * Populate previous letters dropdown with approved letters from API
+   */
+  async function populatePreviousLettersDropdown() {
+    const dropdown = document.getElementById('previousLetter');
+    if (!dropdown) {
+      console.warn('⚠️ Previous letter dropdown not found');
+      return;
+    }
+
+    try {
+      console.log('📋 Fetching previous letters...');
+
+      // Show loading state
+      dropdown.disabled = true;
+      const firstOption = dropdown.querySelector('option');
+      if (firstOption) {
+        firstOption.textContent = 'جاري التحميل...';
+      }
+
+      // Check ApiClient availability
+      if (typeof ApiClient === 'undefined' || !ApiClient.getSubmissions) {
+        console.error('❌ ApiClient.getSubmissions not available');
+        if (firstOption) {
+          firstOption.textContent = 'خطأ في التحميل';
+        }
+        return;
+      }
+
+      // Fetch all submissions (large page size to get all letters)
+      const result = await ApiClient.getSubmissions(1, 1000, 'Timestamp', 'desc');
+
+      if (!result || result.status !== 'success') {
+        console.error('❌ Failed to fetch submissions:', result);
+        if (firstOption) {
+          firstOption.textContent = 'خطأ في التحميل';
+        }
+        return;
+      }
+
+      const allLetters = result.data || [];
+
+      // Filter for only approved letters (Review_status === 'جاهز للإرسال')
+      const approvedLetters = allLetters.filter(letter =>
+        letter.Review_status === 'جاهز للإرسال'
+      );
+
+      console.log(`✅ Found ${approvedLetters.length} approved letters out of ${allLetters.length} total`);
+
+      // Clear existing options
+      dropdown.innerHTML = '';
+
+      // Add placeholder option
+      const placeholderOption = document.createElement('option');
+      placeholderOption.value = '';
+
+      if (approvedLetters.length === 0) {
+        // No approved letters available
+        placeholderOption.textContent = 'لا توجد خطابات معتمدة سابقة';
+        dropdown.appendChild(placeholderOption);
+        dropdown.disabled = true;
+
+        // Show warning message
+        if (typeof notify !== 'undefined') {
+          notify.warning('لا توجد خطابات معتمدة سابقة. يرجى إنشاء خطاب جديد وإعتماده أولاً.');
+        }
+
+        console.log('⚠️ No approved letters available');
+        return;
+      }
+
+      placeholderOption.textContent = 'اختر الخطاب السابق';
+      dropdown.appendChild(placeholderOption);
+
+      // Add letter options with format: "Title - To: Recipient Name"
+      approvedLetters.forEach(letter => {
+        const option = document.createElement('option');
+        option.value = letter.ID;
+
+        // Format display text: Title + Recipient
+        const title = letter.Subject || letter.Title || 'خطاب';
+        const recipient = letter.Recipient_name || 'غير محدد';
+        option.textContent = `${title} - إلى: ${recipient}`;
+
+        // Store full letter content in data attribute
+        option.dataset.content = letter.Letter_content || letter.content || '';
+
+        dropdown.appendChild(option);
+      });
+
+      // Enable dropdown
+      dropdown.disabled = false;
+
+      console.log('✅ Previous letters dropdown populated successfully');
+
+    } catch (error) {
+      console.error('❌ Error populating previous letters dropdown:', error);
+
+      // Reset to error state
+      dropdown.innerHTML = '';
+      const errorOption = document.createElement('option');
+      errorOption.value = '';
+      errorOption.textContent = 'خطأ في التحميل';
+      dropdown.appendChild(errorOption);
+      dropdown.disabled = true;
+    }
+  }
+
+  /**
+   * Populate received letters dropdown with approved letters from API
+   */
+  async function populateReceivedLettersDropdown() {
+    const dropdown = document.getElementById('receivedLetter');
+    if (!dropdown) {
+      console.warn('⚠️ Received letter dropdown not found');
+      return;
+    }
+
+    try {
+      console.log('📋 Fetching received letters...');
+
+      // Show loading state
+      dropdown.disabled = true;
+      const firstOption = dropdown.querySelector('option');
+      if (firstOption) {
+        firstOption.textContent = 'جاري التحميل...';
+      }
+
+      // Check ApiClient availability
+      if (typeof ApiClient === 'undefined' || !ApiClient.getSubmissions) {
+        console.error('❌ ApiClient.getSubmissions not available');
+        if (firstOption) {
+          firstOption.textContent = 'خطأ في التحميل';
+        }
+        return;
+      }
+
+      // Fetch all submissions (large page size to get all letters)
+      const result = await ApiClient.getSubmissions(1, 1000, 'Timestamp', 'desc');
+
+      if (!result || result.status !== 'success') {
+        console.error('❌ Failed to fetch submissions:', result);
+        if (firstOption) {
+          firstOption.textContent = 'خطأ في التحميل';
+        }
+        return;
+      }
+
+      const allLetters = result.data || [];
+
+      // Filter for only approved letters (Review_status === 'جاهز للإرسال')
+      const approvedLetters = allLetters.filter(letter =>
+        letter.Review_status === 'جاهز للإرسال'
+      );
+
+      console.log(`✅ Found ${approvedLetters.length} approved letters out of ${allLetters.length} total`);
+
+      // Clear existing options
+      dropdown.innerHTML = '';
+
+      // Add placeholder option
+      const placeholderOption = document.createElement('option');
+      placeholderOption.value = '';
+
+      if (approvedLetters.length === 0) {
+        // No approved letters available
+        placeholderOption.textContent = 'لا توجد خطابات معتمدة سابقة';
+        dropdown.appendChild(placeholderOption);
+        dropdown.disabled = true;
+
+        // Show warning message
+        if (typeof notify !== 'undefined') {
+          notify.warning('لا توجد خطابات معتمدة سابقة. يرجى إنشاء خطاب جديد وإعتماده أولاً.');
+        }
+
+        console.log('⚠️ No approved letters available');
+        return;
+      }
+
+      placeholderOption.textContent = 'اختر الخطاب المستلم';
+      dropdown.appendChild(placeholderOption);
+
+      // Add letter options with format: "Title - To: Recipient Name"
+      approvedLetters.forEach(letter => {
+        const option = document.createElement('option');
+        option.value = letter.ID;
+
+        // Format display text: Title + Recipient
+        const title = letter.Subject || letter.Title || 'خطاب';
+        const recipient = letter.Recipient_name || 'غير محدد';
+        option.textContent = `${title} - إلى: ${recipient}`;
+
+        // Store full letter content in data attribute
+        option.dataset.content = letter.Letter_content || letter.content || '';
+
+        dropdown.appendChild(option);
+      });
+
+      // Enable dropdown
+      dropdown.disabled = false;
+
+      console.log('✅ Received letters dropdown populated successfully');
+
+    } catch (error) {
+      console.error('❌ Error populating received letters dropdown:', error);
+
+      // Reset to error state
+      dropdown.innerHTML = '';
+      const errorOption = document.createElement('option');
+      errorOption.value = '';
+      errorOption.textContent = 'خطأ في التحميل';
+      dropdown.appendChild(errorOption);
+      dropdown.disabled = true;
+    }
+  }
+
+  /**
    * Setup custom letter type dropdown with icons
    */
   function setupLetterTypeDropdown() {
@@ -174,9 +390,13 @@ const CreateLetterPage = (() => {
     if (selectedType === 'خطاب إلحاقي') {
       previousLetterGroup.style.display = 'flex';
       receivedLetterGroup.style.display = 'none';
+      // Populate previous letters dropdown when this type is selected
+      populatePreviousLettersDropdown();
     } else if (selectedType === 'خطاب رد على خطاب من الجهة') {
       receivedLetterGroup.style.display = 'flex';
       previousLetterGroup.style.display = 'none';
+      // Populate received letters dropdown when this type is selected
+      populateReceivedLettersDropdown();
     } else {
       previousLetterGroup.style.display = 'none';
       receivedLetterGroup.style.display = 'none';
@@ -246,6 +466,11 @@ const CreateLetterPage = (() => {
 
     // Populate contact officer dropdown
     populateContactOfficerDropdown();
+
+    // Populate previous/received letters dropdowns on page load
+    // This ensures they're ready when user selects the letter type
+    populatePreviousLettersDropdown();
+    populateReceivedLettersDropdown();
 
     console.log('✅ Create Letter form initialized');
   }
