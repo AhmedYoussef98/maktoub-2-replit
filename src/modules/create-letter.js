@@ -136,9 +136,9 @@ const CreateLetterPage = (() => {
 
       const allLetters = result.data || [];
 
-      // Filter for only approved letters (Review_status === 'جاهز للإرسال')
+      // Filter for only approved letters (Review_status === 'Approved')
       const approvedLetters = allLetters.filter(letter =>
-        letter.Review_status === 'جاهز للإرسال'
+        letter.Review_status === 'Approved'
       );
 
       console.log(`✅ Found ${approvedLetters.length} approved letters out of ${allLetters.length} total`);
@@ -244,9 +244,9 @@ const CreateLetterPage = (() => {
 
       const allLetters = result.data || [];
 
-      // Filter for only approved letters (Review_status === 'جاهز للإرسال')
+      // Filter for only approved letters (Review_status === 'Approved')
       const approvedLetters = allLetters.filter(letter =>
-        letter.Review_status === 'جاهز للإرسال'
+        letter.Review_status === 'Approved'
       );
 
       console.log(`✅ Found ${approvedLetters.length} approved letters out of ${allLetters.length} total`);
