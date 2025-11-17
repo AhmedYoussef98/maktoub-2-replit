@@ -46,10 +46,9 @@ const ReviewLetters = (() => {
 
   const reviewStatusOptions = [
     { value: 'all', label: 'جميع حالات المراجعة', icon: 'Clipboard check.svg' },
-    { value: 'جاهز للإرسال', label: 'جاهز للإرسال', icon: 'Check.svg' },
-    { value: 'في الانتظار', label: 'في الانتظار', icon: 'Clock.svg' },
-    { value: 'يحتاج إلى تحسين', label: 'يحتاج إلى تحسين', icon: 'Exclamation.svg' },
-    { value: 'مرفوض', label: 'مرفوض', icon: 'X.svg' }
+    { value: 'Approved', label: 'جاهز للإرسال', icon: 'Check.svg' },
+    { value: 'Pending', label: 'في الانتظار', icon: 'Clock.svg' },
+    { value: 'Rejected', label: 'مرفوض', icon: 'X.svg' }
   ];
 
   /**
@@ -277,7 +276,7 @@ const ReviewLetters = (() => {
         <td>${Utils.escapeHtml(letter.Letter_type || '-')}</td>
         <td>
           <span class="status-badge ${getStatusClass(letter.Review_status)}">
-            ${Utils.escapeHtml(letter.Review_status || '-')}
+            ${Utils.escapeHtml(translateReviewStatus(letter.Review_status) || '-')}
           </span>
         </td>
         <td>${Utils.escapeHtml(letter.Recipient_name || '-')}</td>
@@ -317,10 +316,27 @@ const ReviewLetters = (() => {
   }
 
   /**
+   * Translate English review status to Arabic for UI display
+   */
+  function translateReviewStatus(status) {
+    const translations = {
+      'Approved': 'جاهز للإرسال',
+      'Pending': 'في الانتظار',
+      'Rejected': 'مرفوض'
+    };
+    return translations[status] || status;
+  }
+
+  /**
    * Get CSS class for status badge
    */
   function getStatusClass(status) {
     const statusMap = {
+      // English (from backend)
+      'Approved': 'ready',
+      'Pending': 'pending',
+      'Rejected': 'rejected',
+      // Arabic (legacy/display)
       'جاهز للإرسال': 'ready',
       'في الانتظار': 'pending',
       'يحتاج إلى تحسين': 'improvements',
